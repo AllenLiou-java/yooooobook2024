@@ -19,66 +19,66 @@ export default {
     MultiFunctionTable,
   },
   middleware: ['auth'],
-  // async asyncData(context) {
-  //   const isAdministrator =
-  //     context.$cookies.get('isAdministrator') === true ||
-  //     context.$cookies.get('isAdministrator') === 'true'
+  async asyncData(context) {
+    const isAdministrator =
+      context.$cookies.get('isAdministrator') === true ||
+      context.$cookies.get('isAdministrator') === 'true'
 
-  //   if (isAdministrator) {
-  //     const idToken = context.$cookies.get('id_token')
-  //     let orders
-  //     const orderListOfUid = []
+    if (isAdministrator) {
+      const idToken = context.$cookies.get('id_token')
+      let orders
+      const orderListOfUid = []
 
-  //     try {
-  //       // 取得所有訂單資料
-  //       const { data } = await context.app.$api.order.getAllOrders(idToken)
-  //       orders = data
-  //     } catch (e) {
-  //       // eslint-disable-next-line no-console
-  //       console.log(e)
-  //     }
+      try {
+        // 取得所有訂單資料
+        const { data } = await context.app.$api.order.getAllOrders(idToken)
+        orders = data
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e)
+      }
 
-  //     // 在orderList中的每筆資料加入uid與「備註」欄位
-  //     if (orders) {
-  //       Object.entries(orders).forEach((orderOfUid) => {
-  //         const uid = orderOfUid[0]
-  //         const orders = Object.values(orderOfUid[1])
+      // 在orderList中的每筆資料加入uid與「備註」欄位
+      if (orders) {
+        Object.entries(orders).forEach((orderOfUid) => {
+          const uid = orderOfUid[0]
+          const orders = Object.values(orderOfUid[1])
 
-  //         // 增加每筆order的屬性
-  //         orders.map((order) => {
-  //           // 增加uid屬性
-  //           order.uid = uid
-  //           // 若無「備註」欄位屬性，則加入此屬性
-  //           if (!order.remark) {
-  //             order.remark = ''
-  //           }
-  //           // 若無「files」欄位屬性，則加入此屬性
-  //           if (!order.files) {
-  //             order.files = []
-  //           }
-  //           return order
-  //         })
-  //         orderListOfUid.push(orders)
-  //       })
+          // 增加每筆order的屬性
+          orders.map((order) => {
+            // 增加uid屬性
+            order.uid = uid
+            // 若無「備註」欄位屬性，則加入此屬性
+            if (!order.remark) {
+              order.remark = ''
+            }
+            // 若無「files」欄位屬性，則加入此屬性
+            if (!order.files) {
+              order.files = []
+            }
+            return order
+          })
+          orderListOfUid.push(orders)
+        })
 
-  //       // 將二維陣列轉為一維陣列
-  //       const orderList = orderListOfUid.reduce(
-  //         (previousValue, currentValue, currentIndex, array) => {
-  //           return previousValue.concat(currentValue)
-  //         }
-  //       )
+        // 將二維陣列轉為一維陣列
+        const orderList = orderListOfUid.reduce(
+          (previousValue, currentValue, currentIndex, array) => {
+            return previousValue.concat(currentValue)
+          }
+        )
 
-  //       context.store.commit('setAllOrderList', orderList)
+        context.store.commit('setAllOrderList', orderList)
 
-  //       return {
-  //         items: orderList,
-  //       }
-  //     }
-  //   }
-  //   return {
-  //     items: [],
-  //   }
-  // },
+        return {
+          items: orderList,
+        }
+      }
+    }
+    return {
+      items: [],
+    }
+  },
   data() {
     return {
       fields: [

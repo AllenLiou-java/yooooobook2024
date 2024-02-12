@@ -1,5 +1,5 @@
 {
-  "name": "yoobook",
+  "name": "yooooobook",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -50,7 +50,11 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.5.1",
     "prettier": "^2.7.1",
-    "sass": "^1.32.6",
-    "sass-loader": "^10.2.1"
-  }
+    "sass": "1.32.6",
+    "sass-loader": "10.4.1"
+  },
+  "main": "index.js",
+  "repository": "git@github.com:AllenLiou-java/yooooobook2024.git",
+  "author": "AllenLiou-java <75025074+AllenLiou-java@users.noreply.github.com>",
+  "license": "MIT"
 }
