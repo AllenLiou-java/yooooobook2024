@@ -45,7 +45,11 @@
         </div>
         <div class="flex-center text-white flex-wrap">
           <div class="bg-[#0cc95c] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
-            <NuxtImg src="/contact/line qrcode.png" width="158" class="mb-20" />
+            <img
+              class="w-158 mb-20"
+              :src="getContactImageUrl('/line qrcode.png')"
+              alt="line-qrcode-img"
+            />
             <p class="mb-4">LINE官方帳號</p>
             <p class="mb-16">請點擊加入</p>
             <a class="text-white text-12" href="https://lin.ee/f8oZLym" target="_blank"
@@ -53,11 +57,15 @@
             >
           </div>
           <div class="bg-[#456cb3] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
-            <NuxtImg src="/contact/FB qrcode.png" width="158" class="mb-20" />
+            <img
+              class="w-158 mb-20"
+              :src="getContactImageUrl('/FB qrcode.png')"
+              alt="fb-qrcode-img"
+            />
             <p class="mb-4">FB粉絲專頁</p>
             <p class="mb-8">請點擊加入</p>
             <div class="flex border border-solid border-white p-4 rounded-2xl">
-              <NuxtImg src="/contact/FB icon.png" width="17" class="mr-4" />
+              <img class="w-17 mr-4" :src="getContactImageUrl('/FB icon.png')" alt="FB-icon" />
               <div class="flex-center w-72 bg-white rounded-xl">
                 <p class="text-black text-12 pr-10">有良冊</p>
                 <span class="material-icons text-14 text-[#9e9e9f]"> search </span>
@@ -70,6 +78,8 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const { getContactImageUrl } = useAssets()
+</script>
 
 <style lang="scss" scoped></style>

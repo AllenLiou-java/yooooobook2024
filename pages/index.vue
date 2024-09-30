@@ -13,25 +13,30 @@
         <template #empty> 123456</template>
         <template #item="slotProps">
           <div class="relative mx-auto">
-            <NuxtImg fit="cover" :src="slotProps.data.imgPath" width="3600"></NuxtImg>
+            <img
+              class="w-full h-[60vh] object-cover object-center"
+              :src="getBannerImageUrl(slotProps.data.imgPath)"
+              alt="banner"
+            />
           </div>
         </template>
       </Carousel>
     </div>
     <div class="py-64 bg-[#f2eeeb]">
-      <div class="container flex-center flex-wrap">
-        <div class="text-center mr-32 mb-24">
+      <div class="container flex-center flex-wrap gap-32">
+        <div class="text-center mb-24">
           <h2 class="text-blue_dark text-36 mb-16 font-serif">Who Should Read This Book</h2>
           <p class="text-blue_dark text-24 mb-16">有良冊出版書籍最適合那些讀者呢？</p>
-          <NuxtImg src="/reader02.png" height="70" class="mr-28" />
-          <NuxtImg
-            src="/reader01.png"
-            height="70"
-            class="mr-28"
+          <img :src="getHomeImageUrl('/reader02.png')" class="mr-20 h-120" alt="readers" />
+          <img
+            :src="getHomeImageUrl('/reader01.png')"
+            class="mr-20 h-120"
             style="transform: rotateY(180deg)"
+            alt="readers"
           />
-          <NuxtImg src="/reader03.png" height="70" />
+          <img :src="getHomeImageUrl('/reader03.png')" class="h-120" alt="readers" />
         </div>
+
         <div class="mb-24 lt-xl:mb-0">
           <ul class="text-blue_dark">
             <li class="mb-16 flex flex-nowrap">
@@ -74,24 +79,13 @@
         </ul>
         <div class="mb-24">
           <h2 class="text-32 mb-32 font-serif">What Will You Learn?</h2>
-          <ul class="flex">
-            <li class="mr-8">
-              <NuxtImg src="/business/01.png" width="48" />
-            </li>
-            <li class="mr-8">
-              <NuxtImg src="/business/02.png" width="36" />
-            </li>
-            <li class="mr-8">
-              <NuxtImg src="/business/03.png" width="48" />
-            </li>
-            <li class="mr-8">
-              <NuxtImg src="/business/04.png" width="48" />
-            </li>
-            <li class="mr-8">
-              <NuxtImg src="/business/05.png" width="48" />
-            </li>
-            <li>
-              <NuxtImg src="/business/06.png" width="48" />
+          <ul class="flex justify-between items-center">
+            <li v-for="(business, idx) in businessImgPath" :key="idx">
+              <img
+                class="mr-8 w-48"
+                :src="getBusinessImageUrl(business.imgPath)"
+                alt="businessBadge"
+              />
             </li>
           </ul>
         </div>
@@ -106,7 +100,7 @@
         </ul>
       </div>
       <div
-        class="absolute top-0 left-0 bg-[url('@/assets/images/city.png')] bg-cover bg-top bg-fixed w-full h-full z-[-1]"
+        class="absolute top-0 left-0 bg-[url('@/assets/images/home/city.png')] bg-cover bg-top bg-fixed w-full h-full z-[-1]"
       />
       <div class="mask-90" />
     </div>
@@ -115,16 +109,38 @@
 
 <script setup>
 import Carousel from 'primevue/carousel'
+const { getBannerImageUrl, getBusinessImageUrl, getHomeImageUrl } = useAssets()
 
 const banners = ref([
   {
-    imgPath: '/banner/0001.png'
+    imgPath: '/0001.png'
   },
   {
-    imgPath: '/banner/0003.png'
+    imgPath: '/0003.png'
   },
   {
-    imgPath: '/banner/0004.png'
+    imgPath: '/0004.png'
+  }
+])
+
+const businessImgPath = ref([
+  {
+    imgPath: '/01.png'
+  },
+  {
+    imgPath: '/02.png'
+  },
+  {
+    imgPath: '/03.png'
+  },
+  {
+    imgPath: '/04.png'
+  },
+  {
+    imgPath: '/05.png'
+  },
+  {
+    imgPath: '/06.png'
   }
 ])
 

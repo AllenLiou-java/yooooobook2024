@@ -41,8 +41,13 @@
       </div>
       <div class="w-full">
         <div class="flex flex-wrap mb-40">
-          <div class="w-352 h-352 flex-center border border-solid mr-20 mb-20">
-            <NuxtImg v-if="fileInfo.imgPath" :src="fileInfo.imgPath" height="329"></NuxtImg>
+          <div class="w-352 max-h-352 flex-center border border-solid mr-20 mb-20 p-20">
+            <img
+              v-if="fileInfo.imgPath"
+              class="max-h-328 object-contain"
+              :src="getFilesImageUrl(fileInfo.imgPath)"
+              alt="bookImg"
+            />
           </div>
 
           <div class="grow-1">
@@ -131,6 +136,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { FilterMatchMode } from 'primevue/api'
 import fileList from '@/assets/js/fileList'
+const { getFilesImageUrl } = useAssets()
 
 const route = useRoute()
 

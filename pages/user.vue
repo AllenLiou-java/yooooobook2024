@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative text-white bg-gradient-to-r from-[#153D5B] to-[#082C4B]">
-      <div class="container h-500 lt-md:h-320 relative flex items-end lt-sm:flex-col-reverse">
+      <div class="container h-500 lt-md:h-360 relative flex items-end lt-sm:flex-col-reverse">
         <div class="w-full ml-40 mb-20 z-100">
           <h1
             class="relative text-52 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-6 h-[80%] bg-[#35e3eb]) pl-20"
@@ -12,7 +12,11 @@
           <p class="font-bold">首頁 - {{ pageInfo.name }}</p>
         </div>
 
-        <NuxtImg fit="cover" class="ml-20 mb-20" src="/Logo-1.png" sizes="160px md:253px"></NuxtImg>
+        <img
+          class="ml-20 mb-20 w-253 lt-md:w-160"
+          :src="getHomeImageUrl('/Logo-1.png')"
+          alt="logoImg"
+        />
       </div>
     </div>
     <NuxtPage></NuxtPage>
@@ -29,6 +33,8 @@ definePageMeta({
     }
   }
 })
+
+const { getHomeImageUrl } = useAssets()
 
 const route = useRoute()
 
@@ -52,8 +58,6 @@ const pageInfo = computed(() => {
 
   return pages.filter((page) => page.fullPath === fullPath)[0]
 })
-// const route = useRoute()
-// console.log(route)
 </script>
 
 <style lang="scss" scoped></style>

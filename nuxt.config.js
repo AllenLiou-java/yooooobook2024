@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
 
-  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt', '@nuxt/image'],
+  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt'],
 
   primevue: {
     options: {
@@ -48,9 +48,5 @@ export default defineNuxtConfig({
         }
       }
     }
-  },
-
-  image: {
-    dir: 'assets/images'
   }
 })

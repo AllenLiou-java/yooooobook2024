@@ -3,20 +3,14 @@
     <div class="container max-w-800 flex justify-between items-center mx-auto lt-md:flex-wrap">
       <div class="mr-100 lt-md:mr-40">
         <h3 class="mb-16 text-24 font-normal">有良冊股份有限公司</h3>
-        <ul class="flex mb-16">
-          <li class="bg-gray rounded-full hover:bg-white duration-300">
-            <a href="https://www.facebook.com/yooooobook" target="_blank" class="block"
-              ><NuxtImg src="/social/fb-b.svg" width="42" class="p-8"
-            /></a>
-          </li>
-          <li class="bg-gray rounded-full hover:bg-white duration-300 mx-12">
-            <a href="https://lin.ee/f8oZLym" target="_blank" class="block">
-              <NuxtImg src="/social/line-b.svg" width="42" class="p-8" />
-            </a>
-          </li>
-          <li class="bg-gray rounded-full hover:bg-white duration-300">
-            <a href="mailto:yooooobook@gmail.com" target="_blank" class="block">
-              <NuxtImg src="/social/mail-b.svg" width="42" class="p-8" />
+        <ul class="flex mb-16 gap-12">
+          <li
+            v-for="(social, socialIdx) in socialImgPath"
+            :key="socialIdx"
+            class="bg-gray rounded-full hover:bg-white duration-300"
+          >
+            <a :href="social.href" target="_blank" class="block">
+              <img class="w-42 p-8" :src="getSocialImageUrl(social.imgPath)" alt="socialImg" />
             </a>
           </li>
         </ul>
@@ -61,6 +55,23 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const { getSocialImageUrl } = useAssets()
+
+const socialImgPath = ref([
+  {
+    imgPath: '/fb-b.svg',
+    href: 'https://www.facebook.com/yooooobook'
+  },
+  {
+    imgPath: '/line-b.svg',
+    href: 'https://lin.ee/f8oZLym'
+  },
+  {
+    imgPath: '/mail-b.svg',
+    href: 'mailto:yooooobook@gmail.com'
+  }
+])
+</script>
 
 <style lang="scss" scoped></style>

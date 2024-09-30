@@ -140,6 +140,6 @@ const textSearch = ref(null)
 
 <style lang="scss" scoped>
 .bg-logo {
-  @include bg-cover('@/assets/images/Logo.png');
+  @include bg-cover('@/assets/images/home/Logo.png');
 }
 </style>
