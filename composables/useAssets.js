@@ -53,6 +53,15 @@ export default function () {
     return contactImages.value?.[url]
   }
 
+  // images/error 圖片
+  const errorImages = computed(() =>
+    import.meta.glob('~/assets/images/error/**/*', { eager: true, import: 'default' })
+  )
+  const getErrorImageUrl = (filename) => {
+    const url = `/assets/images/error/${String(filename).replace(/^(\.\/+|\/+)/, '')}`
+    return errorImages.value?.[url]
+  }
+
   // const images = computed(() =>
   //   import.meta.glob('~/assets/images/**/*', { eager: true, import: 'default' })
   // )
@@ -67,7 +76,8 @@ export default function () {
     getHomeImageUrl,
     getSocialImageUrl,
     getFilesImageUrl,
-    getContactImageUrl
+    getContactImageUrl,
+    getErrorImageUrl
     // getImageUrl
   }
 }
