@@ -5,14 +5,43 @@
     <p>{{ doubleCount }}</p>
 
     <div class="max-w-320 h-180 myphoto"></div>
+
+    <form @submit="onSubmit">
+      <input v-model="field" v-bind="fieldProps" />
+      <span>{{ errors.field }}</span>
+
+      <button>Submit</button>
+    </form>
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
 
+import { useForm } from 'vee-validate'
+
 definePageMeta({
   layout: 'custom-layout'
+})
+// Validation, or use `yup` or `zod`
+function required(value) {
+  return value ? true : 'This field is required'
+}
+
+// Create the form
+const { defineField, handleSubmit, errors } = useForm({
+  validationSchema: {
+    field: required
+  }
+})
+
+// Define fields
+const [field, fieldProps] = defineField('field')
+
+// Submit handler
+const onSubmit = handleSubmit((values) => {
+  // Submit to API
+  console.log(values)
 })
 
 const counterStore = useCounterStore()

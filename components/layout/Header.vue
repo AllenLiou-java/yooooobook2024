@@ -106,7 +106,7 @@ const routeList = ref([
   },
   {
     label: '訂購書籍',
-    route: '/bookStore'
+    route: '/bookstore'
   },
   {
     label: '購物相關',

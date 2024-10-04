@@ -30,7 +30,7 @@ export default defineNuxtConfig({
       ripple: true
     },
     components: {
-      include: ['IconField', 'InputIcon', 'InputText', 'Button', 'InputSwitch']
+      include: ['IconField', 'InputIcon', 'InputText', 'InputNumber', 'Button', 'InputSwitch']
     },
     cssLayerOrder: 'reset, primevue'
   },
@@ -47,6 +47,17 @@ export default defineNuxtConfig({
           additionalData: '@use "@/assets/style/utils/mixin.scss" as *;'
         }
       }
+    }
+  },
+  veeValidate: {
+    // disable or enable auto imports
+    autoImports: true,
+    // Use different names for components
+    componentNames: {
+      Form: 'VeeForm',
+      Field: 'VeeField',
+      FieldArray: 'VeeFieldArray',
+      ErrorMessage: 'VeeErrorMessage'
     }
   }
 })
