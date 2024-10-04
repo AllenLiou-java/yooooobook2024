@@ -1,6 +1,6 @@
 <template>
-  <div class="card_doc relative inline-block max-w-250 pt-20">
-    <div class="tag-wrapper">
+  <div class="card_shadow relative inline-block max-w-250 pt-20">
+    <div class="relative top-0">
       <div
         class="bg-gradient-to-b from-[#de9e00] to-[#d38f00] inline-block py-6 pl-16 pr-48 absolute top-[-20px] tag"
       >
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div
-      class="bg-[#fdc935] px-24 py-36 rounded-b-[6px] bg-gradient-to-b from-[#fcd768] to-[#fdc62b] h-170 flex items-center"
+      class="bg-[#fdc935] px-24 py-36 rounded-[6px] bg-gradient-to-b from-[#fcd768] to-[#fdc62b] h-170 flex items-center"
     >
       <span class="text-blue text-16">{{ feature.content }}</span>
     </div>
@@ -28,15 +28,11 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
-.card_doc {
+.card_shadow {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-}
-.tag-wrapper {
-  filter: drop-shadow(3px 6px 3px transparent);
 }
 .tag {
   clip-path: polygon(0 0, 85% 0%, 100% 50%, 85% 100%, 0 100%);
   border-radius: 10px 0px 0px 0;
-  box-shadow: 2px 4px 6px 0px #ffffff;
 }
 </style>
