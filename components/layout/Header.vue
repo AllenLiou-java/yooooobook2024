@@ -89,14 +89,62 @@
           </div>
         </div>
       </div>
-      <span class="material-icons text-white text-48 cursor-pointer ml-16 hidden lt-lg:block">
-        menu
-      </span>
+      <div>
+        <Sidebar
+          v-model:visible="visible"
+          :pt="{
+            root: {
+              class: 'bg-blue_dark'
+            },
+            header: {
+              class: 'text-white'
+            }
+          }"
+          header="有良冊股份有限公司"
+          position="full"
+        >
+          <ul class="mt-40 w-1/2 mx-auto">
+            <li v-for="routeItem in routeList" :key="routeItem.label" class="mb-24">
+              <template v-if="routeItem.items?.length > 0">
+                <p class="text-white text-24 mb-12">{{ routeItem.label }}</p>
+                <ul class="ml-32">
+                  <li v-for="item in routeItem.items" :key="item.label" class="mb-12">
+                    <NuxtLink
+                      class="text-white text-24"
+                      :to="item.route"
+                      @click="visible = false"
+                      >{{ item.label }}</NuxtLink
+                    >
+                  </li>
+                </ul>
+              </template>
+              <template v-else
+                ><NuxtLink
+                  class="text-white text-24"
+                  :to="routeItem.route"
+                  @click="visible = false"
+                  >{{ routeItem.label }}</NuxtLink
+                ></template
+              >
+            </li>
+          </ul>
+        </Sidebar>
+        <span
+          class="material-icons text-white text-48 cursor-pointer ml-16 hidden lt-lg:block"
+          @click="visible = true"
+        >
+          menu
+        </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import Sidebar from 'primevue/sidebar'
+
+const visible = ref(false)
+
 const routeList = ref([
   {
     label: '首頁',
