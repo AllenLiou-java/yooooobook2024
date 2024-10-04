@@ -11,7 +11,7 @@
       </div>
     </div>
     <div
-      class="bg-[#fdc935] px-24 py-36 rounded-[12px] bg-gradient-to-b from-[#fcd768] to-[#fdc62b] h-170 flex items-center"
+      class="bg-[#fdc935] px-24 py-36 rounded-b-[6px] bg-gradient-to-b from-[#fcd768] to-[#fdc62b] h-170 flex items-center"
     >
       <span class="text-blue text-16">{{ feature.content }}</span>
     </div>
@@ -32,7 +32,7 @@ defineProps({
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 .tag-wrapper {
-  filter: drop-shadow(3px 6px 3px rgba(255, 255, 255, 0.6));
+  filter: drop-shadow(3px 6px 3px transparent);
 }
 .tag {
   clip-path: polygon(0 0, 85% 0%, 100% 50%, 85% 100%, 0 100%);

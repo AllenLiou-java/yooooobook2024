@@ -4,13 +4,9 @@
       <div class="mr-100 lt-md:mr-40">
         <h3 class="mb-16 text-24 font-normal">有良冊股份有限公司</h3>
         <ul class="flex mb-16 gap-12">
-          <li
-            v-for="(social, socialIdx) in socialImgPath"
-            :key="socialIdx"
-            class="bg-gray rounded-full hover:bg-white duration-300"
-          >
+          <li v-for="(social, socialIdx) in socialImgPath" :key="socialIdx" class="">
             <a :href="social.href" target="_blank" class="block">
-              <img class="w-42 p-8" :src="getSocialImageUrl(social.imgPath)" alt="socialImg" />
+              <img class="w-42" :src="getSocialImageUrl(social.imgPath)" alt="socialImg" />
             </a>
           </li>
         </ul>
@@ -20,7 +16,10 @@
           </li>
           <li class="mb-16">
             <p>
-              Line ID：<a href="https://lin.ee/f8oZLym" target="_blank" class="visited:text-yellow"
+              Line ID：<a
+                href="https://lin.ee/f8oZLym"
+                target="_blank"
+                class="text-white visited:text-yellow"
                 >@yooooobook</a
               >
             </p>
@@ -60,15 +59,15 @@ const { getSocialImageUrl } = useAssets()
 
 const socialImgPath = ref([
   {
-    imgPath: '/fb-b.svg',
+    imgPath: '/fb-cc.png',
     href: 'https://www.facebook.com/yooooobook'
   },
   {
-    imgPath: '/line-b.svg',
+    imgPath: '/line-cc.png',
     href: 'https://lin.ee/f8oZLym'
   },
   {
-    imgPath: '/mail-b.svg',
+    imgPath: '/mail-cc.png',
     href: 'mailto:yooooobook@gmail.com'
   }
 ])
