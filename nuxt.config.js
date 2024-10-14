@@ -30,7 +30,15 @@ export default defineNuxtConfig({
       ripple: true
     },
     components: {
-      include: ['IconField', 'InputIcon', 'InputText', 'InputNumber', 'Button', 'InputSwitch']
+      include: [
+        'IconField',
+        'InputIcon',
+        'InputText',
+        'InputNumber',
+        'Password',
+        'Button',
+        'InputSwitch'
+      ]
     },
     cssLayerOrder: 'reset, primevue'
   },

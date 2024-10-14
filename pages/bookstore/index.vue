@@ -2,7 +2,7 @@
   <div>
     <div class="relative text-white">
       <div class="container h-500 lt-md:h-320 relative">
-        <div class="absolute bottom-20 w-[calc(100%-80px)] left-60 z-100">
+        <div class="absolute bottom-20 w-[calc(100%-80px)] left-60 z-100 lt-md:left-30">
           <h1
             class="relative text-52 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-6 h-[80%] bg-[#35e3eb]) pl-20"
           >

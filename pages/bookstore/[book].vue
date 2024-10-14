@@ -3,7 +3,7 @@
   <div>
     <div class="relative text-white">
       <div class="container h-500 lt-md:h-320 relative">
-        <div class="absolute bottom-20 w-[calc(100%-80px)] left-60 z-100">
+        <div class="absolute bottom-20 w-[calc(100%-80px)] left-60 z-100 lt-md:left-30">
           <h1
             class="relative text-52 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-6 h-[80%] bg-[#35e3eb]) pl-20"
           >
@@ -44,12 +44,12 @@
           </li>
         </ul>
       </div>
-      <div>
+      <div class="max-w-910 w-full">
         <div class="flex gap-32 mb-44 flex-wrap">
           <div class="max-w-352 w-full border border-solid px-8 py-32">
             <img :src="product.imgSrc" alt="productImg" />
           </div>
-          <div class="mt-20 mb-12">
+          <div class="mt-20 mb-12 max-w-412 w-full">
             <h3 class="text-26 text-brown mb-16">{{ product.name }}</h3>
             <ul class="list-disc pl24 mb-16">
               <li v-for="(content, contentIdx) in product.content" :key="contentIdx">
@@ -231,9 +231,9 @@ const product = ref({
   content: ['有限公司篇【532頁】', '股份有限公司篇【964頁】', '應備文件詳析篇【296頁】'],
   bookIntroduction: {
     summary: [
-      '做為創業者開了家公司，但不知道公司登記相關流程及申請手續嗎?<br />又或者不清楚公司哪些變更是需要向公司登記機關提出申請，<br />結果沒有在期限內申請而被裁罰嗎?',
-      '又或是知道要申請變更登記，但不知道應該準備什麼文件，<br />以及文件有哪些地方是需要注意、哪些程序是需要踐行，<br />導致一直遲遲無法取得登記核准文件嗎?',
-      '做為提供公司登記服務的從業人員，<br />明明依照相關規定檢附文件，<br />但還是常常被公司登記機關通知補正，<br />結果自己卻還是不知道哪裡錯，<br />導致案件延宕甚至被退件，<br />最後沒有在客戶要求的時間內完成，<br />不僅重創己身的專業形象，更可能因此失去了重要的客戶。',
+      '做為創業者開了家公司，但不知道公司登記相關流程及申請手續嗎?<br />又或者不清楚公司哪些變更是需要向公司登記機關提出申請，結果沒有在期限內申請而被裁罰嗎?',
+      '又或是知道要申請變更登記，但不知道應該準備什麼文件，以及文件有哪些地方是需要注意、哪些程序是需要踐行，導致一直遲遲無法取得登記核准文件嗎?',
+      '做為提供公司登記服務的從業人員，明明依照相關規定檢附文件，但還是常常被公司登記機關通知補正，結果自己卻還是不知道哪裡錯，導致案件延宕甚至被退件，最後沒有在客戶要求的時間內完成，不僅重創己身的專業形象，更可能因此失去了重要的客戶。',
       '&ldquo;現在，只要擁有這一本，就可以搞定公司登記!&rdquo;'
     ],
     detail: [
