@@ -82,10 +82,18 @@
               <span class="material-icons align-text-top text-22 mr-2"> shopping_cart </span>
               <span class="text-14 align-middle">購物車(0)</span>
             </div>
-            <NuxtLink to="/user/login" class="text-brown_light cursor-pointer">
-              <span class="material-icons align-text-top text-22 mr-2"> person </span>
-              <span class="text-14 align-middle">會員登入</span>
-            </NuxtLink>
+            <template v-if="!isUserLoggedIn">
+              <NuxtLink to="/user/login" class="text-brown_light cursor-pointer">
+                <span class="material-icons align-text-top text-22 mr-2"> person </span>
+                <span class="text-14 align-middle">會員登入</span>
+              </NuxtLink>
+            </template>
+            <template v-else>
+              <!-- <ClientOnly> -->
+              <span class="text-brown_light text-12 mr-12">{{ userName }}</span>
+              <!-- </ClientOnly> -->
+              <button @click="setUserLogout">登出</button>
+            </template>
           </div>
         </div>
       </div>
@@ -184,6 +192,12 @@ const routeList = ref([
 ])
 
 const textSearch = ref(null)
+
+const userStore = useUserStore()
+const { setUserLogout } = userStore
+const { isUserLoggedIn, userName } = storeToRefs(userStore)
+// const isUserLoggedIn = ref(true)
+// const userName = ref('FU JAN LIOU')
 </script>
 
 <style lang="scss" scoped>

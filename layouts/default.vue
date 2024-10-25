@@ -9,6 +9,20 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const userStore = useUserStore()
+const { initProfile } = userStore
+const idToken = useCookie('idToken')
+
+if (idToken.value) {
+  userStore.$patch({
+    isUserLoggedIn: true
+  })
+}
+
+if (idToken.value) {
+  useAsyncData('profile', initProfile)
+}
+</script>
 
 <style lang="scss" scoped></style>

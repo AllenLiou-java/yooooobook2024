@@ -3,7 +3,7 @@
 export default defineNuxtConfig({
   css: ['~/assets/style/all.scss', '~/assets/style/vendor/themes/aura/aura-light/blue/theme.scss'],
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   app: {
     head: {
       charset: 'utf-8',
@@ -57,15 +57,23 @@ export default defineNuxtConfig({
       }
     }
   },
-  veeValidate: {
-    // disable or enable auto imports
-    autoImports: true,
-    // Use different names for components
-    componentNames: {
-      Form: 'VeeForm',
-      Field: 'VeeField',
-      FieldArray: 'VeeFieldArray',
-      ErrorMessage: 'VeeErrorMessage'
+
+  runtimeConfig: {
+    // apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
+    googleAnalyticsId: '',
+    firebaseApiKey: '',
+    firebaseAuthDomain: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: '',
+    appId: '',
+    googleSecretId: '',
+    public: {
+      // apiBase: '' // can be overridden by NUXT_PUBLIC_API_BASE environment variable
+      googleApiUrl: '',
+      firebaseApiUrl: '',
+      webUrl: '',
+      googleClientId: ''
     }
   }
 })

@@ -38,7 +38,7 @@
           <h2 class="text-blue_dark mb-30">您也可以使用下列方式登入</h2>
           <div class="h-[calc(100%-90px)] flex-center flex-col">
             <p class="text-16 mb-12">直接使用您的Google+登入，只需幾秒鐘</p>
-            <div
+            <!-- <div
               class="flex items-center max-w-356 w-full bg-[#dd4b39] px-8 py-3 mx-auto cursor-pointer duration-300 hover:bg-secondary"
             >
               <svg class="w-40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -50,7 +50,8 @@
               </svg>
               <div class="w-1 h-36 bg-white mx-8"></div>
               <span class="text-20 text-white grow-1">Google +</span>
-            </div>
+            </div> -->
+            <GoogleLoginBtn />
           </div>
         </div>
       </div>

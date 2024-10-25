@@ -6,43 +6,28 @@
 
     <div class="max-w-320 h-180 myphoto"></div>
 
-    <form @submit="onSubmit">
-      <input v-model="field" v-bind="fieldProps" />
-      <span>{{ errors.field }}</span>
-
-      <button>Submit</button>
-    </form>
+    <p>res:{{ fireData }}</p>
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
 
-import { useForm } from 'vee-validate'
-
 definePageMeta({
   layout: 'custom-layout'
 })
-// Validation, or use `yup` or `zod`
-function required(value) {
-  return value ? true : 'This field is required'
-}
 
-// Create the form
-const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: {
-    field: required
-  }
-})
+// import { http } from '@/composables/http'
 
-// Define fields
-const [field, fieldProps] = defineField('field')
+// RuntimeConfig
+// const config = useRuntimeConfig()
+// if (import.meta.server) {
+//   console.log('firebaseApiUrl:', config.firebaseApiUrl)
+// } else {
+//   console.log('API pubic:', config.public.googleApiUrl)
+// }
 
-// Submit handler
-const onSubmit = handleSubmit((values) => {
-  // Submit to API
-  console.log(values)
-})
+const { data: fireData } = await useFirebaseApi('/stock/AA00001.json')
 
 const counterStore = useCounterStore()
 const { addCount } = counterStore
