@@ -38,6 +38,7 @@ export default defineNuxtConfig({
         'Password',
         'Button',
         'InputSwitch'
+        // 'Toast'
       ]
     },
     cssLayerOrder: 'reset, primevue'

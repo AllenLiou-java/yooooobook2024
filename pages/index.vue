@@ -15,7 +15,7 @@
           <div class="relative mx-auto">
             <img
               class="w-full h-[60vh] object-cover object-center"
-              :src="getBannerImageUrl(slotProps.data.imgPath)"
+              :src="imageSrc(slotProps.data.imgPath)"
               alt="banner"
             />
           </div>
@@ -27,14 +27,14 @@
         <div class="text-center mb-24">
           <h2 class="text-blue_dark text-36 mb-16 font-serif">Who Should Read This Book</h2>
           <p class="text-blue_dark text-24 mb-16">有良冊出版書籍最適合那些讀者呢？</p>
-          <img :src="getHomeImageUrl('/reader02.png')" class="mr-20 h-120" alt="readers" />
+          <img :src="imageSrc('/home/reader02.png')" class="mr-20 h-120" alt="readers" />
           <img
-            :src="getHomeImageUrl('/reader01.png')"
+            :src="imageSrc('/home/reader01.png')"
             class="mr-20 h-120"
             style="transform: rotateY(180deg)"
             alt="readers"
           />
-          <img :src="getHomeImageUrl('/reader03.png')" class="h-120" alt="readers" />
+          <img :src="imageSrc('/home/reader03.png')" class="h-120" alt="readers" />
         </div>
 
         <div class="mb-24 lt-xl:mb-0">
@@ -81,11 +81,7 @@
           <h2 class="text-32 mb-32 font-serif">What Will You Learn?</h2>
           <ul class="flex justify-between items-center">
             <li v-for="(business, idx) in businessImgPath" :key="idx">
-              <img
-                class="mr-8 w-48"
-                :src="getBusinessImageUrl(business.imgPath)"
-                alt="businessBadge"
-              />
+              <img class="mr-8 w-48" :src="imageSrc(business.imgPath)" alt="businessBadge" />
             </li>
           </ul>
         </div>
@@ -109,38 +105,38 @@
 
 <script setup>
 import Carousel from 'primevue/carousel'
-const { getBannerImageUrl, getBusinessImageUrl, getHomeImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 
 const banners = ref([
   {
-    imgPath: '/0001.png'
+    imgPath: '/banner/0001.png'
   },
   {
-    imgPath: '/0003.png'
+    imgPath: '/banner/0003.png'
   },
   {
-    imgPath: '/0004.png'
+    imgPath: '/banner/0004.png'
   }
 ])
 
 const businessImgPath = ref([
   {
-    imgPath: '/01.png'
+    imgPath: '/business/01.png'
   },
   {
-    imgPath: '/02.png'
+    imgPath: '/business/02.png'
   },
   {
-    imgPath: '/03.png'
+    imgPath: '/business/03.png'
   },
   {
-    imgPath: '/04.png'
+    imgPath: '/business/04.png'
   },
   {
-    imgPath: '/05.png'
+    imgPath: '/business/05.png'
   },
   {
-    imgPath: '/06.png'
+    imgPath: '/business/06.png'
   }
 ])
 

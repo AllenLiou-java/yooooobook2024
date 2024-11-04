@@ -6,19 +6,15 @@
     </div>
 
     <LayoutFooter />
+    <!-- <Toast group="global" position="bottom-right" /> -->
   </div>
 </template>
 
 <script setup>
 const userStore = useUserStore()
 const { initProfile } = userStore
-const idToken = useCookie('idToken')
 
-if (idToken.value) {
-  userStore.$patch({
-    isUserLoggedIn: true
-  })
-}
+const idToken = useCookie('idToken')
 
 if (idToken.value) {
   useAsyncData('profile', initProfile)

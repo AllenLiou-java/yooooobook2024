@@ -6,7 +6,7 @@
         <ul class="flex mb-16 gap-12">
           <li v-for="(social, socialIdx) in socialImgPath" :key="socialIdx" class="">
             <a :href="social.href" target="_blank" class="block">
-              <img class="w-42" :src="getSocialImageUrl(social.imgPath)" alt="socialImg" />
+              <img class="w-42" :src="imageSrc(social.imgPath)" alt="socialImg" />
             </a>
           </li>
         </ul>
@@ -55,19 +55,19 @@
 </template>
 
 <script setup>
-const { getSocialImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 
 const socialImgPath = ref([
   {
-    imgPath: '/fb-cc.png',
+    imgPath: '/social/fb-cc.png',
     href: 'https://www.facebook.com/yooooobook'
   },
   {
-    imgPath: '/line-cc.png',
+    imgPath: '/social/line-cc.png',
     href: 'https://lin.ee/f8oZLym'
   },
   {
-    imgPath: '/mail-cc.png',
+    imgPath: '/social/mail-cc.png',
     href: 'mailto:yooooobook@gmail.com'
   }
 ])

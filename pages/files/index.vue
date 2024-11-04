@@ -51,7 +51,7 @@
           class="w-251 border border-solid flex-center flex-col p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
         >
           <div class="w-230 h-230 flex-center mb-12">
-            <img class="h-215" :src="getFilesImageUrl(file.imgPath)" alt="bookImg" />
+            <img class="h-215" :src="imageSrc(file.imgPath)" alt="bookImg" />
           </div>
           <h3 class="mb-20">{{ file.name }}</h3>
           <p class="text-brown_dark mb-12">附件下載</p>
@@ -68,7 +68,7 @@
 
 <script setup>
 import fileList from '@/assets/js/fileList'
-const { getFilesImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 </script>
 
 <style lang="scss" scoped></style>

@@ -45,7 +45,7 @@
             <img
               v-if="fileInfo.imgPath"
               class="max-h-328 object-contain"
-              :src="getFilesImageUrl(fileInfo.imgPath)"
+              :src="imageSrc(fileInfo.imgPath)"
               alt="bookImg"
             />
           </div>
@@ -136,7 +136,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { FilterMatchMode } from 'primevue/api'
 import fileList from '@/assets/js/fileList'
-const { getFilesImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 
 const route = useRoute()
 

@@ -14,7 +14,7 @@
 
         <img
           class="ml-20 mb-20 w-253 lt-md:w-160"
-          :src="getHomeImageUrl('/Logo-1.png')"
+          :src="imageSrc('/home/Logo-1.png')"
           alt="logoImg"
         />
       </div>
@@ -26,7 +26,12 @@
 <script setup>
 definePageMeta({
   middleware: (to, from) => {
-    if (to.fullPath === '/user') {
+    const idToken = useCookie('idToken')
+    if (idToken.value) {
+      return navigateTo({
+        path: '/'
+      })
+    } else if (to.fullPath === '/user') {
       return navigateTo({
         path: '/user/login'
       })
@@ -34,7 +39,7 @@ definePageMeta({
   }
 })
 
-const { getHomeImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 
 const route = useRoute()
 

@@ -1,6 +1,6 @@
 <template>
   <div class="bg-blue_dark h-[100vh] flex-center flex-col">
-    <img class="w-240 mb-16 -ml-44" :src="getErrorImageUrl('/error_icon.png')" alt="error-icon" />
+    <img class="w-240 mb-16 -ml-44" :src="imageSrc('/error/error_icon.png')" alt="error-icon" />
     <h1 class="text-110 strokeText text-blue_dark" :data-stroke="errorMessageFilter.statusCode">
       {{ errorMessageFilter.statusCode }}
     </h1>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-const { getErrorImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 const prop = defineProps({
   error: {
     type: Object,

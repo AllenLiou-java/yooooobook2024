@@ -5,17 +5,28 @@
     <p>{{ doubleCount }}</p>
 
     <div class="max-w-320 h-180 myphoto"></div>
-
-    <p>res:{{ fireData }}</p>
+    <p>{{ data }}</p>
+    <p>error: {{ error }}</p>
+    <!-- <Toast /> -->
+    <Button label="Show" @click="show()" />
+    <img class="w-full h-[60vh] object-cover object-center" :src="imageSrc(urlRef)" alt="banner" />
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
 
+const show = () => {
+  useNuxtApp().$toast.info('toastify success')
+  // refresh()
+}
+
 definePageMeta({
   layout: 'custom-layout'
 })
+
+const { imageSrc } = getImageSrc()
+const urlRef = ref('/home/city.png')
 
 // import { http } from '@/composables/http'
 
@@ -27,7 +38,9 @@ definePageMeta({
 //   console.log('API pubic:', config.public.googleApiUrl)
 // }
 
-const { data: fireData } = await useFirebaseApi('/stock/AA00001.json')
+// const { data: fireData } = await useFirebaseApi('/stock/AA00001.json')
+
+const { data, error } = await useHttp.get('/stock1/AA00001.json')
 
 const counterStore = useCounterStore()
 const { addCount } = counterStore

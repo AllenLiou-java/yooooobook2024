@@ -47,7 +47,7 @@
           <div class="bg-[#0cc95c] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
             <img
               class="w-158 mb-20"
-              :src="getContactImageUrl('/line qrcode.png')"
+              :src="imageSrc('/contact/line qrcode.png')"
               alt="line-qrcode-img"
             />
             <p class="mb-4">LINE官方帳號</p>
@@ -59,13 +59,13 @@
           <div class="bg-[#456cb3] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
             <img
               class="w-158 mb-20"
-              :src="getContactImageUrl('/FB qrcode.png')"
+              :src="imageSrc('/contact/FB qrcode.png')"
               alt="fb-qrcode-img"
             />
             <p class="mb-4">FB粉絲專頁</p>
             <p class="mb-8">請點擊加入</p>
             <div class="flex border border-solid border-white p-4 rounded-2xl">
-              <img class="w-17 mr-4" :src="getContactImageUrl('/FB icon.png')" alt="FB-icon" />
+              <img class="w-17 mr-4" :src="imageSrc('/contact/FB icon.png')" alt="FB-icon" />
               <div class="flex-center w-72 bg-white rounded-xl">
                 <p class="text-black text-12 pr-10">有良冊</p>
                 <span class="material-icons text-14 text-[#9e9e9f]"> search </span>
@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-const { getContactImageUrl } = useAssets()
+const { imageSrc } = getImageSrc()
 </script>
 
 <style lang="scss" scoped></style>

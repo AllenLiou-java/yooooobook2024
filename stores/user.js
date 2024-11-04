@@ -41,6 +41,8 @@ export const useUserStore = defineStore('user', () => {
     useCookie('userId').value = idTokenDecode.user_id
     useCookie('idToken').value = id_token
     useCookie('refreshToken').value = refresh_token
+
+    navigateTo('/')
   }
 
   const setUserLogout = () => {

@@ -56,7 +56,7 @@ const files = [
         link: 'https://docs.google.com/document/d/1R7hKzOL7LnVL3aGcZehzzze07-1t82HC'
       }
     ],
-    imgPath: '/cover_book-1.jpg'
+    imgPath: '/files/cover_book-1.jpg'
   },
   {
     series: '公司登記實務及案例解析',
@@ -131,7 +131,7 @@ const files = [
         link: 'https://docs.google.com/document/d/15BpM39U76KwtPvx5Y6QcbsqNW9jazTgv'
       }
     ],
-    imgPath: '/cover_book-2.jpg'
+    imgPath: '/files/cover_book-2.jpg'
   },
   {
     series: '公司登記實務及案例解析',
@@ -206,7 +206,7 @@ const files = [
         link: 'https://docs.google.com/document/d/15BpM39U76KwtPvx5Y6QcbsqNW9jazTgv'
       }
     ],
-    imgPath: '/cover_book-3.jpg'
+    imgPath: '/files/cover_book-3.jpg'
   },
   {
     series: '公司登記實務及案例解析',
@@ -281,7 +281,7 @@ const files = [
         link: 'https://docs.google.com/document/d/15BpM39U76KwtPvx5Y6QcbsqNW9jazTgv'
       }
     ],
-    imgPath: '/cover_book-4.jpg'
+    imgPath: '/files/cover_book-4.jpg'
   }
 ]
 
