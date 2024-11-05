@@ -15,9 +15,11 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+const { notify } = useToastifyStore()
 
 const show = () => {
-  useNuxtApp().$toast.info('toastify success')
+  // useNuxtApp().$toast.info('toastify success')
+  notify('warning', '注意錯誤')
   // refresh()
 }
 

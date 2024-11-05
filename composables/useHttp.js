@@ -7,6 +7,8 @@ const checkRef = (obj) => {
 }
 
 const handleError = (status, statusTextCh) => {
+  const { notify } = useToastifyStore()
+  notify('error', statusTextCh)
   console.log('', status, statusTextCh)
 }
 
@@ -26,7 +28,7 @@ const fetchWrapper = (url, opts) => {
 
   const { firebaseApiUrl } = useRuntimeConfig().public
   const nuxtApp = useNuxtApp()
-  const toastifyStore = useToastifyStore()
+  // const toastifyStore = useToastifyStore()
 
   return useFetch(url, {
     onRequest({ request, options }) {
@@ -55,10 +57,6 @@ const fetchWrapper = (url, opts) => {
       }
 
       const statusTextCh = errorHandler.matchErrorMsg(status, statusText)
-
-      toastifyStore.$patch((state) => {
-        state.isToastShow = true
-      })
 
       handleError(status, statusTextCh)
     },

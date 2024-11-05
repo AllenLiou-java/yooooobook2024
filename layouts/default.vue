@@ -6,7 +6,6 @@
     </div>
 
     <LayoutFooter />
-    <!-- <Toast group="global" position="bottom-right" /> -->
   </div>
 </template>
 
