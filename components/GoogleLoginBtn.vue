@@ -36,6 +36,8 @@ const handleGoogleLogin = async () => {
     return
   }
 
+  console.log(accessToken)
+
   const { idToken, refreshToken } = await $fetch('/api/auth/google', {
     method: 'POST',
     body: {
