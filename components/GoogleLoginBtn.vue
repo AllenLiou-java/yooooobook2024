@@ -21,35 +21,37 @@ import { googleTokenLogin } from 'vue3-google-login'
 const userStore = useUserStore()
 const { setUserLoggedin } = userStore
 
+const { notify } = useToastifyStore()
+
 const runtimeConfig = useRuntimeConfig()
 const { googleClientId: GOOGLE_CLIENT_ID } = runtimeConfig.public
 
 // google登入
 const handleGoogleLogin = async () => {
-  // google登入取得accessToken
-  const accessToken = await googleTokenLogin({
-    clientId: GOOGLE_CLIENT_ID
-  }).then((response) => response?.access_token)
+  try {
+    const { access_token: accessToken } = await googleTokenLogin({
+      clientId: GOOGLE_CLIENT_ID
+    })
 
-  if (!accessToken) {
-    console.log('登入失敗')
-    return
+    if (!accessToken) {
+      notify('error', '登入失敗')
+      return
+    }
+
+    const { idToken, refreshToken, error } = await $fetch('/api/auth/google', {
+      method: 'POST',
+      body: {
+        accessToken
+      },
+      initialCache: false
+    })
+
+    if (error) throw new Error('登入失敗')
+
+    setUserLoggedin(idToken, refreshToken)
+  } catch (err) {
+    notify('error', err.message)
   }
-
-  console.log(accessToken)
-
-  const { idToken, refreshToken } = await $fetch('/api/auth/google', {
-    method: 'POST',
-    body: {
-      accessToken
-    },
-    initialCache: false
-  })
-
-  setUserLoggedin(idToken, refreshToken)
-
-  // setIdToken(idToken)
-  // setRefreshToken(refreshToken)
 }
 </script>
 

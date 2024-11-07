@@ -8,15 +8,19 @@ export default defineEventHandler(async (event) => {
   const firebaseOauthLoginApi =
     'https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=' + firebaseApiKey
 
-  const { idToken, refreshToken } = await $fetch(firebaseOauthLoginApi, {
-    method: 'POST',
-    body: {
-      requestUri: webUrl,
-      postBody: 'access_token=' + accessToken + '&providerId=google.com',
-      returnSecureToken: true,
-      returnIdpCredential: true
-    }
-  })
+  try {
+    const oauthLoginPromise = await $fetch(firebaseOauthLoginApi, {
+      method: 'POST',
+      body: {
+        requestUri: webUrl,
+        postBody: 'access_token=' + accessToken + '&providerId=google.com',
+        returnSecureToken: true,
+        returnIdpCredential: true
+      }
+    })
 
-  return { idToken, refreshToken }
+    return oauthLoginPromise
+  } catch (error) {
+    return { error }
+  }
 })
