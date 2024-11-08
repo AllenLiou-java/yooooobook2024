@@ -8,11 +8,18 @@
       {{ errorMessageFilter.errorMessage_CH }}
     </p>
     <p class="text-white text-20 mb-44">{{ errorMessageFilter.errorMessage_EN }}</p>
-    <NuxtLink
+    <!-- <NuxtLink
       class="max-w-320 w-full bg-[#f5dd00] text-blue_dark font-bold text-center py-12 hover:bg-white duration-300"
       to="/"
       >返回首頁</NuxtLink
+    > -->
+    <button
+      type="button"
+      class="max-w-320 w-full bg-[#f5dd00] text-blue_dark font-bold text-center py-12 hover:bg-white duration-300"
+      @click="handleError"
     >
+      返回首頁
+    </button>
   </div>
 </template>
 
@@ -50,6 +57,8 @@ const errorMessageCollect = ref([
     errorMessage_EN: 'Page not found'
   }
 ])
+
+const handleError = () => clearError({ redirect: '/' })
 </script>
 
 <style lang="scss" scoped>

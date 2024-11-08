@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     'https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=' + firebaseApiKey
 
   try {
-    const oauthLoginPromise = await $fetch(firebaseOauthLoginApi, {
+    const { idToken, refreshToken } = await $fetch(firebaseOauthLoginApi, {
       method: 'POST',
       body: {
         requestUri: webUrl,
@@ -19,8 +19,12 @@ export default defineEventHandler(async (event) => {
       }
     })
 
-    return oauthLoginPromise
+    return { message: 'successfully signed in!', idToken, refreshToken }
   } catch (error) {
-    return { error }
+    // return { error }
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Unauthorized'
+    })
   }
 })

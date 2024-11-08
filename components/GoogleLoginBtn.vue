@@ -38,7 +38,7 @@ const handleGoogleLogin = async () => {
       return
     }
 
-    const { idToken, refreshToken, error } = await $fetch('/api/auth/google', {
+    const { idToken, refreshToken } = await $fetch('/api/auth/google', {
       method: 'POST',
       body: {
         accessToken
@@ -46,9 +46,7 @@ const handleGoogleLogin = async () => {
       initialCache: false
     })
 
-    if (error) throw new Error('登入失敗')
-
-    setUserLoggedin(idToken, refreshToken)
+    if (idToken && refreshToken) setUserLoggedin(idToken, refreshToken)
   } catch (err) {
     notify('error', err.message)
   }

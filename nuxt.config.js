@@ -76,9 +76,9 @@ export default defineNuxtConfig({
       webUrl: '',
       googleClientId: ''
     }
-  },
-
-  nitro: {
-    preset: 'vercel'
   }
+
+  // nitro: {
+  //   preset: 'vercel'
+  // }
 })

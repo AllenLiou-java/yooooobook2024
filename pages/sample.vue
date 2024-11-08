@@ -5,8 +5,9 @@
     <p>{{ doubleCount }}</p>
 
     <div class="max-w-320 h-180 myphoto"></div>
-    <p>{{ data }}</p>
-    <p>error: {{ error }}</p>
+    <p>{{ fireData }}</p>
+    <p>error: {{ fireError }}</p>
+    <p>memberLoginUrl: {{ memberLoginUrl }}</p>
     <!-- <Toast /> -->
     <Button label="Show" @click="show()" />
     <img class="w-full h-[60vh] object-cover object-center" :src="imageSrc(urlRef)" alt="banner" />
@@ -15,6 +16,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+import { API } from '~/apis'
 const { notify } = useToastifyStore()
 
 const show = () => {
@@ -42,7 +44,17 @@ const urlRef = ref('/home/city.png')
 
 // const { data: fireData } = await useFirebaseApi('/stock/AA00001.json')
 
-const { data, error } = await useHttp.get('/stock1/AA00001.json')
+const fireData = ref({})
+const fireError = ref('')
+
+await useHttp.get('/stock/AA00001.json').then((res) => {
+  fireData.value = res.data.value
+})
+
+const memberLoginUrl = ref('')
+onMounted(() => {
+  memberLoginUrl.value = API.member.login.url
+})
 
 const counterStore = useCounterStore()
 const { addCount } = counterStore

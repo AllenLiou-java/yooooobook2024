@@ -1,15 +1,9 @@
 /* eslint-disable no-console */
 import { hash } from 'ohash'
-import errorHandler from '@/api/errorHandler'
+import errorHandler from '@/apis/errorHandler'
 
 const checkRef = (obj) => {
   return Object.keys(obj).some((key) => isRef(obj[key]))
-}
-
-const handleError = (status, statusTextCh) => {
-  const { notify } = useToastifyStore()
-  notify('error', statusTextCh)
-  console.log('', status, statusTextCh)
 }
 
 const fetchWrapper = (url, opts) => {
@@ -29,6 +23,7 @@ const fetchWrapper = (url, opts) => {
   const { firebaseApiUrl } = useRuntimeConfig().public
   const nuxtApp = useNuxtApp()
   // const toastifyStore = useToastifyStore()
+  const { notify } = useToastifyStore()
 
   return useFetch(url, {
     onRequest({ request, options }) {
@@ -57,8 +52,7 @@ const fetchWrapper = (url, opts) => {
       }
 
       const statusTextCh = errorHandler.matchErrorMsg(status, statusText)
-
-      handleError(status, statusTextCh)
+      notify('error', statusTextCh)
     },
     // Set the cache key
     key: key ?? hash(['api-fetch', url, JSON.stringify(options)]),
