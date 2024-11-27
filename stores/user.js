@@ -20,11 +20,12 @@ export const useUserStore = defineStore('user', () => {
     refreshToken.value = token
   }
 
-  const setUserLoggedin = (id_token, refresh_token) => {
+  const setUserLoggedin = (id_token, refresh_token, name) => {
+    const router = useRouter()
     const idTokenDecode = jwtDecode(id_token)
 
     isUserLoggedIn.value = true
-    userName.value = idTokenDecode.name
+    userName.value = idTokenDecode.name || name
     email.value = idTokenDecode.email
     emailVerified.value = idTokenDecode.email_verified
     photoUrl.value = idTokenDecode.picture
@@ -35,14 +36,15 @@ export const useUserStore = defineStore('user', () => {
     // 打Api將使用者資料存至firebase
 
     // 存入cookie
-    useCookie('userName').value = idTokenDecode.name
+    useCookie('userName').value = idTokenDecode.name || name
     useCookie('email').value = idTokenDecode.email
+    useCookie('emailVerified').value = idTokenDecode.email_verified
     useCookie('photoUrl').value = idTokenDecode.picture
     useCookie('userId').value = idTokenDecode.user_id
     useCookie('idToken').value = id_token
     useCookie('refreshToken').value = refresh_token
 
-    navigateTo('/')
+    router.back()
   }
 
   const setUserLogout = () => {
@@ -52,27 +54,31 @@ export const useUserStore = defineStore('user', () => {
     emailVerified.value = ''
     photoUrl.value = ''
     userId.value = ''
+    idToken.value = ''
+    refreshToken.value = ''
 
     // 清除cookie
     useCookie('userName').value = null
     useCookie('email').value = null
+    useCookie('emailVerified').value = null
     useCookie('photoUrl').value = null
     useCookie('userId').value = null
     useCookie('idToken').value = null
     useCookie('refreshToken').value = null
 
     // 導向至首頁
-    // navigateTo('/')
+    // await navigateTo('/user/login')
   }
 
   const initProfile = () => {
     const cookieIdToken = useCookie('idToken').value
     const cookieRefreshToken = useCookie('refreshToken').value
+    const cookieUserName = useCookie('userName').value
 
     if (cookieIdToken) {
       const idTokenDecode = jwtDecode(cookieIdToken)
       isUserLoggedIn.value = true
-      userName.value = idTokenDecode.name
+      userName.value = idTokenDecode.name || cookieUserName
       email.value = idTokenDecode.email
       emailVerified.value = idTokenDecode.email_verified
       photoUrl.value = idTokenDecode.picture

@@ -133,6 +133,22 @@
 </template>
 
 <script setup>
+useHead({
+  title: '購物須知'
+})
+
+definePageMeta({
+  title: '購物須知'
+})
+
+useSeoMeta({
+  description: '詳細說明完整訂購流程，也提供退換貨相關辦法。',
+  ogDescription: '詳細說明完整訂購流程，也提供退換貨相關辦法。',
+  ogTitle: '購物須知 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/shoppingInfo'
+})
+
 const currentSection = ref(null)
 const buyProcess = [
   {

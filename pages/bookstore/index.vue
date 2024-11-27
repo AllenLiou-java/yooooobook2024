@@ -9,7 +9,14 @@
             訂購書籍
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - 訂購書籍</p>
+          <!-- <p class="font-bold">首頁 - 訂購書籍</p> -->
+          <NuxtLink
+            v-for="(routeItem, idx) in routeList"
+            :key="routeItem.name"
+            class="text-white font-black"
+            :to="routeItem.linkTo"
+            >{{ routeItem.name }} <span v-if="idx < routeList.length - 1"> ＞ </span>
+          </NuxtLink>
         </div>
       </div>
       <div
@@ -37,7 +44,7 @@
           >
             <NuxtLink
               class="text-gray_dark"
-              :to="{ name: 'bookstore-book', params: { book: product.name } }"
+              :to="{ name: 'bookstore-productId', params: { productId: product.productId } }"
               >{{ product.name }}</NuxtLink
             >
           </li>
@@ -47,17 +54,22 @@
       <ul class="flex flex-wrap lt-sm:(justify-center)">
         <li
           v-for="product in productList"
-          :key="product.name"
+          :key="product.productId"
           class="w-251 border border-solid flex-center flex-col p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
         >
           <div class="w-230 h-230 flex-center mb-12">
             <img class="h-215" :src="product.imgSrc" alt="bookImg" />
           </div>
           <h3 class="mb-20 h-44">{{ product.name }}</h3>
-          <p class="text-secondary mb-12">優惠價：{{ product.price.discount }}元</p>
+          <p class="mb-4 text-14 line-through">
+            定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
+          </p>
+          <p class="text-secondary mb-12">
+            優惠價：{{ thousandthsFormat(product.price.discount) }} 元
+          </p>
           <NuxtLink
             class="w-full text-blue text-center border border-solid p-8 group-hover:(bg-blue text-white duration-300) lt-md:(bg-blue text-white)"
-            :to="{ name: 'bookstore-book', params: { book: product.name } }"
+            :to="{ name: 'bookstore-productId', params: { productId: product.productId } }"
             >詳細資料</NuxtLink
           >
         </li>
@@ -67,28 +79,75 @@
 </template>
 
 <script setup>
-const productList = ref([
+useHead({
+  title: '訂購書籍'
+})
+
+definePageMeta({
+  title: '書籍列表'
+})
+
+useSeoMeta({
+  description: '出版品完整列表。',
+  ogDescription: '出版品完整列表。',
+  ogTitle: '書籍列表 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/bookstore'
+})
+
+const routeList = [
   {
-    name: '公司登記實務及案例解析(共三冊)',
-    imgSrc:
-      'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-    productId: 'AA00001',
-    price: {
-      originalPrice: 5500,
-      discount: 5200
-    }
+    name: '首頁',
+    linkTo: '/'
   },
   {
-    name: '公司登記實務',
-    imgSrc:
-      'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-    productId: 'AA00002',
-    price: {
-      originalPrice: 4800,
-      discount: 4200
-    }
+    name: '訂購書籍',
+    linkTo: ''
   }
-])
+]
+
+const { notify } = useToastifyStore()
+const { data: productList, error } = await useAPI(apiList.product.getListInfo.serverPath)
+
+if (error.value) {
+  if (import.meta.client) {
+    const message = error.value.cause.message
+    const statusCode = error.value.cause.statusCode
+
+    notify('error', message, statusCode)
+  }
+}
+
+const productStore = useProductStore()
+
+onMounted(() => {
+  productStore.$patch({
+    productList: productList.value
+  })
+})
+
+// const productList = ref([
+//   {
+//     name: '公司登記實務及案例解析(共三冊)',
+//     imgSrc:
+//       'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
+//     productId: 'AA00001',
+//     price: {
+//       originalPrice: 5500,
+//       discount: 5200
+//     }
+//   },
+//   {
+//     name: '公司登記實務',
+//     imgSrc:
+//       'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
+//     productId: 'AA00002',
+//     price: {
+//       originalPrice: 4800,
+//       discount: 4200
+//     }
+//   }
+// ])
 </script>
 
 <style lang="scss" scoped></style>

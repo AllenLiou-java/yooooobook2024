@@ -48,7 +48,8 @@ const handleGoogleLogin = async () => {
 
     if (idToken && refreshToken) setUserLoggedin(idToken, refreshToken)
   } catch (err) {
-    notify('error', err.message)
+    const { status, statusMessage } = err
+    if (status && statusMessage) notify('error', '登入失敗')
   }
 }
 </script>

@@ -9,7 +9,7 @@
           <label class="mb-8" for="email">請輸入註冊時的電子郵件 Email</label>
           <VInputText name="email" type="email" autocomplete="email" />
         </div>
-
+        <p class="text-14 text-red-6">{{ errorMsg }}</p>
         <div class="flex">
           <button
             class="bg-blue text-white text-center p-12 cursor-pointer border-0 hover:bg-blue_dark mr-12 grow-3 lt-sm:grow-1"
@@ -32,6 +32,24 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/yup'
 import * as yup from 'yup'
 
+useHead({
+  title: '忘記密碼'
+})
+
+definePageMeta({
+  title: '忘記密碼'
+})
+
+useSeoMeta({
+  ogTitle: '忘記密碼 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/user/resetPassword'
+})
+
+const { $api } = useNuxtApp()
+const errorMsg = ref('')
+const { notify } = useToastifyStore()
+
 const { handleSubmit } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
@@ -40,9 +58,32 @@ const { handleSubmit } = useForm({
   )
 })
 
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2))
+const onSubmit = handleSubmit(async (values) => {
+  const { email } = values
+  try {
+    await resetPasswordPromise(email)
+    await navigateTo({
+      path: '/user/login'
+    })
+    notify('info', '請前往信箱變更密碼。')
+  } catch (e) {
+    const { statusCode, message } = e
+    const errorMessage = mapErrorMessage(message, statusCode)
+
+    errorMsg.value = errorMessage
+  }
 })
+
+const resetPasswordPromise = (email) => {
+  const resetPassword = apiList.member.passwordReset
+
+  return $api(resetPassword.serverPath, {
+    method: resetPassword.method,
+    body: {
+      email
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped></style>

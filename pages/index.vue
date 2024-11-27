@@ -105,6 +105,15 @@
 
 <script setup>
 import Carousel from 'primevue/carousel'
+
+useHead({
+  title: '首頁'
+})
+
+definePageMeta({
+  title: '首頁'
+})
+
 const { imageSrc } = getImageSrc()
 
 const banners = ref([

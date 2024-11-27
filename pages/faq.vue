@@ -57,6 +57,23 @@
 <script setup>
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
+
+useHead({
+  title: '常見問題'
+})
+
+definePageMeta({
+  title: '常見問題'
+})
+
+useSeoMeta({
+  description: '有關訂購過程常見的問題，透過搜尋欄更有效找到解答。',
+  ogDescription: '有關訂購過程常見的問題，透過搜尋欄更有效找到解答。',
+  ogTitle: '常見問題 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/faq'
+})
+
 const value1 = ref(null)
 const tabs = ref([
   {

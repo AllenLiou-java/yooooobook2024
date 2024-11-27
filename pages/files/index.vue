@@ -69,6 +69,22 @@
 <script setup>
 import fileList from '@/assets/js/fileList'
 const { imageSrc } = getImageSrc()
+
+useHead({
+  title: '檔案下載'
+})
+
+definePageMeta({
+  title: '檔案下載列表'
+})
+
+useSeoMeta({
+  description: '出版品完整列表',
+  ogDescription: '出版品完整列表。',
+  ogTitle: '檔案下載列表 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/files'
+})
 </script>
 
 <style lang="scss" scoped></style>

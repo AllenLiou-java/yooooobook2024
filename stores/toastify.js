@@ -18,9 +18,16 @@ export const useToastifyStore = defineStore('toastify', () => {
     }
   })
 
-  const notify = (toastType, toastMsg) => {
-    content.value = toastMsg
+  const notify = (toastType, toastMsg, statusCode) => {
     options.type = toastType
+    if (!statusCode) {
+      // 使用頁面自訂的訊息
+      content.value = toastMsg
+    } else {
+      // 使用回傳並比對後的訊息
+      content.value = mapErrorMessage(toastMsg, statusCode)
+    }
+
     isToastShow.value = true
   }
 

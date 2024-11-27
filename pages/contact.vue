@@ -79,6 +79,24 @@
 </template>
 
 <script setup>
+useHead({
+  title: '聯絡我們'
+})
+
+definePageMeta({
+  title: '聯絡我們'
+})
+
+useSeoMeta({
+  description:
+    '任何訂購問題或公司登記相關問題，歡迎【加入官方 LINE 好友👉 https://lin.ee/f8oZLym】與我們聯繫喔。',
+  ogDescription:
+    '任何訂購問題或公司登記相關問題，歡迎【加入官方 LINE 好友👉 https://lin.ee/f8oZLym】與我們聯繫喔。',
+  ogTitle: '聯絡我們 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/contact'
+})
+
 const { imageSrc } = getImageSrc()
 </script>
 

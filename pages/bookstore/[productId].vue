@@ -10,7 +10,14 @@
             訂購書籍
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - 訂購書籍 - {{ route.params.book }}</p>
+          <!-- <p class="font-bold">首頁 - 訂購書籍 - {{ mapProductName(route.params.productId) }}</p> -->
+          <NuxtLink
+            v-for="(routeItem, idx) in routeList"
+            :key="routeItem.name"
+            class="text-white font-black"
+            :to="routeItem.linkTo"
+            >{{ routeItem.name }} <span v-if="idx < routeList.length - 1"> ＞ </span>
+          </NuxtLink>
         </div>
       </div>
       <div
@@ -38,7 +45,7 @@
           >
             <NuxtLink
               class="text-gray_dark"
-              :to="{ name: 'bookstore-book', params: { book: productItem.name } }"
+              :to="{ name: 'bookstore-productId', params: { productId: productItem.productId } }"
               >{{ productItem.name }}</NuxtLink
             >
           </li>
@@ -59,9 +66,11 @@
             <hr class="bg-brown my-12" />
             <div class="flex gap-32">
               <p>
-                定價：<del>{{ product.price.originalPrice }}元</del>
+                定價：<del>{{ thousandthsFormat(product.price.originalPrice) }}元</del>
               </p>
-              <p class="text-secondary">優惠價：{{ product.price.discount }}元</p>
+              <p class="text-secondary">
+                優惠價：{{ thousandthsFormat(product.price.discount) }}元
+              </p>
             </div>
             <hr class="bg-brown my-12" />
             <div class="flex items-center mb-16">
@@ -82,7 +91,7 @@
                 </template>
               </InputNumber>
             </div>
-            <p class="mb-16">庫存： {{ 3 }}</p>
+            <p class="mb-16">庫存： {{ stock.qty }}</p>
             <div class="flex text-white gap-12">
               <div
                 class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
@@ -145,7 +154,7 @@
                   header="價格"
                 >
                   <template #body="slotProps">
-                    {{ formatCurrency(slotProps.data.price) }}
+                    NT$ {{ thousandthsFormat(slotProps.data.price) }}
                   </template>
                 </Column>
               </DataTable>
@@ -193,97 +202,129 @@
 <script setup>
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-const route = useRoute()
 const orderQty = ref(0)
+const route = useRoute()
 
-const productList = ref([
-  {
-    name: '公司登記實務及案例解析(共三冊)',
-    imgSrc:
-      'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-    productId: 'AA00001',
-    price: {
-      originalPrice: 5500,
-      discount: 5200
-    }
-  },
-  {
-    name: '公司登記實務',
-    imgSrc:
-      'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-    productId: 'AA00002',
-    price: {
-      originalPrice: 4800,
-      discount: 4200
-    }
-  }
-])
-
-const product = ref({
-  name: '公司登記實務及案例解析(共三冊)',
-  imgSrc:
-    'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-  productId: 'AA00001',
-  price: {
-    originalPrice: 5500,
-    discount: 5200
-  },
-  content: ['有限公司篇【532頁】', '股份有限公司篇【964頁】', '應備文件詳析篇【296頁】'],
-  bookIntroduction: {
-    summary: [
-      '做為創業者開了家公司，但不知道公司登記相關流程及申請手續嗎?<br />又或者不清楚公司哪些變更是需要向公司登記機關提出申請，結果沒有在期限內申請而被裁罰嗎?',
-      '又或是知道要申請變更登記，但不知道應該準備什麼文件，以及文件有哪些地方是需要注意、哪些程序是需要踐行，導致一直遲遲無法取得登記核准文件嗎?',
-      '做為提供公司登記服務的從業人員，明明依照相關規定檢附文件，但還是常常被公司登記機關通知補正，結果自己卻還是不知道哪裡錯，導致案件延宕甚至被退件，最後沒有在客戶要求的時間內完成，不僅重創己身的專業形象，更可能因此失去了重要的客戶。',
-      '&ldquo;現在，只要擁有這一本，就可以搞定公司登記!&rdquo;'
-    ],
-    detail: [
-      '公司登記實務及案例解析-有限公司篇 ISBN：978-626-97707-0-0<br />規格：平裝 / 532頁 / 21 x 29.7 x 2.8 cm / 單色印刷 / 初版',
-      '公司登記實務及案例解析-股份有限公司篇 ISBN：978-626-97707-1-7<br />規格：平裝 / 532頁 / 21 x 29.7 x 5 cm / 單色印刷 / 初版',
-      '公司登記實務及案例解析-應備文件詳析篇 ISBN：978-626-97707-2-4<br />規格：平裝 / 532頁 / 21 x 29.7 x 1.6 cm / 單色印刷 / 初版',
-      'CST : 公司法<br />出版地 : 台灣'
-    ]
-  },
-  plans: [
-    {
-      isShow: true,
-      content: ['可各別開立發票', '如需另外寄送，每一地址酌收行政處理費300元'],
-      priceList: [
-        {
-          title: '5-9套',
-          price: 4000
-        },
-        {
-          title: '10套以上',
-          price: 3800
-        }
-      ],
-      type: 'person'
-    },
-    {
-      isShow: true,
-      content: ['可各別開立發票'],
-      priceList: [
-        {
-          title: '4-6套',
-          price: 3000
-        },
-        {
-          title: '7套以上',
-          price: 2800
-        }
-      ],
-      type: 'group'
-    }
-  ]
+useHead({
+  title: () => `訂購書籍【${mapProductName(route.params.productId)}】`
 })
 
-const formatCurrency = (value) => {
-  return value.toLocaleString('zh-TW', {
-    style: 'currency',
-    currency: 'TWD',
-    maximumFractionDigits: 0
-  })
-}
+definePageMeta({
+  title: '訂購書籍'
+})
+
+useSeoMeta({
+  description: '前往訂購頁面，可預覽出版品內容，並了解出版品詳細資訊。',
+  ogDescription: '前往訂購頁面，可預覽出版品內容，並了解出版品詳細資訊。',
+  ogTitle: '訂購書籍 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg'
+})
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '訂購書籍',
+    linkTo: '/bookstore'
+  },
+  {
+    name: `${mapProductName(route.params.productId)}`,
+    linkTo: ''
+  }
+]
+
+const { data: product } = await useAPI(
+  apiList.product.getItemInfo.serverPath.replace(':productId', route.params.productId)
+)
+
+const { data: productList } = await useAPI(apiList.product.getListInfo.serverPath)
+
+const { data: stock } = await useAPI(
+  apiList.stock.getStock.serverPath.replace(':productId', route.params.productId)
+)
+
+// const productList = ref([
+//   {
+//     name: '公司登記實務及案例解析(共三冊)',
+//     imgSrc:
+//       'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
+//     productId: 'AA00001',
+//     price: {
+//       originalPrice: 5500,
+//       discount: 5200
+//     }
+//   },
+//   {
+//     name: '公司登記實務',
+//     imgSrc:
+//       'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
+//     productId: 'AA00002',
+//     price: {
+//       originalPrice: 4800,
+//       discount: 4200
+//     }
+//   }
+// ])
+
+// const product = ref({
+//   name: '公司登記實務及案例解析(共三冊)',
+//   imgSrc:
+//     'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
+//   productId: 'AA00001',
+//   price: {
+//     originalPrice: 5500,
+//     discount: 5200
+//   },
+//   content: ['有限公司篇【532頁】', '股份有限公司篇【964頁】', '應備文件詳析篇【296頁】'],
+//   bookIntroduction: {
+//     summary: [
+//       '做為創業者開了家公司，但不知道公司登記相關流程及申請手續嗎?<br />又或者不清楚公司哪些變更是需要向公司登記機關提出申請，結果沒有在期限內申請而被裁罰嗎?',
+//       '又或是知道要申請變更登記，但不知道應該準備什麼文件，以及文件有哪些地方是需要注意、哪些程序是需要踐行，導致一直遲遲無法取得登記核准文件嗎?',
+//       '做為提供公司登記服務的從業人員，明明依照相關規定檢附文件，但還是常常被公司登記機關通知補正，結果自己卻還是不知道哪裡錯，導致案件延宕甚至被退件，最後沒有在客戶要求的時間內完成，不僅重創己身的專業形象，更可能因此失去了重要的客戶。',
+//       '&ldquo;現在，只要擁有這一本，就可以搞定公司登記!&rdquo;'
+//     ],
+//     detail: [
+//       '公司登記實務及案例解析-有限公司篇 ISBN：978-626-97707-0-0<br />規格：平裝 / 532頁 / 21 x 29.7 x 2.8 cm / 單色印刷 / 初版',
+//       '公司登記實務及案例解析-股份有限公司篇 ISBN：978-626-97707-1-7<br />規格：平裝 / 532頁 / 21 x 29.7 x 5 cm / 單色印刷 / 初版',
+//       '公司登記實務及案例解析-應備文件詳析篇 ISBN：978-626-97707-2-4<br />規格：平裝 / 532頁 / 21 x 29.7 x 1.6 cm / 單色印刷 / 初版',
+//       'CST : 公司法<br />出版地 : 台灣'
+//     ]
+//   },
+//   plans: [
+//     {
+//       isShow: true,
+//       content: ['可各別開立發票', '如需另外寄送，每一地址酌收行政處理費300元'],
+//       priceList: [
+//         {
+//           title: '5-9套',
+//           price: 4000
+//         },
+//         {
+//           title: '10套以上',
+//           price: 3800
+//         }
+//       ],
+//       type: 'person'
+//     },
+//     {
+//       isShow: true,
+//       content: ['可各別開立發票'],
+//       priceList: [
+//         {
+//           title: '4-6套',
+//           price: 3000
+//         },
+//         {
+//           title: '7套以上',
+//           price: 2800
+//         }
+//       ],
+//       type: 'group'
+//     }
+//   ]
+// })
 </script>
 
 <style lang="scss" scoped></style>

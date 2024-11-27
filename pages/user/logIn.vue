@@ -15,6 +15,7 @@
               <label class="mb-8" for="password">密碼 Password</label>
               <VPassword input-id="password" name="password" :feedback="false" />
             </div>
+            <p class="text-14 text-red-6">{{ errorMsg }}</p>
             <NuxtLink
               class="self-end text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
               to="/user/resetPassword"
@@ -38,19 +39,6 @@
           <h2 class="text-blue_dark mb-30">您也可以使用下列方式登入</h2>
           <div class="h-[calc(100%-90px)] flex-center flex-col">
             <p class="text-16 mb-12">直接使用您的Google+登入，只需幾秒鐘</p>
-            <!-- <div
-              class="flex items-center max-w-356 w-full bg-[#dd4b39] px-8 py-3 mx-auto cursor-pointer duration-300 hover:bg-secondary"
-            >
-              <svg class="w-40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <title>google-plus</title>
-                <path
-                  fill="#ffffff"
-                  d="M23,11H21V9H19V11H17V13H19V15H21V13H23M8,11V13.4H12C11.8,14.4 10.8,16.4 8,16.4C5.6,16.4 3.7,14.4 3.7,12C3.7,9.6 5.6,7.6 8,7.6C9.4,7.6 10.3,8.2 10.8,8.7L12.7,6.9C11.5,5.7 9.9,5 8,5C4.1,5 1,8.1 1,12C1,15.9 4.1,19 8,19C12,19 14.7,16.2 14.7,12.2C14.7,11.7 14.7,11.4 14.6,11H8Z"
-                />
-              </svg>
-              <div class="w-1 h-36 bg-white mx-8"></div>
-              <span class="text-20 text-white grow-1">Google +</span>
-            </div> -->
             <GoogleLoginBtn />
           </div>
         </div>
@@ -64,6 +52,24 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/yup'
 import * as yup from 'yup'
 
+const { $api } = useNuxtApp()
+const { setUserLoggedin } = useUserStore()
+const errorMsg = ref('')
+
+useHead({
+  title: '會員登入'
+})
+
+definePageMeta({
+  title: '會員登入'
+})
+
+useSeoMeta({
+  ogTitle: '會員登入 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/user/login'
+})
+
 const { handleSubmit } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
@@ -76,9 +82,41 @@ const { handleSubmit } = useForm({
 // const [email, emailAttrs] = defineField('email')
 // const [password, passwordAttrs] = defineField('password')
 
-const onSubmit = handleSubmit((values) => {
-  alert(JSON.stringify(values, null, 2))
+const onSubmit = handleSubmit(async (values) => {
+  const { email, password } = values
+
+  try {
+    const { idToken, refreshToken, localId } = await signInPromise(email, password)
+
+    const { userName } = await $api(
+      apiList.member.getMemberInfo.serverPath.replace(':memberId', localId),
+      {
+        method: 'get',
+        onRequest({ options }) {
+          options.headers.set('idToken', idToken)
+        }
+      }
+    )
+
+    setUserLoggedin(idToken, refreshToken, userName)
+  } catch (e) {
+    const { statusCode, message } = e
+    const errorMessage = mapErrorMessage(message, statusCode)
+
+    errorMsg.value = errorMessage
+  }
+
+  // alert(JSON.stringify(values, null, 2))
 })
+
+const signInPromise = (email, password) => {
+  const signIn = apiList.member.signIn
+
+  return $api(signIn.serverPath, {
+    method: signIn.method,
+    body: { email, password }
+  })
+}
 </script>
 
 <style lang="scss" scoped></style>

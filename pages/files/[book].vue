@@ -140,6 +140,21 @@ const { imageSrc } = getImageSrc()
 
 const route = useRoute()
 
+useHead({
+  title: () => `檔案下載【${route.params.book}】`
+})
+
+definePageMeta({
+  title: '檔案下載'
+})
+
+useSeoMeta({
+  description: '前往下載公司登記常用的各式表單。',
+  ogDescription: '前往下載公司登記常用的各式表單。',
+  ogTitle: '檔案下載 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg'
+})
+
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS }
 })

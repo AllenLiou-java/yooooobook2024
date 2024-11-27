@@ -26,14 +26,19 @@
 <script setup>
 definePageMeta({
   middleware: (to, from) => {
-    const idToken = useCookie('idToken')
-    if (idToken.value) {
-      return navigateTo({
-        path: '/'
-      })
-    } else if (to.fullPath === '/user') {
+    if (to.fullPath === '/user') {
       return navigateTo({
         path: '/user/login'
+      })
+    }
+
+    const idToken = useCookie('idToken')
+    const signUpBlock = idToken.value && to.fullPath === '/user/signup'
+    const loginBlock = idToken.value && to.fullPath === '/user/login'
+
+    if (signUpBlock || loginBlock) {
+      return navigateTo({
+        path: '/'
       })
     }
   }

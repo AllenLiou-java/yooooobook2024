@@ -17,7 +17,7 @@
             :key="routeItem.label"
             class="relative group mx-12 py-4 hover:(border-0 border-b-2 border-solid border-[#35e3ea] )"
           >
-            <NuxtLink :to="routeItem.route" class="pt-16 pb-24">
+            <NuxtLink no-prefetch :to="routeItem.route" class="pt-16 pb-24">
               <span
                 v-if="routeItem.icon"
                 class="text-20 mr-4 text-white group-hover:text-[#35e3ea] align-text-top"
@@ -39,7 +39,7 @@
                   :key="item.label"
                   class="border-0 border-b-1 border-solid border-gray_light text-[#35e3ea] last:border-0"
                 >
-                  <NuxtLink :to="item.route">
+                  <NuxtLink no-prefetch :to="item.route">
                     <span class="text-gray_dark hover:text-[#4989a6] font-bold px-20 py-16 block">{{
                       item.label
                     }}</span>
@@ -77,24 +77,52 @@
               label="搜尋"
             />
           </div>
+          <!-- <ClientOnly> -->
           <div class="flex items-center">
             <div class="text-white cursor-pointer mr-16">
               <span class="material-icons align-text-top text-22 mr-2"> shopping_cart </span>
+
               <span class="text-14 align-middle">購物車(0)</span>
             </div>
+
             <template v-if="!isUserLoggedIn">
-              <NuxtLink to="/user/login" class="text-brown_light cursor-pointer">
+              <NuxtLink no-prefetch to="/user/login" class="text-brown_light cursor-pointer">
                 <span class="material-icons align-text-top text-22 mr-2"> person </span>
                 <span class="text-14 align-middle">會員登入</span>
               </NuxtLink>
             </template>
             <template v-else>
-              <!-- <ClientOnly> -->
-              <span class="text-brown_light text-12 mr-12">{{ userName }}</span>
-              <!-- </ClientOnly> -->
-              <button @click="setUserLogout">登出</button>
+              <div class="card flex justify-content-center relative cursor-pointer group">
+                <div
+                  aria-haspopup="true"
+                  aria-controls="overlay_tmenu"
+                  class="font-black rounded-full border border-solid text-blue border-blue bg-white text-14 px-12 py-4 group-hover:( bg-brown_light)"
+                  :style="onPopup ? popupActiveStyle : ''"
+                  @click="toggle"
+                >
+                  {{ userName }}
+                </div>
+
+                <TieredMenu
+                  id="overlay_tmenu"
+                  ref="menu"
+                  :model="items"
+                  popup
+                  @show="onPopup = true"
+                  @hide="onPopup = false"
+                />
+                <span
+                  class="material-icons text-20 text-gray bg-white rounded-full absolute end-[-10px] bottom-[-4px]"
+                >
+                  expand_circle_down
+                </span>
+              </div>
+              <div>
+                <ConfirmDialog></ConfirmDialog>
+              </div>
             </template>
           </div>
+          <!-- </ClientOnly> -->
         </div>
       </div>
       <div>
@@ -118,6 +146,7 @@
                 <ul class="ml-32">
                   <li v-for="item in routeItem.items" :key="item.label" class="mb-12">
                     <NuxtLink
+                      no-prefetch
                       class="text-white text-24"
                       :to="item.route"
                       @click="visible = false"
@@ -128,6 +157,7 @@
               </template>
               <template v-else
                 ><NuxtLink
+                  no-prefetch
                   class="text-white text-24"
                   :to="routeItem.route"
                   @click="visible = false"
@@ -146,10 +176,28 @@
       </div>
     </div>
   </div>
+  <ConfirmDialog group="headless">
+    <template #container="{ message, acceptCallback, rejectCallback }">
+      <div class="flex flex-col items-center p-28 rounded-full">
+        <div class="rounded-full inline-flex justify-center items-center bg-white h-84 w-84 -mt-72">
+          <span class="material-icons text-blue text-104"> help </span>
+        </div>
+        <span class="font-bold text-24 block mb-8 mt-20">{{ message.header }}</span>
+        <p class="mb-0">{{ message.message }}</p>
+        <div class="flex items-center gap-8 mt-20">
+          <Button class="min-w-120" label="登出" @click="acceptCallback"></Button>
+          <Button class="min-w-120" label="取消" outlined @click="rejectCallback"></Button>
+        </div>
+      </div>
+    </template>
+  </ConfirmDialog>
 </template>
 
 <script setup>
 import Sidebar from 'primevue/sidebar'
+import TieredMenu from 'primevue/tieredmenu'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useConfirm } from 'primevue/useconfirm'
 
 const visible = ref(false)
 
@@ -196,8 +244,59 @@ const textSearch = ref(null)
 const userStore = useUserStore()
 const { setUserLogout } = userStore
 const { isUserLoggedIn, userName } = storeToRefs(userStore)
-// const isUserLoggedIn = ref(true)
-// const userName = ref('FU JAN LIOU')
+const router = useRouter()
+
+const menu = ref()
+
+const items = ref([
+  {
+    label: '登出',
+    icon: 'pi pi-file',
+    command: () => {
+      confirmLogout()
+    }
+  },
+  {
+    label: '重設密碼',
+    icon: 'pi pi-file-edit',
+    command: () => {
+      router.push({ path: '/user/resetPassword' })
+    }
+  },
+  {
+    label: '信箱驗證',
+    icon: 'pi pi-search'
+  }
+])
+
+const toggle = (event) => {
+  menu.value.toggle(event)
+}
+
+const onPopup = ref(false)
+
+const popupActiveStyle = computed(() => {
+  return { backgroundColor: '#facc15' }
+})
+
+const { notify } = useToastifyStore()
+const confirm = useConfirm()
+const confirmLogout = () => {
+  confirm.require({
+    group: 'headless',
+    header: '登出',
+    message: '您是否確定要登出?',
+    rejectLabel: '取消',
+    acceptLabel: '登出',
+    accept: () => {
+      setUserLogout()
+      notify('info', '登出成功')
+    },
+    reject: () => {
+      console.log('logout cancel')
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

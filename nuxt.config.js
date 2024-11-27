@@ -22,6 +22,12 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['stores']
   },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false
+    }
+  ],
 
   modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt'],
 
@@ -62,19 +68,33 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
     googleAnalyticsId: '',
-    firebaseApiKey: '',
     firebaseAuthDomain: '',
     projectId: '',
     storageBucket: '',
     messagingSenderId: '',
     appId: '',
     googleSecretId: '',
+    firebaseApiUrl: '',
+    firebaseApiKey: '',
+    googleApiUrl: '',
+    webUrl: '',
     public: {
-      // apiBase: '' // can be overridden by NUXT_PUBLIC_API_BASE environment variable
-      googleApiUrl: '',
-      firebaseApiUrl: '',
-      webUrl: '',
       googleClientId: ''
+    }
+  },
+  hooks: {
+    'build:manifest': (manifest) => {
+      for (const key in manifest) {
+        const file = manifest[key]
+
+        if (file.prefetch) {
+          file.prefetch = false
+        }
+
+        if (file.resourceType === 'script') {
+          file.css = []
+        }
+      }
     }
   }
 

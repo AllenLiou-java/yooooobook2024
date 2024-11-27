@@ -21,11 +21,13 @@
           <label class="mb-8" for="passwordConfirm">再次確認密碼 Repeat Password</label>
           <VPassword input-id="passwordConfirm" name="passwordConfirm" :feedback="false" />
         </div>
+        <p class="text-14 text-red-6 mb-12">{{ errorMsg }}</p>
         <button
           class="bg-blue text-white text-center p-12 mb-16 cursor-pointer w-full border-0 hover:bg-blue_dark"
         >
           註冊
         </button>
+
         <NuxtLink class="text-center block" to="/user/login"
           ><span class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
             >已是會員了嗎？馬上登入！</span
@@ -40,6 +42,24 @@
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/yup'
 import * as yup from 'yup'
+
+const { $api } = useNuxtApp()
+const { notify } = useToastifyStore()
+const errorMsg = ref('')
+
+useHead({
+  title: '會員註冊'
+})
+
+definePageMeta({
+  title: '會員註冊'
+})
+
+useSeoMeta({
+  ogTitle: '會員註冊 - 有良冊股份有限公司',
+  ogImage: '/yooooobook.jpg',
+  ogUrl: 'https://www.yooooobook.com/user/signup'
+})
 
 const { handleSubmit } = useForm({
   validationSchema: toTypedSchema(
@@ -56,10 +76,60 @@ const { handleSubmit } = useForm({
   )
 })
 
-const onSubmit = handleSubmit((values, { resetForm }) => {
-  alert(JSON.stringify(values, null, 2))
-  resetForm()
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    const { name } = values
+    const { idToken, email, localId } = await signUpPromise(values)
+
+    await patchMemberInfoPromise({ name, email, localId }, idToken)
+    await sendEmailVerifyPromise(idToken)
+    await navigateTo({
+      path: '/user/login'
+    })
+    notify('info', '驗證信已寄出，請前往信箱驗證。')
+  } catch (e) {
+    const { statusCode, message } = e
+    const errorMessage = mapErrorMessage(message, statusCode)
+
+    errorMsg.value = errorMessage
+  }
 })
+
+const signUpPromise = (values) => {
+  const registered = apiList.member.registered
+
+  return $api(registered.serverPath, {
+    method: registered.method,
+    body: values
+  })
+}
+
+const sendEmailVerifyPromise = (idToken) => {
+  const emailVerify = apiList.member.sendEmailVerify
+
+  return $api(emailVerify.serverPath, {
+    method: emailVerify.method,
+    body: {
+      idToken
+    }
+  })
+}
+
+const patchMemberInfoPromise = (info, idToken) => {
+  const patchMemberInfo = apiList.member.patchMemberInfo
+  const memberInfo = {
+    userName: info.name,
+    email: info.email,
+    userUid: info.localId,
+    emailVerified: false,
+    picture: ''
+  }
+
+  return $api(patchMemberInfo.serverPath.replace(':memberId', info.localId), {
+    method: patchMemberInfo.method,
+    body: { memberInfo, idToken }
+  })
+}
 </script>
 
 <style lang="scss" scoped></style>
