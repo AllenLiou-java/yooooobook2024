@@ -81,22 +81,22 @@ export default defineNuxtConfig({
     public: {
       googleClientId: ''
     }
-  },
-  hooks: {
-    'build:manifest': (manifest) => {
-      for (const key in manifest) {
-        const file = manifest[key]
-
-        if (file.prefetch) {
-          file.prefetch = false
-        }
-
-        if (file.resourceType === 'script') {
-          file.css = []
-        }
-      }
-    }
   }
+  // hooks: {
+  //   'build:manifest': (manifest) => {
+  //     for (const key in manifest) {
+  //       const file = manifest[key]
+
+  //       if (file.prefetch) {
+  //         file.prefetch = false
+  //       }
+
+  //       if (file.resourceType === 'script') {
+  //         file.css = []
+  //       }
+  //     }
+  //   }
+  // }
 
   // nitro: {
   //   preset: 'vercel'
