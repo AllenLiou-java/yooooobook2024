@@ -110,7 +110,23 @@
                   popup
                   @show="onPopup = true"
                   @hide="onPopup = false"
-                />
+                >
+                  <template #item="{ item, props }">
+                    <NuxtLink
+                      v-if="item.route"
+                      class="gap-8"
+                      :to="item.route"
+                      v-bind="props.action"
+                    >
+                      <span class="material-icons"> {{ item.icon }} </span>
+                      <span>{{ item.label }}</span>
+                    </NuxtLink>
+                    <p v-else class="px-12 py-8 gap-8" v-bind="props.action">
+                      <span class="material-icons"> {{ item.icon }} </span>
+                      <span>{{ item.label }}</span>
+                    </p>
+                  </template>
+                </TieredMenu>
                 <span
                   class="material-icons text-20 text-gray bg-white rounded-full absolute end-[-10px] bottom-[-4px]"
                 >
@@ -198,6 +214,7 @@ import Sidebar from 'primevue/sidebar'
 import TieredMenu from 'primevue/tieredmenu'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
+import { storeToRefs } from 'pinia'
 
 const visible = ref(false)
 
@@ -243,30 +260,30 @@ const textSearch = ref(null)
 
 const userStore = useUserStore()
 const { setUserLogout } = userStore
-const { isUserLoggedIn, userName } = storeToRefs(userStore)
-const router = useRouter()
+const { isUserLoggedIn, userName, emailVerified } = storeToRefs(userStore)
 
 const menu = ref()
 
 const items = ref([
   {
     label: '登出',
-    icon: 'pi pi-file',
+    icon: 'logout',
     command: () => {
       confirmLogout()
     }
   },
   {
     label: '重設密碼',
-    icon: 'pi pi-file-edit',
-    command: () => {
-      router.push({ path: '/user/resetPassword' })
-    }
-  },
-  {
-    label: '信箱驗證',
-    icon: 'pi pi-search'
+    icon: 'password',
+    route: '/user/resetPassword'
   }
+  // {
+  //   label: '信箱驗證',
+  //   icon: 'verified',
+  //   command: () => {
+  //     confirmEmailVerify()
+  //   }
+  // }
 ])
 
 const toggle = (event) => {
@@ -297,6 +314,42 @@ const confirmLogout = () => {
     }
   })
 }
+
+const { $api } = useNuxtApp()
+const confirmEmailVerify = async () => {
+  if (emailVerified.value) return
+
+  const idToken = useCookie('idToken').value
+  const emailVerify = apiList.member.sendEmailVerify
+
+  try {
+    await $api(emailVerify.serverPath, {
+      method: emailVerify.method,
+      body: {
+        idToken
+      }
+    })
+    notify('info', '請前往信箱收取驗證信')
+  } catch (e) {
+    notify('error', e.message, e.statusCode)
+  }
+}
+
+const setEmailVarifyItem = () => {
+  if (!emailVerified.value) {
+    items.value.push({
+      label: '信箱驗證',
+      icon: 'verified',
+      command: () => {
+        confirmEmailVerify()
+      }
+    })
+  }
+}
+
+onMounted(() => {
+  setEmailVarifyItem()
+})
 </script>
 
 <style lang="scss" scoped>

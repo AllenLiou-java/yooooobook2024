@@ -9,6 +9,7 @@
 
     <!-- <p>productInfo: {{ productInfo }}</p> -->
     <p>stock: {{ stock }}</p>
+
     <!-- <p>data: {{ data }}</p> -->
 
     <Button class="m-12" label="取得庫存" @click="fetchStock()" />
@@ -20,12 +21,12 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 
+// const { data } = await useAPI('/api/stock/AA00001')
+
 const { $api } = useNuxtApp()
 const { notify } = useToastifyStore()
 
 const stock = ref({})
-
-// const { data} = await useAPI('/api/stock/AA00001')
 
 const fetchStock = async () => {
   console.log('fetchStock')
