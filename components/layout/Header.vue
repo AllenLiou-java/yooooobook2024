@@ -260,23 +260,23 @@ const textSearch = ref(null)
 
 const userStore = useUserStore()
 const { setUserLogout } = userStore
-const { isUserLoggedIn, userName, emailVerified } = storeToRefs(userStore)
+const { isUserLoggedIn, userName, idToken, signInProvider } = storeToRefs(userStore)
 
 const menu = ref()
 
 const items = ref([
-  {
-    label: '登出',
-    icon: 'logout',
-    command: () => {
-      confirmLogout()
-    }
-  },
-  {
-    label: '重設密碼',
-    icon: 'password',
-    route: '/user/resetPassword'
-  }
+  // {
+  //   label: '登出',
+  //   icon: 'logout',
+  //   command: () => {
+  //     confirmLogout()
+  //   }
+  // }
+  // {
+  //   label: '重設密碼',
+  //   icon: 'password',
+  //   route: '/user/resetPassword'
+  // }
   // {
   //   label: '信箱驗證',
   //   icon: 'verified',
@@ -317,7 +317,8 @@ const confirmLogout = () => {
 
 const { $api } = useNuxtApp()
 const confirmEmailVerify = async () => {
-  if (emailVerified.value) return
+  const emailVerified = useCookie('emailVerified').value
+  if (emailVerified) return
 
   const idToken = useCookie('idToken').value
   const emailVerify = apiList.member.sendEmailVerify
@@ -335,8 +336,27 @@ const confirmEmailVerify = async () => {
   }
 }
 
-const setEmailVarifyItem = () => {
-  if (!emailVerified.value) {
+const updateLoginMenuItem = () => {
+  items.value = []
+
+  if (!idToken.value) return
+  items.value.push({
+    label: '登出',
+    icon: 'logout',
+    command: () => {
+      confirmLogout()
+    }
+  })
+  if (signInProvider.value === 'password') {
+    items.value.push({
+      label: '重設密碼',
+      icon: 'password',
+      route: '/user/resetPassword'
+    })
+  }
+  const emailVerifiedCookie = useCookie('emailVerified').value
+
+  if (!emailVerifiedCookie) {
     items.value.push({
       label: '信箱驗證',
       icon: 'verified',
@@ -347,8 +367,51 @@ const setEmailVarifyItem = () => {
   }
 }
 
-onMounted(() => {
-  setEmailVarifyItem()
+watch(idToken, async (newVal, oldVal) => {
+  if (import.meta.server) return
+  if (!newVal) return
+  await updateEmailVerify()
+  updateLoginMenuItem()
+})
+
+const updateEmailVerify = async () => {
+  const cookieidToken = useCookie('idToken').value
+  const cookieEmailVerified = useCookie('emailVerified').value
+  if (!cookieidToken) return
+  if (cookieEmailVerified) return
+
+  const userDataResponse = await $api(apiList.member.getUserData.serverPath, {
+    method: apiList.member.getUserData.method,
+    body: {
+      idToken: cookieidToken
+    }
+  }).catch((e) => {
+    console.log('e', e.message, e.statusCode)
+  })
+
+  if (!userDataResponse) return
+  const user = userDataResponse.users[0]
+
+  userStore.$patch({
+    emailVerified: user.emailVerified
+  })
+
+  useCookie('emailVerified').value = user.emailVerified
+
+  const patchMemberInfo = apiList.member.patchMemberInfo
+  await $api(patchMemberInfo.serverPath.replace(':memberId', user.localId), {
+    method: patchMemberInfo.method,
+    body: {
+      memberInfo: {
+        emailVerified: user.emailVerified
+      }
+    }
+  })
+}
+
+onMounted(async () => {
+  await updateEmailVerify()
+  updateLoginMenuItem()
 })
 </script>
 

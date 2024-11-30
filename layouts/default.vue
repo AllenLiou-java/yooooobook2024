@@ -36,13 +36,12 @@ useSeoMeta({
   ogImage: '/yooooobook.jpg'
 })
 
-const userStore = useUserStore()
-const { initProfile } = userStore
+const { initProfile } = useUserStore()
 
 const idToken = useCookie('idToken')
 
 if (idToken.value) {
-  useAsyncData('profile', initProfile)
+  await useAsyncData('profile', initProfile)
 }
 </script>
 

@@ -23,6 +23,11 @@ const member = {
     serverPath: '/api/auth/sendEmailVerify',
     method: 'post'
   },
+  getUserData: {
+    url: '/v1/accounts:lookup',
+    serverPath: '/api/auth/getUserData',
+    method: 'post'
+  },
   passwordReset: {
     url: '/v1/accounts:sendOobCode',
     serverPath: '/api/auth/resetPassword',

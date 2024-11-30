@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
 
 export const useUserStore = defineStore('user', () => {
+  const { $api } = useNuxtApp()
   const isUserLoggedIn = ref(false)
   const userName = ref('')
   const email = ref('')
@@ -11,14 +12,7 @@ export const useUserStore = defineStore('user', () => {
   const userId = ref('')
   const idToken = ref('')
   const refreshToken = ref('')
-
-  const setIdToken = (token) => {
-    idToken.value = token
-  }
-
-  const setRefreshToken = (token) => {
-    refreshToken.value = token
-  }
+  const signInProvider = ref('')
 
   const setUserLoggedin = (id_token, refresh_token, name) => {
     const router = useRouter()
@@ -32,8 +26,7 @@ export const useUserStore = defineStore('user', () => {
     userId.value = idTokenDecode.user_id
     idToken.value = id_token
     refreshToken.value = refresh_token
-
-    // 打Api將使用者資料存至firebase
+    signInProvider.value = idTokenDecode.firebase.sign_in_provider
 
     // 存入cookie
     useCookie('userName').value = idTokenDecode.name || name
@@ -43,6 +36,24 @@ export const useUserStore = defineStore('user', () => {
     useCookie('userId').value = idTokenDecode.user_id
     useCookie('idToken').value = id_token
     useCookie('refreshToken').value = refresh_token
+    useCookie('signInProvider').value = idTokenDecode.firebase.sign_in_provider
+
+    // 若透過google auth 登入，則打Api將使用者資料存至firebase
+    if (signInProvider.value === 'google.com') {
+      const patchMemberInfo = apiList.member.patchMemberInfo
+      const memberInfo = {
+        userName: idTokenDecode.name,
+        email: idTokenDecode.email,
+        userUid: idTokenDecode.user_id,
+        emailVerified: true,
+        picture: idTokenDecode.picture
+      }
+
+      $api(patchMemberInfo.serverPath.replace(':memberId', idTokenDecode.user_id), {
+        method: patchMemberInfo.method,
+        body: { memberInfo, idToken: id_token }
+      })
+    }
 
     router.back()
   }
@@ -56,6 +67,7 @@ export const useUserStore = defineStore('user', () => {
     userId.value = ''
     idToken.value = ''
     refreshToken.value = ''
+    signInProvider.value = ''
 
     // 清除cookie
     useCookie('userName').value = null
@@ -65,6 +77,7 @@ export const useUserStore = defineStore('user', () => {
     useCookie('userId').value = null
     useCookie('idToken').value = null
     useCookie('refreshToken').value = null
+    useCookie('signInProvider').value = null
 
     // 導向至首頁
     // await navigateTo('/user/login')
@@ -77,6 +90,7 @@ export const useUserStore = defineStore('user', () => {
 
     if (cookieIdToken) {
       const idTokenDecode = jwtDecode(cookieIdToken)
+
       isUserLoggedIn.value = true
       userName.value = idTokenDecode.name || cookieUserName
       email.value = idTokenDecode.email
@@ -85,7 +99,9 @@ export const useUserStore = defineStore('user', () => {
       userId.value = idTokenDecode.user_id
       idToken.value = cookieIdToken
       refreshToken.value = cookieRefreshToken
+      signInProvider.value = idTokenDecode.firebase.sign_in_provider
     }
+
     return true
   }
 
@@ -98,10 +114,9 @@ export const useUserStore = defineStore('user', () => {
     userId,
     idToken,
     refreshToken,
+    signInProvider,
     setUserLoggedin,
     setUserLogout,
-    setIdToken,
-    setRefreshToken,
     initProfile
   }
 })
