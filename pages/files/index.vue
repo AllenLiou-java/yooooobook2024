@@ -9,7 +9,8 @@
             檔案下載
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - 檔案下載</p>
+          <!-- <p class="font-bold">首頁 - 檔案下載</p> -->
+          <Breadcrumb :link-list="routeList" />
         </div>
       </div>
       <div
@@ -85,6 +86,17 @@ useSeoMeta({
   ogImage: '/yooooobook.jpg',
   ogUrl: 'https://www.yooooobook.com/files'
 })
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '檔案下載',
+    linkTo: ''
+  }
+]
 </script>
 
 <style lang="scss" scoped></style>

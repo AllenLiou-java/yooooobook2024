@@ -10,7 +10,7 @@
             購物須知
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - 購物須知</p>
+          <Breadcrumb :link-list="routeList" />
         </div>
       </div>
       <div
@@ -148,6 +148,17 @@ useSeoMeta({
   ogImage: '/yooooobook.jpg',
   ogUrl: 'https://www.yooooobook.com/shoppingInfo'
 })
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '購物須知',
+    linkTo: ''
+  }
+]
 
 const currentSection = ref(null)
 const buyProcess = [

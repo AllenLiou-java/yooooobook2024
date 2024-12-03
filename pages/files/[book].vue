@@ -9,7 +9,7 @@
             檔案下載
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - 檔案下載 - {{ route.params.book }}</p>
+          <Breadcrumb :link-list="routeList" />
         </div>
       </div>
       <div
@@ -154,6 +154,21 @@ useSeoMeta({
   ogTitle: '檔案下載 - 有良冊股份有限公司',
   ogImage: '/yooooobook.jpg'
 })
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '檔案下載',
+    linkTo: '/files'
+  },
+  {
+    name: `${route.params.book}`,
+    linkTo: ''
+  }
+]
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS }

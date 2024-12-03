@@ -10,14 +10,7 @@
             訂購書籍
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <!-- <p class="font-bold">首頁 - 訂購書籍 - {{ mapProductName(route.params.productId) }}</p> -->
-          <NuxtLink
-            v-for="(routeItem, idx) in routeList"
-            :key="routeItem.name"
-            class="text-white font-black"
-            :to="routeItem.linkTo"
-            >{{ routeItem.name }} <span v-if="idx < routeList.length - 1"> ＞ </span>
-          </NuxtLink>
+          <Breadcrumb :link-list="routeList" />
         </div>
       </div>
       <div

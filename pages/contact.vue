@@ -9,7 +9,7 @@
             聯絡我們
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - 聯絡我們</p>
+          <Breadcrumb :link-list="routeList" />
         </div>
       </div>
       <div
@@ -98,6 +98,17 @@ useSeoMeta({
 })
 
 const { imageSrc } = getImageSrc()
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '聯絡我們',
+    linkTo: ''
+  }
+]
 </script>
 
 <style lang="scss" scoped></style>

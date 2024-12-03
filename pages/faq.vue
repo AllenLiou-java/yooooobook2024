@@ -10,7 +10,7 @@
             常見問題
           </h1>
           <hr class="bg-gray_light mt-32 mb-24" />
-          <p class="font-bold">首頁 - 常見問題</p>
+          <Breadcrumb :link-list="routeList" text-color="#082C4B" />
         </div>
       </div>
       <div
@@ -73,6 +73,17 @@ useSeoMeta({
   ogImage: '/yooooobook.jpg',
   ogUrl: 'https://www.yooooobook.com/faq'
 })
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '常見問題',
+    linkTo: ''
+  }
+]
 
 const value1 = ref(null)
 const tabs = ref([

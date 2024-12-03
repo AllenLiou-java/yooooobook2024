@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     }
   ],
 
-  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt'],
+  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt', '@nuxt/content'],
 
   primevue: {
     options: {
@@ -82,21 +82,6 @@ export default defineNuxtConfig({
       googleClientId: ''
     }
   }
-  // hooks: {
-  //   'build:manifest': (manifest) => {
-  //     for (const key in manifest) {
-  //       const file = manifest[key]
-
-  //       if (file.prefetch) {
-  //         file.prefetch = false
-  //       }
-
-  //       if (file.resourceType === 'script') {
-  //         file.css = []
-  //       }
-  //     }
-  //   }
-  // }
 
   // nitro: {
   //   preset: 'vercel'

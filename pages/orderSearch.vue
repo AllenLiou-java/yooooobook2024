@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>訂單查詢</h1>
+    <Breadcrumb :link-list="routeList" text-color="#032C4B" />
   </div>
 </template>
 
@@ -20,6 +21,17 @@ useSeoMeta({
   ogImage: '/yooooobook.jpg',
   ogUrl: 'https://www.yooooobook.com/orderSearch'
 })
+
+const routeList = [
+  {
+    name: '首頁',
+    linkTo: '/'
+  },
+  {
+    name: '訂單查詢',
+    linkTo: ''
+  }
+]
 </script>
 
 <style lang="scss" scoped></style>

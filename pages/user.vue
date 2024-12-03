@@ -9,7 +9,7 @@
             {{ pageInfo.name }}
           </h1>
           <hr class="bg-white mt-32 mb-24" />
-          <p class="font-bold">首頁 - {{ pageInfo.name }}</p>
+          <Breadcrumb :link-list="routeList" />
         </div>
 
         <img
@@ -67,6 +67,19 @@ const pageInfo = computed(() => {
   const fullPath = route.fullPath
 
   return pages.filter((page) => page.fullPath === fullPath)[0]
+})
+
+const routeList = computed(() => {
+  return [
+    {
+      name: '首頁',
+      linkTo: '/'
+    },
+    {
+      name: `${pageInfo.value.name}`,
+      linkTo: ''
+    }
+  ]
 })
 </script>
 
