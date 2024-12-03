@@ -14,7 +14,7 @@
           <img
             class="w-full h-[60vh] object-cover object-center"
             :src="imageSrc(slotProps.data.imgPath)"
-            alt="banner"
+            :alt="slotProps.data.altName"
           />
         </div>
       </template>
@@ -103,6 +103,8 @@
 
 <script setup>
 import Carousel from 'primevue/carousel'
+import bannerService from '@/service/bannerService'
+import businessService from '@/service/businessService'
 
 useHead({
   title: '首頁'
@@ -114,38 +116,56 @@ definePageMeta({
 
 const { imageSrc } = getImageSrc()
 
+// const banners = ref([
+//   {
+//     imgPath: '/banner/0001.png',
+//     altName: 'book-1'
+//   },
+//   {
+//     imgPath: '/banner/0003.png',
+//     altName: 'book-2'
+//   },
+//   {
+//     imgPath: '/banner/0004.png',
+//     altName: 'book-3'
+//   }
+// ])
+
+// const businessImgPath = ref([
+//   {
+//     imgPath: '/business/01.png',
+//     altName: 'businessBadge-1'
+//   },
+//   {
+//     imgPath: '/business/02.png',
+//     altName: 'businessBadge-2'
+//   },
+//   {
+//     imgPath: '/business/03.png',
+//     altName: 'businessBadge-3'
+//   },
+//   {
+//     imgPath: '/business/04.png',
+//     altName: 'businessBadge-4'
+//   },
+//   {
+//     imgPath: '/business/05.png',
+//     altName: 'businessBadge-5'
+//   },
+//   {
+//     imgPath: '/business/06.png',
+//     altName: 'businessBadge-6'
+//   }
+// ])
+
 const banners = ref([
   {
-    imgPath: '/banner/0001.png'
-  },
-  {
-    imgPath: '/banner/0003.png'
-  },
-  {
-    imgPath: '/banner/0004.png'
+    imgPath: '/banner/0001.png',
+    altName: 'book-1'
   }
 ])
 
-const businessImgPath = ref([
-  {
-    imgPath: '/business/01.png'
-  },
-  {
-    imgPath: '/business/02.png'
-  },
-  {
-    imgPath: '/business/03.png'
-  },
-  {
-    imgPath: '/business/04.png'
-  },
-  {
-    imgPath: '/business/05.png'
-  },
-  {
-    imgPath: '/business/06.png'
-  }
-])
+const businessImgPath = ref([])
 
 const features = [
   {
@@ -172,6 +192,15 @@ const features = [
       '從各項登記之基礎點切入，彙整各項登記可能會遇到的問題並加以說明，讓你熟稔各項公司登記後，即使遇到再複雜的變更登記案件，也能輕鬆掌握要點。'
   }
 ]
+
+onMounted(() => {
+  bannerService().then((res) => {
+    banners.value = res
+  })
+  businessService().then((res) => {
+    businessImgPath.value = res
+  })
+})
 </script>
 
 <style lang="scss" scoped></style>
