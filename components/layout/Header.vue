@@ -264,27 +264,7 @@ const { isUserLoggedIn, userName, idToken, signInProvider } = storeToRefs(userSt
 
 const menu = ref()
 
-const items = ref([
-  // {
-  //   label: '登出',
-  //   icon: 'logout',
-  //   command: () => {
-  //     confirmLogout()
-  //   }
-  // }
-  // {
-  //   label: '重設密碼',
-  //   icon: 'password',
-  //   route: '/user/resetPassword'
-  // }
-  // {
-  //   label: '信箱驗證',
-  //   icon: 'verified',
-  //   command: () => {
-  //     confirmEmailVerify()
-  //   }
-  // }
-])
+const items = ref([])
 
 const toggle = (event) => {
   menu.value.toggle(event)

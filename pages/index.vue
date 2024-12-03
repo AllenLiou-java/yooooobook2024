@@ -1,27 +1,25 @@
 <template>
   <div>
-    <div class="relative max-h-100vh">
-      <Carousel
-        :value="banners"
-        :num-visible="1"
-        :num-scroll="1"
-        :show-navigators="false"
-        circular
-        :autoplay-interval="3000"
-        indicators-content-class="absolute left-3/6 bottom-20 -translate-x-1/2"
-      >
-        <template #empty> 123456</template>
-        <template #item="slotProps">
-          <div class="relative mx-auto">
-            <img
-              class="w-full h-[60vh] object-cover object-center"
-              :src="imageSrc(slotProps.data.imgPath)"
-              alt="banner"
-            />
-          </div>
-        </template>
-      </Carousel>
-    </div>
+    <Carousel
+      :value="banners"
+      :num-visible="1"
+      :num-scroll="1"
+      :show-navigators="false"
+      :autoplay-interval="3000"
+      indicators-content-class="absolute left-3/6 bottom-20 -translate-x-1/2"
+      content-class="relative"
+    >
+      <template #item="slotProps">
+        <div class="relative mx-auto">
+          <img
+            class="w-full h-[60vh] object-cover object-center"
+            :src="imageSrc(slotProps.data.imgPath)"
+            alt="banner"
+          />
+        </div>
+      </template>
+    </Carousel>
+
     <div class="py-64 bg-[#f2eeeb]">
       <div class="container flex-center flex-wrap gap-32">
         <div class="text-center mb-24">

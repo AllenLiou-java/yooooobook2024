@@ -1,5 +1,6 @@
 <template>
   <div class="relative">
+    <CustomLoading />
     <LayoutHeader />
     <div class="min-h-[calc(100vh-316px)]">
       <slot />
@@ -12,6 +13,7 @@
 <script setup>
 import LayoutHeader from '@/components/layout/Header.vue'
 import LayoutFooter from '@/components/layout/Footer.vue'
+
 const route = useRoute()
 
 useHead({
@@ -35,13 +37,12 @@ useSeoMeta({
     '《有良冊》致力於出版公司登記專書，並透過本網站與Facebook粉絲專頁分享公司法及公司登記實務知識，另提供免費公司登記諮詢服務。【加入官方 LINE 好友👉 https://lin.ee/f8oZLym】',
   ogImage: '/yooooobook.jpg'
 })
-
 const { initProfile } = useUserStore()
 
 const idToken = useCookie('idToken')
 
 if (idToken.value) {
-  await useAsyncData('profile', initProfile)
+  await useAsyncData('profile', () => initProfile())
 }
 </script>
 
