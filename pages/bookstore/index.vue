@@ -100,7 +100,16 @@ const routeList = [
 ]
 
 const { notify } = useToastifyStore()
-const { data: productList, error } = await useAPI(apiList.product.getListInfo.serverPath)
+
+const productStore = useProductStore()
+const { data: productList, error } = await useAsyncData('products', () => {
+  const productList = productStore.productList
+  if (Object.keys(productList).length > 0) {
+    return productList
+  } else {
+    return $fetch(apiList.product.getListInfo.serverPath)
+  }
+})
 
 if (error.value) {
   if (import.meta.client) {
@@ -111,36 +120,11 @@ if (error.value) {
   }
 }
 
-const productStore = useProductStore()
-
 onMounted(() => {
   productStore.$patch({
     productList: productList.value
   })
 })
-
-// const productList = ref([
-//   {
-//     name: '公司登記實務及案例解析(共三冊)',
-//     imgSrc:
-//       'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-//     productId: 'AA00001',
-//     price: {
-//       originalPrice: 5500,
-//       discount: 5200
-//     }
-//   },
-//   {
-//     name: '公司登記實務',
-//     imgSrc:
-//       'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media&token=8fdf139e-19e7-48cd-83a6-0d59b75cdaee',
-//     productId: 'AA00002',
-//     price: {
-//       originalPrice: 4800,
-//       discount: 4200
-//     }
-//   }
-// ])
 </script>
 
 <style lang="scss" scoped></style>

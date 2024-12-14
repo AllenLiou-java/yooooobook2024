@@ -6,10 +6,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   const idTokenCookie = useCookie('idToken')
   const refreshTokenCookie = useCookie('refreshToken')
   const emailVerifiedCookie = useCookie('emailVerified')
+  const signInProviderCookie = useCookie('signInProvider')
 
   const api = $fetch.create({
     async onResponseError({ response }) {
-      if (response.status === 4011) {
+      if (response.status === 401) {
         userNameCookie.value = null
         emailCookie.value = null
         photoUrlCookie.value = null
@@ -17,6 +18,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         idTokenCookie.value = null
         refreshTokenCookie.value = null
         emailVerifiedCookie.value = null
+        signInProviderCookie.value = null
         await nuxtApp.runWithContext(() => navigateTo('/user/login'))
       }
 

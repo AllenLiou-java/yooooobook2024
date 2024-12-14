@@ -81,6 +81,7 @@ export const useUserStore = defineStore('user', () => {
 
     // 導向至首頁
     // await navigateTo('/user/login')
+    reloadNuxtApp()
   }
 
   const initProfile = () => {

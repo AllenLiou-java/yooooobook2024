@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-blue_dark tracking-widest z-999">
-    <div class="container py-16 flex-center">
+  <div class="bg-blue_dark tracking-widest z-999 fixed w-full">
+    <div class="container py-18 flex-center">
       <div
         class="flex justify-between items-center flex-grow-1 lt-md:(flex-col items-start justify-center)"
       >
-        <h1 class="">
+        <h1>
           <NuxtLink
             class="w-230 h-25 block bg-logo indent-[101%] whitespace-nowrap overflow-hidden"
             to="/"
@@ -20,7 +20,7 @@
             <NuxtLink no-prefetch :to="routeItem.route" class="pt-16 pb-24">
               <span
                 v-if="routeItem.icon"
-                class="text-20 mr-4 text-white group-hover:text-[#35e3ea] align-text-top"
+                class="material-icons text-20 mr-4 text-white group-hover:text-[#35e3ea] align-text-top"
                 :class="routeItem.icon"
                 >{{ routeItem.iconName }}</span
               >
@@ -79,10 +79,10 @@
           </div>
           <!-- <ClientOnly> -->
           <div class="flex items-center">
-            <div class="text-white cursor-pointer mr-16">
+            <div class="text-white cursor-pointer mr-16" @click="emit('setVisible')">
               <span class="material-icons align-text-top text-22 mr-2"> shopping_cart </span>
 
-              <span class="text-14 align-middle">購物車(0)</span>
+              <span class="text-14 align-middle">購物車({{ qtyInCart }})</span>
             </div>
 
             <template v-if="!isUserLoggedIn">
@@ -154,12 +154,30 @@
           }"
           header="有良冊股份有限公司"
           position="full"
+          block-scroll
         >
-          <ul class="mt-40 w-1/2 mx-auto">
+          <template #header>
+            <h1>
+              <NuxtLink
+                class="w-230 h-25 block bg-logo indent-[101%] whitespace-nowrap overflow-hidden"
+                to="/"
+                @click="visible = false"
+                >有良冊股份有限公司</NuxtLink
+              >
+            </h1>
+          </template>
+          <ul class="mt-12 ml-24">
             <li v-for="routeItem in routeList" :key="routeItem.label" class="mb-24">
               <template v-if="routeItem.items?.length > 0">
-                <p class="text-white text-24 mb-12">{{ routeItem.label }}</p>
-                <ul class="ml-32">
+                <p class="text-white text-24 mb-12">
+                  <span v-if="routeItem.icon" class="material-icons mr-16 text-white align-bottom">
+                    {{ routeItem.icon }}
+                  </span>
+                  {{ routeItem.label }}
+                  <span class="material-icons"> arrow_drop_down </span>
+                </p>
+
+                <ul class="ml-52">
                   <li v-for="item in routeItem.items" :key="item.label" class="mb-12">
                     <NuxtLink
                       no-prefetch
@@ -171,8 +189,11 @@
                   </li>
                 </ul>
               </template>
-              <template v-else
-                ><NuxtLink
+              <template v-else>
+                <span v-if="routeItem.icon" class="material-icons mr-16 text-white align-bottom">
+                  {{ routeItem.icon }}
+                </span>
+                <NuxtLink
                   no-prefetch
                   class="text-white text-24"
                   :to="routeItem.route"
@@ -210,27 +231,31 @@
 </template>
 
 <script setup>
-import Sidebar from 'primevue/sidebar'
 import TieredMenu from 'primevue/tieredmenu'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 import { storeToRefs } from 'pinia'
+
+const orderStore = useOrderStore()
+const { qtyInCart } = storeToRefs(orderStore)
 
 const visible = ref(false)
 
 const routeList = ref([
   {
     label: '首頁',
-    icon: 'material-icons',
+    icon: 'home',
     iconName: 'home',
     route: '/'
   },
   {
     label: '訂購書籍',
+    icon: 'store',
     route: '/bookstore'
   },
   {
     label: '購物相關',
+    icon: 'info',
     items: [
       {
         label: '訂單查詢',
@@ -248,10 +273,12 @@ const routeList = ref([
   },
   {
     label: '檔案下載',
+    icon: 'cloud_download',
     route: '/files'
   },
   {
     label: '聯絡我們',
+    icon: 'contacts',
     route: '/contact'
   }
 ])
@@ -393,6 +420,8 @@ onMounted(async () => {
   await updateEmailVerify()
   updateLoginMenuItem()
 })
+
+const emit = defineEmits(['setVisible'])
 </script>
 
 <style lang="scss" scoped>

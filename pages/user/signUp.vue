@@ -40,7 +40,6 @@
 
 <script setup>
 import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/yup'
 import * as yup from 'yup'
 
 const { $api } = useNuxtApp()
@@ -62,18 +61,16 @@ useSeoMeta({
 })
 
 const { handleSubmit } = useForm({
-  validationSchema: toTypedSchema(
-    yup.object({
-      name: yup.string().required('請填入會員姓名'),
-      email: yup.string().email('請確認Email是否正確').required('請填入Email'),
-      password: yup.string().min(8, '密碼至少需要8位數').required('請填入密碼'),
-      passwordConfirm: yup
-        .string()
-        .min(8, '密碼至少需要8位數')
-        .required('請填入密碼')
-        .oneOf([yup.ref('password')], '與輸入的密碼不同，請再次確認')
-    })
-  )
+  validationSchema: yup.object({
+    name: yup.string().required('請填入會員姓名'),
+    email: yup.string().email('請確認Email是否正確').required('請填入Email'),
+    password: yup.string().min(8, '密碼至少需要8位數').required('請填入密碼'),
+    passwordConfirm: yup
+      .string()
+      .min(8, '密碼至少需要8位數')
+      .required('請填入密碼')
+      .oneOf([yup.ref('password')], '與輸入的密碼不同，請再次確認')
+  })
 })
 
 const onSubmit = handleSubmit(async (values) => {

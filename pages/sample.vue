@@ -15,11 +15,42 @@
     <Button class="m-12" label="取得庫存" @click="fetchStock()" />
     <Button class="m-12" label="修改庫存" @click="patchStock()" />
     <!-- <img class="w-full h-[60vh] object-cover object-center" :src="imageSrc(urlRef)" alt="banner" /> -->
+    <button @click="sendMail(order)">發送信件</button>
+    {{ isOrderLoading }}
+    <Button
+      type="button"
+      label="Search"
+      icon="pi pi-search"
+      :loading="isOrderLoading"
+      @click="load"
+    />
+
+    <Button
+      type="button"
+      label="訂單送出"
+      :loading="loading"
+      class="flex-row-reverse gap-4"
+      @click="load"
+    >
+      <template #icon>
+        <span class="material-icons leading-18"> arrow_forward </span>
+      </template>
+    </Button>
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
+const { isOrderLoading } = storeToRefs(useOrderStore())
+
+const loading = ref(false)
+
+const load = () => {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 2000)
+}
 
 // const { data } = await useAPI('/api/stock/AA00001')
 
@@ -77,6 +108,61 @@ const { counter, doubleCount } = storeToRefs(counterStore)
 
 const userStore = useUserStore()
 const { photoUrl: userPhotoUrl } = storeToRefs(userStore)
+
+const sendMail = (orderInfo) => {
+  $fetch('/api/mail', {
+    method: 'post',
+    body: {
+      orderInfo
+    }
+  })
+}
+
+const order = ref({
+  bankAccountNo: '98765',
+  buyer: 'allen liou.co',
+  delivery: {
+    company: '',
+    trackingNo: '',
+    trackingUrl: ''
+  },
+  email: 'mydevmailsend@gmail.com',
+  isClosed: false,
+  isFromGroup: false,
+  oderDate: '2024/12/11 17:24',
+  orderId: '241211172438681',
+  orderList: [
+    {
+      content: ['公司登記實務及案例解析(增資 · 發行新股篇)'],
+      imgSrc:
+        'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbook2.png?alt=media',
+      productId: 'AA00002',
+      productName: ' 公司法：規範與案例（二版）',
+      qty: 3,
+      totalPrice: 6000,
+      unitPrice: 2000
+    },
+    {
+      content: ['有限公司篇【532頁】', '股份有限公司篇【964頁】', '應備文件詳析篇【296頁】'],
+      imgSrc:
+        'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media',
+      productId: 'AA00001',
+      productName: '公司登記實務及案例解析(共三冊)',
+      qty: 4,
+      totalPrice: 20800,
+      unitPrice: 5200
+    }
+  ],
+  phone: '0988765432',
+  receiver: {
+    address: '台中市西屯區文心路2段100號',
+    name: 'allen liou'
+  },
+  remark: '',
+  status: '1',
+  taxId: '96385274',
+  totalPrice: 26800
+})
 </script>
 
 <style lang="scss">

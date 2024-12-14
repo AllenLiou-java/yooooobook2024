@@ -1,14 +1,14 @@
 import { serverApi } from '@/server/utils/database'
-// async
-export default defineEventHandler(async (event) => {
-  const memberId = getRouterParam(event, 'id')
-  const idToken = getRequestHeader(event, 'idToken')
 
-  const data = await serverApi(`/users/${memberId}.json`, {
+export default defineEventHandler(async (event) => {
+  const memberId = getRouterParam(event, 'memberId')
+  const body = await readBody(event)
+  const idToken = parseCookies(event).idToken || body.idToken
+
+  const data = await serverApi(`/order/${memberId}/${body.orderId}.json`, {
     query: {
       auth: idToken
-    },
-    method: 'get'
+    }
   })
     .then((result) => result)
     .catch((error) => {
@@ -23,5 +23,9 @@ export default defineEventHandler(async (event) => {
       })
     })
 
-  return data
+  if (data === null) {
+    return {}
+  } else {
+    return data
+  }
 })

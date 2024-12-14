@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 
 export const useProductStore = defineStore('product', () => {
-  const productList = ref([])
+  const productList = ref({})
+  const productDetailList = ref({})
 
-  return { productList }
+  return { productList, productDetailList }
 })

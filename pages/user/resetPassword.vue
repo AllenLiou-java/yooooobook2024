@@ -29,7 +29,6 @@
 
 <script setup>
 import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/yup'
 import * as yup from 'yup'
 
 useHead({
@@ -51,11 +50,9 @@ const errorMsg = ref('')
 const { notify } = useToastifyStore()
 
 const { handleSubmit } = useForm({
-  validationSchema: toTypedSchema(
-    yup.object({
-      email: yup.string().email('請確認Email是否正確').required('請填入Email')
-    })
-  )
+  validationSchema: yup.object({
+    email: yup.string().email('請確認Email是否正確').required('請填入Email')
+  })
 })
 
 const onSubmit = handleSubmit(async (values) => {

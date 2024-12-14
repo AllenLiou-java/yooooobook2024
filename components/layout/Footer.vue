@@ -12,7 +12,13 @@
         </ul>
         <ul>
           <li class="mb-16">
-            <p>統一編號：94008568</p>
+            <p class="mb-8">統一編號：94008568</p>
+            <a
+              href="https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do"
+              target="_blank"
+              class="text-brown_light"
+              >【商工登記公示資料查詢】</a
+            >
           </li>
           <li class="mb-16">
             <p>

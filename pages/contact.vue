@@ -31,47 +31,56 @@
               </ul>
             </li>
             <li>
-              LINE官方帳號 <a class="text-primary" href="https://lin.ee/f8oZLym">@yooooobook</a>
+              LINE官方帳號 :
+              <a
+                class="text-secondary underline underline-offset-4"
+                href="https://lin.ee/f8oZLym"
+                target="_blank"
+                >@yooooobook</a
+              >
             </li>
           </ul>
           <hr class="bg-gray_light my-20" />
           <p class="text-blue_light mb-16">匯款資訊：</p>
           <ul>
-            <li class="mb-8">匯款銀行：玉山銀行 - 台中分行</li>
-            <li class="mb-8">銀行代碼：808</li>
-            <li class="mb-8">銀行帳戶：1366940052966</li>
-            <li class="mb-8">戶名：有良冊股份有限公司</li>
+            <li class="mb-8">匯款銀行：<span class="text-brown_dark">玉山銀行 - 台中分行</span></li>
+            <li class="mb-8">銀行代碼：<span class="text-brown_dark">808</span></li>
+            <li class="mb-8">銀行帳戶：<span class="text-brown_dark">1366940052966</span></li>
+            <li class="mb-8">戶名：<span class="text-brown_dark">有良冊股份有限公司</span></li>
           </ul>
         </div>
         <div class="flex-center text-white flex-wrap">
-          <div class="bg-[#0cc95c] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
-            <img
-              class="w-158 mb-20"
-              :src="imageSrc('/contact/line qrcode.png')"
-              alt="line-qrcode-img"
-            />
-            <p class="mb-4">LINE官方帳號</p>
-            <p class="mb-16">請點擊加入</p>
-            <a class="text-white text-12" href="https://lin.ee/f8oZLym" target="_blank"
-              >@yooooobook</a
-            >
-          </div>
-          <div class="bg-[#456cb3] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
-            <img
-              class="w-158 mb-20"
-              :src="imageSrc('/contact/FB qrcode.png')"
-              alt="fb-qrcode-img"
-            />
-            <p class="mb-4">FB粉絲專頁</p>
-            <p class="mb-8">請點擊加入</p>
-            <div class="flex border border-solid border-white p-4 rounded-2xl">
-              <img class="w-17 mr-4" :src="imageSrc('/contact/FB icon.png')" alt="FB-icon" />
-              <div class="flex-center w-72 bg-white rounded-xl">
-                <p class="text-black text-12 pr-10">有良冊</p>
-                <span class="material-icons text-14 text-[#9e9e9f]"> search </span>
+          <a href="https://lin.ee/f8oZLym" target="_blank">
+            <div class="text-white bg-[#0cc95c] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
+              <img
+                class="w-158 mb-20"
+                :src="imageSrc('/contact/line qrcode.png')"
+                alt="line-qrcode-img"
+              />
+              <p class="mb-4">LINE官方帳號</p>
+              <p class="mb-16">請點擊加入</p>
+              <p class="text-12">@yooooobook</p>
+            </div>
+          </a>
+          <a href="https://www.facebook.com/yooooobook" target="_blank">
+            <div class="text-white bg-[#456cb3] w-196 h-286 flex-center flex-col p-20 mr-28 mb-28">
+              <img
+                class="w-158 mb-20"
+                :src="imageSrc('/contact/FB qrcode.png')"
+                alt="fb-qrcode-img"
+              />
+              <p class="mb-4">FB粉絲專頁</p>
+              <p class="mb-8">請點擊加入</p>
+              <div class="flex border border-solid border-white p-4 rounded-2xl">
+                <img class="w-17 mr-4" :src="imageSrc('/contact/FB icon.png')" alt="FB-icon" />
+
+                <div class="flex-center w-72 bg-white rounded-xl">
+                  <p class="text-black text-12 pr-10">有良冊</p>
+                  <span class="material-icons text-14 text-[#9e9e9f]"> search </span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>

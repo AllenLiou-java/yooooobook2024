@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     }
   ],
 
-  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt', '@nuxt/content'],
+  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt', 'nuxt-nodemailer'],
 
   primevue: {
     options: {
@@ -43,7 +43,15 @@ export default defineNuxtConfig({
         'InputNumber',
         'Password',
         'Button',
-        'InputSwitch'
+        'InputSwitch',
+        'Sidebar',
+        'Divider',
+        'ScrollPanel',
+        'BlockUI',
+        'DataTable',
+        'Column',
+        'ColumnGroup',
+        'Row'
         // 'Toast'
       ]
     },
@@ -78,6 +86,7 @@ export default defineNuxtConfig({
     firebaseApiKey: '',
     googleApiUrl: '',
     webUrl: '',
+    gmailAppPassword: '',
     public: {
       googleClientId: ''
     }

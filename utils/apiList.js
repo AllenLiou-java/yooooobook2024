@@ -68,8 +68,32 @@ const product = {
   }
 }
 
+const order = {
+  getAllOrders: {
+    url: '/order.json',
+    method: 'get'
+  },
+  // 取得會員的訂單列表
+  getOrderList: {
+    url: '/order/:user_id.json',
+    method: 'get'
+  },
+  // 取得會員的特定訂單內容
+  getOrderInfo: {
+    url: '/order/:user_id/:order_id.json',
+    method: 'get'
+  },
+  // 新增會員的訂單資訊
+  patchOrderInfo: {
+    url: '/order/:user_id/:order_id.json',
+    serverPath: '/api/order/:userId',
+    method: 'patch'
+  }
+}
+
 export const apiList = {
   member,
   stock,
-  product
+  product,
+  order
 }

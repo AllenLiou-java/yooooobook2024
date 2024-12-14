@@ -10,6 +10,7 @@
       strong-label="密碼強度：強"
       :toggle-mask="toggleMask"
       :feedback="feedback"
+      class="mb-4"
     >
       <template #footer>
         <Divider />
