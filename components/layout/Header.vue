@@ -144,6 +144,7 @@
       <div>
         <Sidebar
           v-model:visible="visible"
+          class="border-blue_dark"
           :pt="{
             root: {
               class: 'bg-blue_dark'
@@ -166,6 +167,7 @@
               >
             </h1>
           </template>
+          <Divider class="m-0" />
           <ul class="mt-12 ml-24">
             <li v-for="routeItem in routeList" :key="routeItem.label" class="mb-24">
               <template v-if="routeItem.items?.length > 0">

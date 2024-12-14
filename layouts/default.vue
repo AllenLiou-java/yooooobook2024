@@ -14,56 +14,67 @@
       header="購物車"
       position="right"
       block-scroll
+      class="border-blue_dark"
+      :pt="{
+        header: {
+          class: 'bg-blue_light text-white'
+        },
+        closeButton: {
+          class: 'bg-blue_light group hover:bg-white border-0 focus-visible:outline-none'
+        },
+        closeIcon: {
+          class: 'text-white group-hover:text-blue_light'
+        }
+      }"
       @show="blocked = true"
     >
-      <!-- <div class="flex flex-col h-[calc(100vh-100px)]"> -->
-      <ScrollPanel>
-        <div class="flex flex-col justify-between">
-          <ul class="h-[calc(100vh-120px)]">
-            <li v-for="order in ordersInCart" :key="order.productId" class="pt-16 text-14">
-              <div class="flex items-center gap-12">
-                <ClientOnly>
-                  <img class="w-80" :src="order.imgSrc" alt="order.productId" />
-                </ClientOnly>
-                <div>
-                  <p class="mb-8">{{ order.productName }}</p>
-                  <div class="flex justify-between items-center">
-                    <div class="flex items-center">
-                      <span
-                        class="material-icons p-2 cursor-pointer"
-                        @click="updateOrderQty('minus', order.productId)"
-                      >
-                        remove
-                      </span>
-                      <span class="mx-8">{{ order.qty }}</span>
-                      <span
-                        class="material-icons p-2 cursor-pointer"
-                        @click="updateOrderQty('add', order.productId)"
-                      >
-                        add
-                      </span>
-                    </div>
-                    $ {{ thousandthsFormat(order.discount * order.qty) }}
+      <ScrollPanel class="h-[calc(100vh-152px)] pr-16 mb-16">
+        <ul>
+          <li v-for="order in ordersInCart" :key="order.productId" class="pt-16 text-14">
+            <div class="flex items-center gap-12">
+              <ClientOnly>
+                <img class="w-80" :src="order.imgSrc" alt="order.productId" />
+              </ClientOnly>
+              <div>
+                <p class="mb-8">{{ order.productName }}</p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <span
+                      class="material-icons p-2 cursor-pointer"
+                      @click="updateOrderQty('minus', order.productId)"
+                    >
+                      remove
+                    </span>
+                    <span class="mx-8">{{ order.qty }}</span>
+                    <span
+                      class="material-icons p-2 cursor-pointer"
+                      @click="updateOrderQty('add', order.productId)"
+                    >
+                      add
+                    </span>
                   </div>
+                  $ {{ thousandthsFormat(order.discount * order.qty) }}
                 </div>
-                <span class="material-icons cursor-pointer" @click="deleteOrder(order.productId)">
-                  delete
-                </span>
               </div>
-              <Divider />
-            </li>
-          </ul>
-          <div class="flex justify-between gap-16 justify-self-stretch">
-            <Button class="grow flex-center border-none" @click="cartSidebarVisible = false"
-              >關閉</Button
-            >
-            <Button class="grow flex-center bg-secondary border-none" @click="toCartPage"
-              >結帳</Button
-            >
-          </div>
-        </div>
+              <span class="material-icons cursor-pointer" @click="deleteOrder(order.productId)">
+                delete
+              </span>
+            </div>
+            <Divider />
+          </li>
+        </ul>
       </ScrollPanel>
-      <!-- </div> -->
+      <Divider />
+      <div class="grid grid-cols-2 gap-18">
+        <Button class="grow flex-center border-none" @click="cartSidebarVisible = false"
+          >關閉</Button
+        >
+        <Button
+          class="grow flex-center bg-secondary hover:bg-[#d80545] border-none"
+          @click="toCartPage"
+          >結帳</Button
+        >
+      </div>
     </Sidebar>
   </div>
 </template>
