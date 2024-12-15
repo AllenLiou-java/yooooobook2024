@@ -14,7 +14,7 @@
       header="購物車"
       position="right"
       block-scroll
-      class="border-blue_dark"
+      class="border-0"
       :pt="{
         header: {
           class: 'bg-blue_light text-white'
@@ -28,7 +28,7 @@
       }"
       @show="blocked = true"
     >
-      <ScrollPanel class="h-[calc(100vh-152px)] pr-16 mb-16">
+      <ScrollPanel class="h-[calc(100vh-166px)] pr-16 my-16">
         <ul>
           <li v-for="order in ordersInCart" :key="order.productId" class="pt-16 text-14">
             <div class="flex items-center gap-12">
@@ -64,16 +64,18 @@
           </li>
         </ul>
       </ScrollPanel>
-      <Divider />
-      <div class="grid grid-cols-2 gap-18">
-        <Button class="grow flex-center border-none" @click="cartSidebarVisible = false"
-          >關閉</Button
-        >
+      <Divider class="m-0" />
+      <div class="grid grid-cols-2 gap-18 pt-16">
         <Button
-          class="grow flex-center bg-secondary hover:bg-[#d80545] border-none"
+          label="關閉"
+          class="grow border-none leading-20"
+          @click="cartSidebarVisible = false"
+        />
+        <Button
+          label="結帳"
+          class="grow border-none leading-20 bg-secondary hover:bg-[#d80545]"
           @click="toCartPage"
-          >結帳</Button
-        >
+        />
       </div>
     </Sidebar>
   </div>
