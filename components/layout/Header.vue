@@ -261,7 +261,7 @@ const routeList = ref([
     items: [
       {
         label: '訂單查詢',
-        route: '/orderSearch'
+        route: '/order'
       },
       {
         label: '購物須知',

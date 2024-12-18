@@ -74,7 +74,7 @@
       </li>
       <li class="mb-12">
         若想查詢訂單進度，可前往<u class="mx-1"
-          ><nuxt-link class="font-black text-blue" to="/orderSearch"> 訂單查詢 </nuxt-link></u
+          ><nuxt-link class="font-black text-blue" to="/order"> 訂單查詢 </nuxt-link></u
         >了解處理進度。
       </li>
       <li class="mb-12">有關訂單詳細資料以及匯款資訊，可至您的電子郵件匣中查閱。</li>
@@ -89,6 +89,8 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'
+
 definePageMeta({
   middleware: [
     function (to, from) {
@@ -103,69 +105,29 @@ definePageMeta({
   ]
 })
 const route = useRoute()
-const { userId, idToken } = useUserStore()
+const orderStore = useOrderStore()
+const userStore = useUserStore()
+const { userId, idToken } = storeToRefs(userStore)
 const { notify } = useToastifyStore()
 
-const { data: order, error } = await useAPI(`/api/order/${userId}`, {
-  method: 'post',
-  body: {
-    orderId: route.params.orderId,
-    idToken
+const { data: order, error } = await useAPI(
+  apiList.order.getOrderInfo.serverPath.replace(
+    ':userId/:orderId',
+    `${userId.value}/${route.params.orderId}`
+  ),
+  {
+    method: apiList.order.getOrderInfo.method,
+    onRequest({ options }) {
+      options.headers.set('idToken', idToken.value)
+    }
   }
-})
+)
 
-if (import.meta.client) {
-  if (!order.value) {
-    const { statusMessage, statusCode } = error.value.cause
-    notify('error', statusMessage, statusCode)
-  }
+if (error.value?.statusCode === 401) {
+  notify('error', '權限失效，請重新登入')
+  userStore.$reset()
+  orderStore.$reset()
 }
-
-// const order = {
-//   bankAccountNo: '98765',
-//   buyer: 'allen liou.co',
-//   delivery: {
-//     company: '',
-//     trackingNo: '',
-//     trackingUrl: ''
-//   },
-//   email: 'mydevmailsend@gmail.com',
-//   isClosed: false,
-//   isFromGroup: false,
-//   oderDate: '2024/12/11 17:24',
-//   orderId: '241211172438681',
-//   orderList: [
-//     {
-//       content: ['公司登記實務及案例解析(增資 · 發行新股篇)'],
-//       imgSrc:
-//         'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbook2.png?alt=media',
-//       productId: 'AA00002',
-//       productName: ' 公司法：規範與案例（二版）',
-//       qty: 3,
-//       totalPrice: 6000,
-//       unitPrice: 2000
-//     },
-//     {
-//       content: ['有限公司篇【532頁】', '股份有限公司篇【964頁】', '應備文件詳析篇【296頁】'],
-//       imgSrc:
-//         'https://firebasestorage.googleapis.com/v0/b/yooooobook-dev.appspot.com/o/Product%2Fbooks.png?alt=media',
-//       productId: 'AA00001',
-//       productName: '公司登記實務及案例解析(共三冊)',
-//       qty: 4,
-//       totalPrice: 20800,
-//       unitPrice: 5200
-//     }
-//   ],
-//   phone: '0988765432',
-//   receiver: {
-//     address: '台中市西屯區文心路2段100號',
-//     name: 'allen liou'
-//   },
-//   remark: '',
-//   status: '1',
-//   taxId: '96385274',
-//   totalPrice: 26800
-// }
 </script>
 
 <style lang="scss" scoped></style>

@@ -33,9 +33,8 @@
 
       <Accordion :active-index="0">
         <AccordionTab
-          v-for="tab in tabs"
+          v-for="(tab, index) in tabs"
           :key="tab.title"
-          :header="tab.title"
           :pt="{
             header: {
               class: 'bg-white '
@@ -45,6 +44,7 @@
             }
           }"
         >
+          <template #header> Q{{ index + 1 }} {{ tab.title }}</template>
           <ul class="list-disc px-24 leading-[1.5] tracking-wide font-medium text-primary">
             <li v-for="(t_content, idx) in tab.content" :key="idx" v-html="t_content"></li>
           </ul>
@@ -88,56 +88,54 @@ const routeList = [
 const value1 = ref(null)
 const tabs = ref([
   {
-    title: 'Q1 預購流程與匯款方式',
+    title: '訂購流程與匯款方式',
     content: [
-      '<div><p class="mb-24">填寫預購單（預購至11月15日截止） ▶ 三日內匯款完成 ▶ 確認收到款項後即完成預購 ▶12月中旬起依預購完成順序陸續出貨，發票隨貨寄出 ▶缺頁或破損請於收到後七日內連繫客服寄回進行換貨。</p><p class="bg-[#d8d8d8] inline-block px-16 py-6 mb-24">備註1：請於 <span class="text-[red]">3日內</span> 將款項匯款至以下：</p><ul class="mb-24"><li>匯款銀行：玉山銀行 - 台中分行</li><li>銀行代碼：808</li><li>銀行帳戶：1366940052966</li><li>戶名：有良冊股份有限公司</li></ul><p class="mb-24">並於匯款後至有良冊LINE官方帳號(@yooooobook)告知您的<span class="text-[red]">「訂單編號」</span>、<span class="text-[red]">「匯款金額」</span>及<span class="text-[red]">「帳號末5碼」</span>等資料， 我們將每天進行統一對帳，如無問題將不另行通知。</p><p class="border-1 border-solid border-[#d8d8d8] inline-block p-4">備註2：若想查詢訂單進度，可前往<span class="text-blue_light">「訂單查詢」</span> 了解處理進度。</p></div>'
+      '<div><p class="mb-24">前往「訂購書籍」頁面訂購 ▶ 三日內匯款完成 ▶ 確認收到款項後即完成訂購 ▶三日內完成出貨，發票隨貨寄出 ▶缺頁或破損請於收到後七日內連繫客服寄回進行換貨。</p><p class="bg-[#d8d8d8] inline-block px-16 py-6 mb-24">備註1：請於 <span class="text-[red]">3日內</span> 將款項匯款至以下：</p><ul class="mb-24"><li>匯款銀行：玉山銀行 - 台中分行</li><li>銀行代碼：808</li><li>銀行帳戶：1366940052966</li><li>戶名：有良冊股份有限公司</li></ul><p class="mb-24">並於匯款後至有良冊LINE官方帳號(@yooooobook)告知您的<span class="text-[red]">「訂單編號」</span>、<span class="text-[red]">「匯款金額」</span>及<span class="text-[red]">「帳號末5碼」</span>等資料， 我們將每天進行統一對帳，如無問題將不另行通知。</p><p class="border-1 border-solid border-[#d8d8d8] inline-block p-4">備註2：若想查詢訂單進度，可前往<span class="text-blue_light">「訂單查詢」</span> 了解處理進度。</p></div>'
     ]
   },
   {
-    title: 'Q2 預購後未於時間內匯款',
+    title: '訂購後未於時間內匯款',
     content: [
-      '視同未完成預購，若需購買請 重新填單 或 聯繫客服 (請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> )後再匯款。'
+      '視同未完成訂購，若需購買請 重新填單 或 聯繫客服 (請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> )後再匯款。'
     ]
   },
   {
-    title: 'Q3 下訂後想增加訂單數量',
+    title: '下訂後想增加訂單數量',
     content: [
-      '已匯款者：請另外填寫新預購訂單並匯款，我們於出貨時亦會依據訂單完成順序分批寄送。',
+      '已匯款者：請另外填寫新訂購訂單並匯款，我們於出貨時亦會依據訂單完成順序分批寄送。',
       '尚未匯款者：請聯繫客服 (請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> ) 更改數量。'
     ]
   },
   {
-    title: 'Q4 下訂後想要減少訂單數量',
+    title: '下訂後想要減少訂單數量',
     content: [
       '已匯款者：請聯繫客服 (請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> ) 修改數量，並提供退款帳號，最遲將於十個工作天內完成退款。',
       '尚未匯款者：請聯繫客服 (請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> ) 更改數量。'
     ]
   },
   {
-    title: 'Q5 訂購金額是否需付額外的運費',
-    content: [
-      '於預購期間完成預購者，運費部分將由本公司負擔，不需額外支付運費。（公會/協會等名義團體除外）'
-    ]
+    title: '訂購金額是否需付額外的運費',
+    content: ['運費部分將由本公司負擔，不需額外支付運費。（團購僅寄送單一地址）']
   },
   {
-    title: 'Q6 預計什麼時候可以收到商品',
-    content: ['預計將於12月中旬起依預購完成順序陸續出貨。']
+    title: '預計什麼時候可以收到商品',
+    content: ['訂單成立後三日內完成出貨。']
   },
+  // {
+  //   title: '預購有什麼好處，預購截止後還可以購買嗎',
+  //   content: [
+  //     '因本套書係依據預購數量印製數量，故本次預購銷售完畢後倘有剩餘存貨，還是可以購買本公司商品，惟不保證預購期間結束後是否有多餘商品供貨，仍建議於預購期間完成預購程序，以免向隅。'
+  //   ]
+  // },
   {
-    title: 'Q7 預購有什麼好處，預購截止後還可以購買嗎',
-    content: [
-      '因本套書係依據預購數量印製數量，故本次預購銷售完畢後倘有剩餘存貨，還是可以購買本公司商品，惟不保證預購期間結束後是否有多餘商品供貨，仍建議於預購期間完成預購程序，以免向隅。'
-    ]
-  },
-  {
-    title: 'Q8 如果有公司登記相關問題，該如何聯繫你們',
+    title: '如果有公司登記相關問題，該如何聯繫你們',
     content: [
       '書籍內容勘誤：請聯繫客服 (請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> )',
       '公司登記問題：<ul><li>可以加入我們的有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a>，並留下您的問題，我們會提供您完整的資訊。</li><li>惟各公司登記機關對於所轄申請案件具有行政裁量權，案件仍應以所轄公司登記機關之規定辦理。</li></ul>'
     ]
   },
   {
-    title: 'Q9 加入有良冊LINE官方帳號有什麼好處',
+    title: '加入有良冊LINE官方帳號有什麼好處',
     content: [
       '如果有任何需求需要聯絡，可以透過有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a>',
       '免費提供公司登記問題回復，並詳述您的問題，我們會提供完整的資訊。',
@@ -147,25 +145,25 @@ const tabs = ref([
     ]
   },
   {
-    title: 'Q10 可否單買整套書中的其中一本',
+    title: '可否單買整套書中的其中一本',
     content: ['目前皆以套書方式進行販售，無法單本拆封。']
   },
   {
-    title: 'Q11 如何查詢我的訂單狀態',
+    title: '如何查詢我的訂單狀態',
     content: [
-      '登入會員後，點選<span class="text-blue_light">「訂單查詢」</span>，即可查詢訂單狀態。'
+      '登入會員後，點選<span class="text-blue_light">「購物相關 ▶ 訂單查詢」</span>，即可查詢訂單狀態。'
     ]
   },
   {
-    title: 'Q12 為什麼匯款後訂單狀態還未顯示已收到款項',
+    title: '為什麼匯款後訂單狀態還未顯示已收到款項',
     content: [
-      '因人工對帳無法即時更新入帳資訊，若<span class="text-[red]">匯款後三個工作天後</span>仍未更新訂單狀態，敬請聯繫客服(請加入有良冊LINE官方帳號@yooooobook)進行確認。'
+      '因人工對帳無法即時更新入帳資訊，若<span class="text-[red]">匯款後三個工作天後</span>仍未更新訂單狀態，敬請聯繫客服(請加入有良冊LINE官方帳號 <a href="https://lin.ee/f8oZLym" target="_blank" class="text-[red]">@yooooobook</a> )進行確認。'
     ]
-  },
-  {
-    title: 'Q13 除了本次預購套書外，有其他公司登記實務相關書籍可以購買嗎',
-    content: ['本公司已著手規劃中，未來將陸續推出公司登記實務進階篇相關書籍，敬請期待！。']
   }
+  // {
+  //   title: '除了本次出版套書外，有其他公司登記實務相關書籍可以購買嗎',
+  //   content: ['本公司已著手規劃中，未來將陸續推出公司登記實務進階篇相關書籍，敬請期待！。']
+  // }
 ])
 </script>
 

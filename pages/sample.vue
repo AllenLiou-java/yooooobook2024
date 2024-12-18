@@ -16,14 +16,6 @@
     <Button class="m-12" label="修改庫存" @click="patchStock()" />
     <!-- <img class="w-full h-[60vh] object-cover object-center" :src="imageSrc(urlRef)" alt="banner" /> -->
     <button @click="sendMail(order)">發送信件</button>
-    {{ isOrderLoading }}
-    <Button
-      type="button"
-      label="Search"
-      icon="pi pi-search"
-      :loading="isOrderLoading"
-      @click="load"
-    />
 
     <Button
       type="button"
@@ -36,12 +28,15 @@
         <span class="material-icons leading-18"> arrow_forward </span>
       </template>
     </Button>
+
+    <!-- <button @click="getOrder">取得訂單</button> -->
+    <button @click="getOrderList">取得訂單</button>
+    <!-- <button @click="patchOrder">新增訂單</button> -->
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
-const { isOrderLoading } = storeToRefs(useOrderStore())
 
 const loading = ref(false)
 
@@ -107,7 +102,7 @@ const { addCount } = counterStore
 const { counter, doubleCount } = storeToRefs(counterStore)
 
 const userStore = useUserStore()
-const { photoUrl: userPhotoUrl } = storeToRefs(userStore)
+const { photoUrl: userPhotoUrl, idToken } = storeToRefs(userStore)
 
 const sendMail = (orderInfo) => {
   $fetch('/api/mail', {
@@ -163,6 +158,32 @@ const order = ref({
   taxId: '96385274',
   totalPrice: 26800
 })
+
+// const getOrder = async () => {
+//   const data = await $fetch('/api/order/3VlG9FnECLeK4j5CStguCFa3BCt1/241215205852480')
+
+//   console.log('data', data)
+// }
+
+const getOrderList = async () => {
+  const data = await $fetch('/api/order/3VlG9FnECLeK4j5CStguCFa3BCt1', {
+    method: 'get',
+    onRequest({ options }) {
+      options.headers.set('idToken', idToken.value)
+    }
+  })
+
+  console.log('data', data)
+}
+
+// const patchOrder = async () => {
+//   const data = await $fetch('/api/order/3VlG9FnECLeK4j5CStguCFa3BCt1/241215205852500', {
+//     method: 'patch',
+//     body: order.value
+//   })
+
+//   console.log('data', data)
+// }
 </script>
 
 <style lang="scss">

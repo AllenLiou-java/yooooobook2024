@@ -105,6 +105,13 @@
         </div>
 
         <div>
+          <h4 class="text-20 text-blue mb-20">書籍試閱 (請點擊篇名)</h4>
+          <BookPreview />
+        </div>
+
+        <hr class="bg-gray_light my-28" />
+
+        <div>
           <h4 class="text-20 text-blue mb-16">團購優惠價格</h4>
           <p class="mb-12">
             若有團購需求，請透過官方
@@ -165,12 +172,6 @@
         <hr class="bg-gray_light my-28" />
 
         <div>
-          <h4 class="text-20 text-blue mb-20">書籍試閱 (請點擊篇名)</h4>
-        </div>
-
-        <hr class="bg-gray_light my-28" />
-
-        <div>
           <h4 class="text-20 text-blue mb-20">書籍簡介</h4>
           <p
             v-for="(summarySegment, idx) in product.bookIntroduction.summary"
@@ -198,6 +199,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+import BookPreview from '@/components/BookPreview.vue'
 const orderQty = ref(0)
 const route = useRoute()
 const router = useRouter()

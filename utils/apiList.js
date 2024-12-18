@@ -76,17 +76,19 @@ const order = {
   // 取得會員的訂單列表
   getOrderList: {
     url: '/order/:user_id.json',
+    serverPath: '/api/order/:userId',
     method: 'get'
   },
   // 取得會員的特定訂單內容
   getOrderInfo: {
     url: '/order/:user_id/:order_id.json',
+    serverPath: '/api/order/:userId/:orderId',
     method: 'get'
   },
   // 新增會員的訂單資訊
   patchOrderInfo: {
     url: '/order/:user_id/:order_id.json',
-    serverPath: '/api/order/:userId',
+    serverPath: '/api/order/:userId/:orderId',
     method: 'patch'
   }
 }

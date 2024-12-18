@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useOrderStore = defineStore('order', () => {
   const ordersInCart = ref([])
   const isOrderLoading = ref(false)
+  const userOrderInfo = ref([])
 
   const qtyInCart = computed(() => {
     return ordersInCart.value.length
@@ -179,13 +180,20 @@ export const useOrderStore = defineStore('order', () => {
     if (idToken) {
       try {
         const { $api } = useNuxtApp()
-        await $api(`/api/order/${userId}`, {
-          method: 'patch',
-          body: info
-        })
+
+        await $api(
+          apiList.order.patchOrderInfo.serverPath.replace(
+            ':userId/:orderId',
+            `${userId}/${info.orderId}`
+          ),
+          {
+            method: apiList.order.patchOrderInfo.method,
+            body: info
+          }
+        )
 
         clearAllOrder()
-        router.push({
+        await router.push({
           path: `/cart/success/${info.orderId}`
         })
 
@@ -204,10 +212,17 @@ export const useOrderStore = defineStore('order', () => {
     }
   }
 
+  function $reset() {
+    ordersInCart.value = []
+    isOrderLoading.value = false
+    userOrderInfo.value = []
+  }
+
   return {
     ordersInCart,
     qtyInCart,
     isOrderLoading,
+    userOrderInfo,
     addOrderInCart,
     updateOrdersInCart,
     getOrderListInStorage,
@@ -217,6 +232,7 @@ export const useOrderStore = defineStore('order', () => {
     setTimeDateFmt,
     oderDateCreater,
     orderIdCreater,
-    patchOrderInfo
+    patchOrderInfo,
+    $reset
   }
 })

@@ -1,11 +1,12 @@
 import { serverApi } from '@/server/utils/database'
 
 export default defineEventHandler(async (event) => {
-  const memberId = getRouterParam(event, 'memberId')
+  const userId = getRouterParam(event, 'userId')
+  const orderId = getRouterParam(event, 'orderId')
   const body = await readBody(event)
-  const idToken = parseCookies(event).idToken || body.idToken
+  const idToken = parseCookies(event).idToken
 
-  const data = await serverApi(`/order/${memberId}/${body.orderId}.json`, {
+  const data = await serverApi(`/order/${userId}/${orderId}.json`, {
     query: {
       auth: idToken
     },

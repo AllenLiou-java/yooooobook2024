@@ -106,6 +106,18 @@ export const useUserStore = defineStore('user', () => {
     return true
   }
 
+  function $reset() {
+    isUserLoggedIn.value = false
+    userName.value = ''
+    email.value = ''
+    emailVerified.value = false
+    photoUrl.value = ''
+    userId.value = ''
+    idToken.value = ''
+    refreshToken.value = ''
+    signInProvider.value = ''
+  }
+
   return {
     isUserLoggedIn,
     userName,
@@ -118,6 +130,7 @@ export const useUserStore = defineStore('user', () => {
     signInProvider,
     setUserLoggedin,
     setUserLogout,
-    initProfile
+    initProfile,
+    $reset
   }
 })
