@@ -48,23 +48,33 @@
         <li
           v-for="product in productList"
           :key="product.productId"
-          class="w-251 border border-solid flex-center flex-col p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
+          class="relative w-251 border border-solid p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
         >
-          <div class="w-230 h-230 flex-center mb-12">
-            <img class="h-215" :src="product.imgSrc" alt="bookImg" />
+          <div v-if="product.isNew">
+            <div class="bg"></div>
+            <div class="sale">新品</div>
           </div>
-          <h3 class="mb-20 h-44">{{ product.name }}</h3>
-          <p class="mb-4 text-14 line-through">
-            定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
-          </p>
-          <p class="text-secondary mb-12">
-            優惠價：{{ thousandthsFormat(product.price.discount) }} 元
-          </p>
+
           <NuxtLink
-            class="w-full text-blue text-center border border-solid p-8 group-hover:(bg-blue text-white duration-300) lt-md:(bg-blue text-white)"
             :to="{ name: 'bookstore-productId', params: { productId: product.productId } }"
-            >詳細資料</NuxtLink
+            class="flex-center flex-col text-primary"
           >
+            <div class="w-230 h-230 flex-center mb-12">
+              <img class="h-215" :src="product.imgSrc" alt="bookImg" />
+            </div>
+            <h3 class="mb-20 h-44">{{ product.name }}</h3>
+            <p class="mb-4 text-14 line-through">
+              定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
+            </p>
+            <p class="text-secondary mb-12">
+              優惠價：{{ thousandthsFormat(product.price.discount) }} 元
+            </p>
+            <div
+              class="w-full text-blue text-center border border-solid p-8 group-hover:(bg-blue text-white duration-300) lt-md:(bg-blue text-white)"
+            >
+              詳細資料
+            </div>
+          </NuxtLink>
         </li>
       </ul>
     </div>
@@ -127,4 +137,20 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.bg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 70px solid #e44;
+  border-right: 70px solid transparent;
+}
+
+.sale {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  color: #fff;
+  transform: rotate(-45deg);
+}
+</style>

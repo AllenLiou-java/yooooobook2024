@@ -85,7 +85,7 @@
                 </template>
               </InputNumber>
             </div>
-            <p class="mb-16">庫存： {{ stock.qty }}</p>
+            <p class="mb-16">庫存： {{ stock }}</p>
             <div class="flex text-white gap-12">
               <div
                 class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
@@ -265,9 +265,17 @@ const { data: productList } = await useAsyncData('productList', () => {
   }
 })
 
-const { data: stock } = await useAPI(
+const { data: _stock } = await useAPI(
   apiList.stock.getStock.serverPath.replace(':productId', route.params.productId)
 )
+
+const stock = computed(() => {
+  if (_stock.value.qty >= 100) {
+    return '>=100'
+  } else {
+    return _stock.value.qty
+  }
+})
 
 const { notify } = useToastifyStore()
 const { idToken } = storeToRefs(useUserStore())

@@ -49,18 +49,23 @@
         <li
           v-for="file in fileList"
           :key="file.name"
-          class="w-251 border border-solid flex-center flex-col p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
+          class="w-251 border border-solid p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
         >
-          <div class="w-230 h-230 flex-center mb-12">
-            <img class="h-215" :src="imageSrc(file.imgPath)" alt="bookImg" />
-          </div>
-          <h3 class="mb-20">{{ file.name }}</h3>
-          <p class="text-brown_dark mb-12">附件下載</p>
           <NuxtLink
-            class="w-full text-blue text-center border border-solid p-8 group-hover:(bg-blue text-white duration-300) lt-md:(bg-blue text-white)"
             :to="{ name: 'files-book', params: { book: file.name } }"
-            >詳細資料</NuxtLink
+            class="flex-center flex-col text-primary"
           >
+            <div class="w-230 h-230 flex-center mb-12">
+              <img class="h-215" :src="imageSrc(file.imgPath)" alt="bookImg" />
+            </div>
+            <h3 class="mb-20">{{ file.name }}</h3>
+            <p class="text-brown_dark mb-12">附件下載</p>
+            <div
+              class="w-full text-blue text-center border border-solid p-8 group-hover:(bg-blue text-white duration-300) lt-md:(bg-blue text-white)"
+            >
+              詳細資料
+            </div>
+          </NuxtLink>
         </li>
       </ul>
     </div>
