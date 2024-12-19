@@ -106,7 +106,14 @@
 
         <div>
           <h4 class="text-20 text-blue mb-20">書籍試閱 (請點擊篇名)</h4>
-          <BookPreview />
+          <div v-if="previewBookPhotos" class="flex flex-wrap gap-12">
+            <BookPreview
+              v-for="book in previewBookPhotos"
+              :key="book.name"
+              :tag-name="book.name"
+              :image-urls="book.links"
+            />
+          </div>
         </div>
 
         <hr class="bg-gray_light my-28" />
@@ -199,7 +206,9 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+// import BookPreview from '@/components/BookPreview.vue'
 import BookPreview from '@/components/BookPreview.vue'
+import bookImgLink from '@/assets/js/bookImgLink'
 const orderQty = ref(0)
 const route = useRoute()
 const router = useRouter()
@@ -233,6 +242,11 @@ const routeList = [
     linkTo: ''
   }
 ]
+
+const previewBookPhotos = computed(() => {
+  const productId = route.params.productId
+  return Object.values(bookImgLink[productId])
+})
 
 const { addOrderInCart } = useOrderStore()
 const { ordersInCart } = storeToRefs(useOrderStore())

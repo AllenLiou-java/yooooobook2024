@@ -51,7 +51,8 @@ export default defineNuxtConfig({
         'DataTable',
         'Column',
         'ColumnGroup',
-        'Row'
+        'Row',
+        'Galleria'
         // 'Toast'
       ]
     },
