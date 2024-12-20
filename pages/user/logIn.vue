@@ -6,7 +6,7 @@
       >
         <div class="w-3/6 px-60 lt-md:(w-full mb-40 px-30)">
           <h2 class="text-blue_dark text-center mb-30">會員登入</h2>
-          <form class="flex flex-col justify-center" @submit.prevent="onSubmit">
+          <div class="flex flex-col justify-center">
             <div class="flex flex-col gap-2 mb-16">
               <label class="mb-8" for="email">電子郵件 Email</label>
               <VInputText name="email" type="email" autocomplete="email" />
@@ -21,18 +21,25 @@
               to="/user/resetPassword"
               >忘記密碼?</NuxtLink
             >
-            <button
-              class="bg-blue text-white text-center p-12 mb-16 cursor-pointer border-0 hover:bg-blue_dark"
-            >
-              登入
-            </button>
+            <Button
+              type="button"
+              label="登入"
+              class="bg-blue text-white text-center p-12 mb-16 cursor-pointer border-0 hover:bg-blue_dark rounded-none"
+              :loading="isUserLoading"
+              :pt="{
+                loadingIcon: {
+                  class: 'absolute left-[calc(50%-36px)]'
+                }
+              }"
+              @click="onSubmit"
+            />
             <NuxtLink class="text-center" to="/user/signup"
               ><span
                 class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
                 >還不是會員嗎?馬上註冊!</span
               ></NuxtLink
             >
-          </form>
+          </div>
         </div>
         <div class="w-1 h-auto bg-gray_light lt-md:(w-5/6 h-1 self-center my-40)"></div>
         <div class="w-3/6 px-60 text-center lt-md:(w-full mb-20 px-30)">
@@ -50,8 +57,11 @@
 <script setup>
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { storeToRefs } from 'pinia'
 
 const { $api } = useNuxtApp()
+const userStore = useUserStore()
+const { isUserLoading } = storeToRefs(userStore)
 const { setUserLoggedin } = useUserStore()
 const errorMsg = ref('')
 
@@ -77,6 +87,10 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
+  userStore.$patch({
+    isUserLoading: true
+  })
+
   const { email, password } = values
 
   try {
@@ -92,12 +106,19 @@ const onSubmit = handleSubmit(async (values) => {
       }
     )
 
-    setUserLoggedin(idToken, refreshToken, userName)
+    await setUserLoggedin(idToken, refreshToken, userName)
+    userStore.$patch({
+      isUserLoading: false
+    })
   } catch (e) {
     const { statusCode, message } = e
     const errorMessage = mapErrorMessage(message, statusCode)
 
     errorMsg.value = errorMessage
+
+    userStore.$patch({
+      isUserLoading: false
+    })
   }
 
   // alert(JSON.stringify(values, null, 2))

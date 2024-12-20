@@ -13,8 +13,9 @@ export const useUserStore = defineStore('user', () => {
   const idToken = ref('')
   const refreshToken = ref('')
   const signInProvider = ref('')
+  const isUserLoading = ref(false)
 
-  const setUserLoggedin = (id_token, refresh_token, name) => {
+  const setUserLoggedin = async (id_token, refresh_token, name) => {
     const router = useRouter()
     const idTokenDecode = jwtDecode(id_token)
 
@@ -49,7 +50,7 @@ export const useUserStore = defineStore('user', () => {
         picture: idTokenDecode.picture
       }
 
-      $api(patchMemberInfo.serverPath.replace(':memberId', idTokenDecode.user_id), {
+      await $api(patchMemberInfo.serverPath.replace(':memberId', idTokenDecode.user_id), {
         method: patchMemberInfo.method,
         body: { memberInfo, idToken: id_token }
       })
@@ -116,6 +117,7 @@ export const useUserStore = defineStore('user', () => {
     idToken.value = ''
     refreshToken.value = ''
     signInProvider.value = ''
+    isUserLoading.value = false
   }
 
   return {
@@ -128,6 +130,7 @@ export const useUserStore = defineStore('user', () => {
     idToken,
     refreshToken,
     signInProvider,
+    isUserLoading,
     setUserLoggedin,
     setUserLogout,
     initProfile,

@@ -8,7 +8,7 @@
       container-class="max-w-[88%]"
       :circular="true"
       :full-screen="true"
-      :show-item-navigators="showItemNavigators"
+      :show-item-navigators="true"
       :thumbnails-position="thubnailsPosition"
       vertical-thumbnail-view-port-height="400px"
     >
@@ -20,9 +20,23 @@
       <template #thumbnail="slotProps">
         <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" class="w-40" />
       </template>
+      <template #previousitemicon>
+        <span class="material-icons text-52 lt-sm:text-36 bg-[#191919] rounded-full">
+          keyboard_arrow_left
+        </span>
+      </template>
+      <template #nextitemicon>
+        <span class="material-icons text-52 lt-sm:text-36 bg-[#191919] rounded-full">
+          keyboard_arrow_right
+        </span>
+      </template>
     </Galleria>
 
-    <Button :label="tagName" @click="displayBasic = true" />
+    <Button
+      class="bg-blue_light hover:bg-blue border-none"
+      :label="tagName"
+      @click="displayBasic = true"
+    />
   </div>
 </template>
 <script setup>
@@ -42,7 +56,6 @@ const props = defineProps({
 })
 
 const thubnailsPosition = ref('left')
-const showItemNavigators = ref(true)
 
 const images = ref()
 
@@ -73,10 +86,8 @@ onMounted(() => {
     const windowWidth = window.innerWidth
     if (windowWidth >= 768) {
       thubnailsPosition.value = 'left'
-      showItemNavigators.value = true
     } else {
       thubnailsPosition.value = 'bottom'
-      showItemNavigators.value = false
     }
   })
 })

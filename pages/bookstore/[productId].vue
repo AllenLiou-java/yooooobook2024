@@ -180,12 +180,12 @@
 
         <div>
           <h4 class="text-20 text-blue mb-20">書籍簡介</h4>
-          <p
+          <div
             v-for="(summarySegment, idx) in product.bookIntroduction.summary"
             :key="idx"
             class="mb-16"
             v-html="summarySegment"
-          ></p>
+          ></div>
         </div>
 
         <hr class="bg-gray_light my-28" />
@@ -206,7 +206,6 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-// import BookPreview from '@/components/BookPreview.vue'
 import BookPreview from '@/components/BookPreview.vue'
 import bookImgLink from '@/assets/js/bookImgLink'
 const orderQty = ref(0)

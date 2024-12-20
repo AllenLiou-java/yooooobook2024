@@ -4,25 +4,32 @@
       class="ml-40 mt-30 mb-60 border border-solid border-blue_light px-20 py-30 lt-md:(flex-col ml-0)"
     >
       <h2 class="text-blue_dark mb-30 text-center">忘記密碼</h2>
-      <form class="max-w-466 mx-auto" @submit.prevent="onSubmit">
+      <div class="max-w-466 mx-auto">
         <div class="flex flex-col gap-2 mb-16">
           <label class="mb-8" for="email">請輸入註冊時的電子郵件 Email</label>
           <VInputText name="email" type="email" autocomplete="email" />
         </div>
         <p class="text-14 text-red-6">{{ errorMsg }}</p>
         <div class="flex">
-          <button
-            class="bg-blue text-white text-center p-12 cursor-pointer border-0 hover:bg-blue_dark mr-12 grow-3 lt-sm:grow-1"
-          >
-            送出
-          </button>
+          <Button
+            type="button"
+            label="送出"
+            class="bg-blue text-white text-center p-12 cursor-pointer border-0 hover:bg-blue_dark mr-12 grow-3 lt-sm:grow-1 border-none rounded-none"
+            :loading="isUserLoading"
+            :pt="{
+              loadingIcon: {
+                class: 'absolute left-[calc(50%-36px)]'
+              }
+            }"
+            @click="onSubmit"
+          />
           <NuxtLink
             class="bg-gray p-12 hover:bg-gray_dark grow-1 text-center lt-sm:grow-1"
             to="/user/login"
             ><span class="text-gray_dark text-white">返回</span></NuxtLink
           >
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +37,10 @@
 <script setup>
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+const { isUserLoading } = storeToRefs(userStore)
 
 useHead({
   title: '忘記密碼'
@@ -56,9 +67,18 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
+  userStore.$patch({
+    isUserLoading: true
+  })
+
   const { email } = values
   try {
     await resetPasswordPromise(email)
+
+    userStore.$patch({
+      isUserLoading: false
+    })
+
     await navigateTo({
       path: '/user/login'
     })
@@ -68,6 +88,10 @@ const onSubmit = handleSubmit(async (values) => {
     const errorMessage = mapErrorMessage(message, statusCode)
 
     errorMsg.value = errorMessage
+
+    userStore.$patch({
+      isUserLoading: false
+    })
   }
 })
 

@@ -4,7 +4,7 @@
       class="ml-40 mt-30 mb-60 border border-solid border-blue_light px-20 py-30 lt-md:(flex-col ml-0)"
     >
       <h2 class="text-blue_dark mb-30 text-center">會員註冊</h2>
-      <form class="max-w-466 mx-auto" @submit.prevent="onSubmit">
+      <div class="max-w-466 mx-auto">
         <div class="flex flex-col gap-2 mb-16">
           <label class="mb-8" for="name">會員姓名 User name</label>
           <VInputText name="name" autocomplete="name" />
@@ -22,18 +22,26 @@
           <VPassword input-id="passwordConfirm" name="passwordConfirm" :feedback="false" />
         </div>
         <p class="text-14 text-red-6 mb-12">{{ errorMsg }}</p>
-        <button
-          class="bg-blue text-white text-center p-12 mb-16 cursor-pointer w-full border-0 hover:bg-blue_dark"
-        >
-          註冊
-        </button>
+
+        <Button
+          type="button"
+          label="註冊"
+          class="bg-blue text-white text-center p-12 mb-16 cursor-pointer w-full border-0 hover:bg-blue_dark rounded-none"
+          :loading="isUserLoading"
+          :pt="{
+            loadingIcon: {
+              class: 'absolute left-[calc(50%-36px)]'
+            }
+          }"
+          @click="onSubmit"
+        />
 
         <NuxtLink class="text-center block" to="/user/login"
           ><span class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
             >已是會員了嗎？馬上登入！</span
           ></NuxtLink
         >
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +51,8 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 
 const { $api } = useNuxtApp()
+const userStore = useUserStore()
+const { isUserLoading } = storeToRefs(userStore)
 const { notify } = useToastifyStore()
 const errorMsg = ref('')
 
@@ -74,12 +84,21 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
+  userStore.$patch({
+    isUserLoading: true
+  })
+
   try {
     const { name } = values
     const { idToken, email, localId } = await signUpPromise(values)
 
     await patchMemberInfoPromise({ name, email, localId }, idToken)
     await sendEmailVerifyPromise(idToken)
+
+    userStore.$patch({
+      isUserLoading: false
+    })
+
     await navigateTo({
       path: '/user/login'
     })
@@ -89,6 +108,10 @@ const onSubmit = handleSubmit(async (values) => {
     const errorMessage = mapErrorMessage(message, statusCode)
 
     errorMsg.value = errorMessage
+
+    userStore.$patch({
+      isUserLoading: false
+    })
   }
 })
 

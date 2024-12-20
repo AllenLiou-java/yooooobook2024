@@ -122,7 +122,7 @@
                     type="text"
                     class="rounded-0 border-gray_dark border-1 px-12 py-8 focus:(outline-none ring-2 ring-gray_dark border-0) mb-4"
                     autocomplete="bankAccountNo"
-                    placeholder="請輸入金融帳戶後5碼"
+                    placeholder="尚未確認匯款帳號，請填 00000"
                   />
                   <small class="text-secondary text-14">{{ basicErrors.bankAccountNo }}</small>
                 </div>
