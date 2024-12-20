@@ -5,7 +5,6 @@
     <div class="min-h-[calc(100vh-316px)] pt-92 lt-md-pt-133">
       <slot />
     </div>
-
     <LayoutFooter />
 
     <Sidebar

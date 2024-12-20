@@ -284,7 +284,7 @@ const { data: _stock } = await useAPI(
 
 const stock = computed(() => {
   if (_stock.value.qty >= 100) {
-    return '>=100'
+    return '>100'
   } else {
     return _stock.value.qty
   }
