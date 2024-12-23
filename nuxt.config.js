@@ -52,7 +52,8 @@ export default defineNuxtConfig({
         'Column',
         'ColumnGroup',
         'Row',
-        'Galleria'
+        'Galleria',
+        'SpeedDial'
         // 'Toast'
       ]
     },

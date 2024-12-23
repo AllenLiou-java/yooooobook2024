@@ -11,11 +11,13 @@
     >
       <template #item="slotProps">
         <div class="relative mx-auto">
-          <img
-            class="w-full h-[60vh] object-cover object-center"
-            :src="imageSrc(slotProps.data.imgPath)"
-            :alt="slotProps.data.altName"
-          />
+          <NuxtLink :to="slotProps.data.linkTo">
+            <img
+              class="w-full h-[60vh] object-cover object-center"
+              :src="imageSrc(slotProps.data.imgPath)"
+              :alt="slotProps.data.altName"
+            />
+          </NuxtLink>
         </div>
       </template>
     </Carousel>
@@ -24,7 +26,9 @@
       <div class="container flex-center flex-wrap gap-32">
         <div class="text-center mb-24">
           <h2 class="text-blue_dark text-36 mb-16 font-serif">Who Should Read This Book</h2>
-          <p class="text-blue_dark text-24 mb-16">有良冊出版書籍最適合那些讀者呢？</p>
+          <p class="text-blue_dark text-24 mb-16" data-aos="flip-left">
+            有良冊出版書籍最適合那些讀者呢？
+          </p>
           <img :src="imageSrc('/home/reader02.png')" class="mr-20 h-120" alt="readers" />
           <img
             :src="imageSrc('/home/reader01.png')"
@@ -117,15 +121,13 @@ const { imageSrc } = getImageSrc()
 const banners = ref([
   {
     imgPath: '/banner/0001.png',
-    altName: 'book-1'
+    altName: 'book-2',
+    linkTo: '/bookstore/AA00002'
   },
   {
     imgPath: '/banner/0003.png',
-    altName: 'book-2'
-  },
-  {
-    imgPath: '/banner/0004.png',
-    altName: 'book-3'
+    altName: 'book-1',
+    linkTo: '/bookstore/AA00001'
   }
 ])
 

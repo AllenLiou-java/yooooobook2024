@@ -77,6 +77,7 @@
         />
       </div>
     </Sidebar>
+    <SideSocialGroup />
   </div>
 </template>
 
@@ -84,6 +85,7 @@
 import { storeToRefs } from 'pinia'
 import LayoutHeader from '@/components/layout/Header.vue'
 import LayoutFooter from '@/components/layout/Footer.vue'
+import SideSocialGroup from '@/components/SideSocialGroup.vue'
 
 const blocked = ref(false)
 

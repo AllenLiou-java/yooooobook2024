@@ -52,7 +52,11 @@
         >
           <div v-if="product.isNew">
             <div class="bg"></div>
-            <div class="sale">新品</div>
+            <div class="absolute top-25 left-20 text-white -rotate-45">新品</div>
+          </div>
+          <div v-if="product.isOnSale">
+            <div class="bg"></div>
+            <div class="absolute top-18 left-20 text-white -rotate-45 text-14">限時<br />優惠</div>
           </div>
 
           <NuxtLink
@@ -142,15 +146,7 @@ onMounted(() => {
   position: absolute;
   width: 0;
   height: 0;
-  border-top: 70px solid #e44;
-  border-right: 70px solid transparent;
-}
-
-.sale {
-  position: absolute;
-  top: 25px;
-  left: 20px;
-  color: #fff;
-  transform: rotate(-45deg);
+  border-top: 75px solid #e44;
+  border-right: 75px solid transparent;
 }
 </style>

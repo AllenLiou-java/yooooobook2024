@@ -212,8 +212,34 @@ const orderQty = ref(0)
 const route = useRoute()
 const router = useRouter()
 
+// 取得指定產品資料
+const productStore = useProductStore()
+
+const { data: product } = await useAsyncData('product', () => {
+  const productDetailList = productStore.productDetailList
+
+  if (Object.keys(productDetailList).includes(route.params.productId)) {
+    return productDetailList[route.params.productId]
+  } else {
+    return $fetch(
+      apiList.product.getItemInfo.serverPath.replace(':productId', route.params.productId)
+    )
+  }
+})
+
+// 取得所有產品列表
+const { data: productList } = await useAsyncData('productList', () => {
+  const productList = productStore.productList
+
+  if (Object.keys(productList).length > 0) {
+    return productList
+  } else {
+    return $fetch(apiList.product.getListInfo.serverPath)
+  }
+})
+
 useHead({
-  title: () => `訂購書籍【${mapProductName(route.params.productId)}】`
+  title: () => `訂購書籍【${product.value.name}】`
 })
 
 definePageMeta({
@@ -237,13 +263,15 @@ const routeList = [
     linkTo: '/bookstore'
   },
   {
-    name: `${mapProductName(route.params.productId)}`,
+    name: product.value.name,
     linkTo: ''
   }
 ]
 
+// 載入預覽圖
 const previewBookPhotos = computed(() => {
   const productId = route.params.productId
+  if (typeof bookImgLink[productId] !== 'object') return []
   return Object.values(bookImgLink[productId])
 })
 
@@ -254,30 +282,7 @@ const addCart = (product) => {
   orderQty.value = 0
 }
 
-const productStore = useProductStore()
-
-const { data: product } = await useAsyncData('product', () => {
-  const productDetailList = productStore.productDetailList
-
-  if (Object.keys(productDetailList).includes(route.params.productId)) {
-    return productDetailList[route.params.productId]
-  } else {
-    return $fetch(
-      apiList.product.getItemInfo.serverPath.replace(':productId', route.params.productId)
-    )
-  }
-})
-
-const { data: productList } = await useAsyncData('productList', () => {
-  const productList = productStore.productList
-
-  if (Object.keys(productList).length > 0) {
-    return productList
-  } else {
-    return $fetch(apiList.product.getListInfo.serverPath)
-  }
-})
-
+// 取得產品庫存
 const { data: _stock } = await useAPI(
   apiList.stock.getStock.serverPath.replace(':productId', route.params.productId)
 )
