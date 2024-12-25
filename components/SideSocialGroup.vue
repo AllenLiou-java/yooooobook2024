@@ -103,9 +103,9 @@ onMounted(() => {
         rgba(0, 0, 0, 0.19) 0px 10px 20px,
         rgba(0, 0, 0, 0.23) 0px 6px 6px;
       transition: 0.3s ease-in-out;
-      &:hover {
-        transform: scale(1.2);
-      }
+      // &:hover {
+      //   transform: scale(1.2);
+      // }
       a {
         display: block;
         width: 44px;
@@ -118,6 +118,12 @@ onMounted(() => {
         }
       }
     }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .sideSocialGroup ul > li:hover {
+    transform: scale(1.2);
   }
 }
 

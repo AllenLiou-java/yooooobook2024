@@ -107,7 +107,7 @@ useSeoMeta({
   title: '有良冊股份有限公司',
   ogTitle: '有良冊股份有限公司',
   keywords:
-    '有良冊,公司登記,公司申請,公司登記實務及案例解析,有限公司,股份有限公司,應備文件詳析,company registration,增資,發行新股，公司登記基礎，公司登記進階，工商登記諮詢',
+    '有良冊,公司登記,公司申請,公司登記實務及案例解析,有限公司,股份有限公司,應備文件詳析,增資,發行新股,company registration,增資,發行新股，公司登記基礎，公司登記進階，工商登記諮詢',
   ogSiteName: '有良冊股份有限公司',
   ogType: 'website',
   ogLocale: 'zh_TW',
