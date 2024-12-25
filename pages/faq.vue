@@ -14,7 +14,7 @@
         </div>
       </div>
       <div
-        class="absolute top-0 left-0 bg-[url('@/assets/images/banner/0005.png')] bg-no-repeat bg-cover bg-right-bottom w-full h-full lt-sm:bg-center"
+        class="absolute top-0 left-0 bg-[url('@/assets/images/banner/QA.jpg')] lt-lg:bg-[url('@/assets/images/banner/QA_pad.jpg')] lt-sm:bg-[url('@/assets/images/banner/QA_t.jpg')] bg-no-repeat bg-contain bg-right-bottom w-full h-full"
       />
     </div>
     <div class="container pl-60 py-60">

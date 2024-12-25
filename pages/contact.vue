@@ -13,7 +13,7 @@
         </div>
       </div>
       <div
-        class="absolute top-0 left-0 bg-[url('@/assets/images/banner/0006.png')] bg-cover bg-no-repeat bg-right-bottom w-full h-full z-[-1]"
+        class="absolute top-0 left-0 bg-[url('@/assets/images/banner/Contact.jpg')] lt-lg:bg-[url('@/assets/images/banner/Contact_pad.jpg')] lt-sm:bg-[url('@/assets/images/banner/Contact_t.jpg')] bg-cover bg-no-repeat bg-right-center w-full h-full"
       />
     </div>
     <div class="container max-w-845 my-60 font-bold text-primary tracking-wide">

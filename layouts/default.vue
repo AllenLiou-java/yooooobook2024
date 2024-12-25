@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="layout relative">
     <CustomLoading />
     <LayoutHeader @set-visible="setVisible" />
     <div class="min-h-[calc(100vh-316px)] pt-92 lt-md-pt-133">

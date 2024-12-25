@@ -13,7 +13,7 @@
         <div class="relative mx-auto">
           <NuxtLink :to="slotProps.data.linkTo">
             <img
-              class="w-full h-[60vh] object-cover object-center"
+              class="object-contain object-center w-full"
               :src="imageSrc(slotProps.data.imgPath)"
               :alt="slotProps.data.altName"
             />
@@ -81,9 +81,9 @@
         </ul>
         <div class="mb-24">
           <h2 class="text-32 mb-32 font-serif">What Will You Learn?</h2>
-          <ul class="flex justify-between items-center">
+          <ul class="flex justify-between items-center gap-8">
             <li v-for="(business, idx) in businessImgPath" :key="idx">
-              <img class="mr-8 w-48" :src="imageSrc(business.imgPath)" :alt="business.altName" />
+              <img class="w-48" :src="imageSrc(business.imgPath)" :alt="business.altName" />
             </li>
           </ul>
         </div>
@@ -120,14 +120,9 @@ const { imageSrc } = getImageSrc()
 
 const banners = ref([
   {
-    imgPath: '/banner/0001.png',
+    imgPath: '/banner/home_01_pc.jpg',
     altName: 'book-2',
     linkTo: '/bookstore/AA00002'
-  },
-  {
-    imgPath: '/banner/0003.png',
-    altName: 'book-1',
-    linkTo: '/bookstore/AA00001'
   }
 ])
 
@@ -183,6 +178,45 @@ const features = [
       '從各項登記之基礎點切入，彙整各項登記可能會遇到的問題並加以說明，讓你熟稔各項公司登記後，即使遇到再複雜的變更登記案件，也能輕鬆掌握要點。'
   }
 ]
+
+function getBannerInfo(windowWidth = 1400) {
+  const banners = [
+    {
+      imgPath: '',
+      altName: 'book-2',
+      linkTo: '/bookstore/AA00002'
+    },
+    {
+      imgPath: '',
+      altName: 'book-1',
+      linkTo: '/bookstore/AA00001'
+    }
+  ]
+  if (windowWidth <= 450) {
+    banners[0].imgPath = '/banner/home_01_m.jpg'
+    banners[1].imgPath = '/banner/home_02_m.jpg'
+  } else if (windowWidth <= 768) {
+    banners[0].imgPath = '/banner/home_01_t.jpg'
+    banners[1].imgPath = '/banner/home_02_t.jpg'
+  } else if (windowWidth <= 1200) {
+    banners[0].imgPath = '/banner/home_01_pad.jpg'
+    banners[1].imgPath = '/banner/home_02_pad.jpg'
+  } else {
+    banners[0].imgPath = '/banner/home_01_pc.jpg'
+    banners[1].imgPath = '/banner/home_02_pc.jpg'
+  }
+
+  return banners
+}
+
+onMounted(() => {
+  const windowWidth = window.innerWidth
+  banners.value = getBannerInfo(windowWidth)
+  window.addEventListener('resize', () => {
+    const windowWidth = window.innerWidth
+    banners.value = getBannerInfo(windowWidth)
+  })
+})
 </script>
 
 <style lang="scss" scoped></style>

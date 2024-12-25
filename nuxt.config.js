@@ -54,7 +54,6 @@ export default defineNuxtConfig({
         'Row',
         'Galleria',
         'SpeedDial'
-        // 'Toast'
       ]
     },
     cssLayerOrder: 'reset, primevue'

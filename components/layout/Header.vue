@@ -100,7 +100,9 @@
                   :style="onPopup ? popupActiveStyle : ''"
                   @click="toggle"
                 >
-                  {{ userName }}
+                  <p class="w-68 whitespace-nowrap text-ellipsis overflow-hidden">
+                    {{ userName }}
+                  </p>
                 </div>
 
                 <TieredMenu
@@ -128,7 +130,7 @@
                   </template>
                 </TieredMenu>
                 <span
-                  class="material-icons text-20 text-gray bg-white rounded-full absolute end-[-10px] bottom-[-4px]"
+                  class="material-icons text-20 text-gray bg-white rounded-full absolute end-[-10px] bottom-[-4px] absolute"
                 >
                   expand_circle_down
                 </span>

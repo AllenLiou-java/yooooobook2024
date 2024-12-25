@@ -14,7 +14,7 @@
         </div>
       </div>
       <div
-        class="absolute top-0 left-0 bg-[url('@/assets/images/home/city.png')] bg-cover bg-no-repeat bg-bottom w-full h-full z-[-1]"
+        class="absolute top-0 left-0 bg-[url('@/assets/images/banner/0001.png')] bg-cover bg-no-repeat bg-bottom w-full h-full z-[-1]"
       />
       <div class="mask-70"></div>
     </div>
