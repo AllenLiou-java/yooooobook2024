@@ -32,11 +32,51 @@
     <!-- <button @click="getOrder">取得訂單</button> -->
     <button @click="getOrderList">取得訂單</button>
     <!-- <button @click="patchOrder">新增訂單</button> -->
+
+    <div class="card flex flex-column align-items-center gap-3">
+      <DataTable :value="Object.values(productList)" table-style="min-width: 50rem">
+        <Column field="name" header="Name"></Column>
+        <!-- <Column field="price" header="Price"></Column> -->
+        <!-- <Column field="quantity" header="Quantity"></Column> -->
+      </DataTable>
+
+      <Button
+        type="button"
+        :label="selectedProduct ? selectedProduct.name : 'Select a Product'"
+        aria-haspopup="true"
+        aria-controls="overlay_panel"
+        @click="toggleProduct"
+      />
+
+      <OverlayPanel ref="productPanel" append-to="body">
+        <DataTable
+          :value="Object.values(productList)"
+          selection-mode="single"
+          :paginator="true"
+          :rows="5"
+        >
+          <Column field="name" header="Name" sortable style="min-width: 12rem"></Column>
+          <!-- <Column header="Image">
+            <template #body="slotProps">
+              <img
+                :src="`https://primefaces.org/cdn/primevue/images/product/${selectedProduct.image}`"
+                :alt="slotProps.data.image"
+                class="w-4rem shadow-1"
+              />
+            </template>
+          </Column>
+          <Column field="price" header="Price" sortable style="min-width: 8rem">
+            <template #body="slotProps"> $ {{ slotProps.data.price }} </template>
+          </Column> -->
+        </DataTable>
+      </OverlayPanel>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { storeToRefs } from 'pinia'
+import OverlayPanel from 'primevue/overlaypanel'
 
 const loading = ref(false)
 
@@ -183,6 +223,38 @@ const getOrderList = async () => {
 //   })
 
 //   console.log('data', data)
+// }
+
+const productStore = useProductStore()
+const { data: productList, error } = await useAsyncData('products', () => {
+  const productList = productStore.productList
+  if (Object.keys(productList).length > 0) {
+    return productList
+  } else {
+    return $fetch(apiList.product.getListInfo.serverPath)
+  }
+})
+
+if (error.value) {
+  if (import.meta.client) {
+    const message = error.value.cause.message
+    const statusCode = error.value.cause.statusCode
+
+    notify('error', message, statusCode)
+  }
+}
+
+const productPanel = ref()
+const selectedProduct = ref()
+
+const toggleProduct = (event) => {
+  // console.log(productPanel.value)
+
+  productPanel.value.toggle(event)
+}
+
+// const onProductSelect = (event) => {
+//   productPanel.value.hide()
 // }
 </script>
 

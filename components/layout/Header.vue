@@ -1,5 +1,6 @@
 <template>
   <div class="bg-blue_dark tracking-widest z-999 fixed w-full">
+    <BlockUI :blocked="blocked" full-screen />
     <div class="container py-18 flex-center">
       <div
         class="flex justify-between items-center flex-grow-1 lt-md:(flex-col items-start justify-center)"
@@ -52,43 +53,54 @@
         <div
           class="min-w-184 h-60 shrink-0 flex flex-col justify-between lt-lg:(flex-row) lt-md:(flex-col mt-16)"
         >
-          <div class="flex-center lt-lg:mr-12">
-            <IconField icon-position="left">
-              <InputIcon
-                :pt="{
-                  root: {
-                    class: 'left-6'
-                  }
-                }"
-              >
-                <template #default>
-                  <span class="material-icons text-16 rotate-y-180 text-black"> search </span>
-                </template>
-              </InputIcon>
-              <InputText
-                id="bookName"
-                v-model="textSearch"
-                placeholder="書籍名稱"
-                class="text-14 max-w-140 lt-md:max-w-177 h-25 rounded-0 enabled:focus:outline-none pl-28"
-              />
-            </IconField>
-            <Button
-              class="bg-brown_dark w-53 h-25 text-center cursor-pointer rounded-0 text-14 font-bold p-0 m-0 border-0"
-              label="搜尋"
-            />
-          </div>
-          <!-- <ClientOnly> -->
-          <div class="flex items-center">
-            <div class="text-white cursor-pointer mr-16" @click="emit('setVisible')">
+          <div class="flex-center lt-lg:mr-0 gap-12 mb-8 lt-lg:mb-0 lt-md:mb-8">
+            <div class="text-white cursor-pointer" @click="emit('setVisible')">
               <span class="material-icons align-text-top text-22 mr-2"> shopping_cart </span>
-
               <span class="text-14 align-middle">購物車({{ qtyInCart }})</span>
             </div>
 
+            <Button
+              class="bg-brown_dark px-8 py-4 text-center cursor-pointer text-14 font-bold p-0 m-0 border-0 rounded-4"
+              aria-haspopup="true"
+              aria-controls="overlay_panel"
+              @click="toggleProductPanel"
+            >
+              <template #default>
+                <span class="material-icons mr-2"> search </span>
+                書籍搜尋
+              </template>
+            </Button>
+
+            <OverlayPanel ref="productPanel" append-to="body" @hide="blocked = false">
+              <DataTable
+                :value="Object.values(productList)"
+                selection-mode="single"
+                :paginator="true"
+                :rows="5"
+                @row-select="onProductSelect"
+              >
+                <Column field="name" header="產品名稱" sortable style="min-width: 12rem"></Column>
+                <Column header="產品圖片">
+                  <template #body="slotProps">
+                    <img
+                      :src="slotProps.data.imgSrc"
+                      :alt="slotProps.data.productId"
+                      class="w-64"
+                    />
+                  </template>
+                </Column>
+                <Column field="price" header="價格" sortable style="min-width: 8rem">
+                  <template #body="slotProps"> $ {{ slotProps.data.price.discount }} </template>
+                </Column>
+              </DataTable>
+            </OverlayPanel>
+          </div>
+
+          <div class="flex justify-end items-center ml-12 lt-md:(justify-start ml-0)">
             <template v-if="!isUserLoggedIn">
               <NuxtLink no-prefetch to="/user/login" class="text-brown_light cursor-pointer">
-                <span class="material-icons align-text-top text-22 mr-2"> person </span>
-                <span class="text-14 align-middle">會員登入</span>
+                <span class="material-icons align-text-top text-22 mr-6"> person </span>
+                <span class="text-16 align-middle">會員登入</span>
               </NuxtLink>
             </template>
             <template v-else>
@@ -100,7 +112,7 @@
                   :style="onPopup ? popupActiveStyle : ''"
                   @click="toggle"
                 >
-                  <p class="w-68 whitespace-nowrap text-ellipsis overflow-hidden">
+                  <p class="w-120 whitespace-nowrap text-ellipsis overflow-hidden text-center">
                     {{ userName }}
                   </p>
                 </div>
@@ -108,7 +120,7 @@
                 <TieredMenu
                   id="overlay_tmenu"
                   ref="menu"
-                  :model="items"
+                  :model="loginMenu"
                   popup
                   @show="onPopup = true"
                   @hide="onPopup = false"
@@ -140,7 +152,6 @@
               </div>
             </template>
           </div>
-          <!-- </ClientOnly> -->
         </div>
       </div>
       <div>
@@ -240,10 +251,13 @@ import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 import { storeToRefs } from 'pinia'
 
+const router = useRouter()
+const { notify } = useToastifyStore()
+const visible = ref(false)
+const blocked = ref(false)
+
 const orderStore = useOrderStore()
 const { qtyInCart } = storeToRefs(orderStore)
-
-const visible = ref(false)
 
 const routeList = ref([
   {
@@ -287,15 +301,43 @@ const routeList = ref([
   }
 ])
 
-const textSearch = ref(null)
+const productStore = useProductStore()
+const { data: productList, error } = await useAsyncData('products', () => {
+  const productList = productStore.productList
+  if (Object.keys(productList).length > 0) {
+    return productList
+  } else {
+    return $fetch(apiList.product.getListInfo.serverPath)
+  }
+})
+
+if (error.value) {
+  if (import.meta.client) {
+    const message = error.value.cause.message
+    const statusCode = error.value.cause.statusCode
+
+    notify('error', message, statusCode)
+  }
+}
+
+const productPanel = ref()
+
+const toggleProductPanel = (event) => {
+  productPanel.value.toggle(event)
+  blocked.value = true
+}
+
+const onProductSelect = (event) => {
+  router.push(`/bookstore/${event.data.productId}`)
+
+  productPanel.value.hide()
+}
 
 const userStore = useUserStore()
 const { setUserLogout } = userStore
 const { isUserLoggedIn, userName, idToken, signInProvider } = storeToRefs(userStore)
 
 const menu = ref()
-
-const items = ref([])
 
 const toggle = (event) => {
   menu.value.toggle(event)
@@ -307,7 +349,6 @@ const popupActiveStyle = computed(() => {
   return { backgroundColor: '#facc15' }
 })
 
-const { notify } = useToastifyStore()
 const confirm = useConfirm()
 const confirmLogout = () => {
   confirm.require({
@@ -347,11 +388,12 @@ const confirmEmailVerify = async () => {
   }
 }
 
+const loginMenu = ref([])
 const updateLoginMenuItem = () => {
-  items.value = []
+  loginMenu.value = []
 
   if (!idToken.value) return
-  items.value.push({
+  loginMenu.value.push({
     label: '登出',
     icon: 'logout',
     command: () => {
@@ -359,7 +401,7 @@ const updateLoginMenuItem = () => {
     }
   })
   if (signInProvider.value === 'password') {
-    items.value.push({
+    loginMenu.value.push({
       label: '重設密碼',
       icon: 'password',
       route: '/user/resetPassword'
@@ -368,7 +410,7 @@ const updateLoginMenuItem = () => {
   const emailVerifiedCookie = useCookie('emailVerified').value
 
   if (!emailVerifiedCookie) {
-    items.value.push({
+    loginMenu.value.push({
       label: '信箱驗證',
       icon: 'verified',
       command: () => {
@@ -385,6 +427,7 @@ watch(idToken, async (newVal, oldVal) => {
   updateLoginMenuItem()
 })
 
+// 更新emailVerified狀態
 const updateEmailVerify = async () => {
   const cookieidToken = useCookie('idToken').value
   const cookieEmailVerified = useCookie('emailVerified').value
@@ -423,6 +466,10 @@ const updateEmailVerify = async () => {
 onMounted(async () => {
   await updateEmailVerify()
   updateLoginMenuItem()
+
+  productStore.$patch({
+    productList: productList.value
+  })
 })
 
 const emit = defineEmits(['setVisible'])
