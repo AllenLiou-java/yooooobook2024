@@ -27,6 +27,8 @@
           :rows="5"
           :rows-per-page-options="[5, 10, 20]"
           table-style="min-width: 50rem"
+          :sort-field="defaultSort.field"
+          :sort-order="defaultSort.sortOrder"
         >
           <Column
             :pt="{
@@ -169,6 +171,11 @@ useSeoMeta({
   ogTitle: '訂單查詢 - 有良冊股份有限公司',
   ogImage: '/yooooobook.jpg',
   ogUrl: 'https://www.yooooobook.com/order'
+})
+
+const defaultSort = ref({
+  field: 'oderDate',
+  sortOrder: -1
 })
 
 const routeList = [

@@ -214,7 +214,6 @@ const isOrderInfoShow = computed(() => {
     return false
   }
 })
-// console.log('error', error)
 </script>
 
 <style lang="scss" scoped></style>

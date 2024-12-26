@@ -65,6 +65,8 @@
                 優惠價：{{ thousandthsFormat(product.price.discount) }}元
               </p>
             </div>
+            <div class="mt-10" v-html="product.price.remarkContent"></div>
+
             <hr class="bg-brown my-12" />
             <div class="flex items-center mb-16">
               <label for="orderQty">數量：</label>
