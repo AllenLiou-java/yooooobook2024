@@ -18,11 +18,12 @@
       />
       <div class="mask-70"></div>
     </div>
+
     <div
-      class="container text-primary flex pt-48 pb-80 font-bold flex-wrap lt-sm:justify-center gap-60"
+      class="container text-primary flex flex-wrap pt-48 pb-80 font-bold lt-lg:flex-wrap lt-sm:justify-center"
     >
       <div
-        class="max-w-310 w-full h-230 border border-gray_light border-solid p-24 shrink-0 lt-sm:mr-0"
+        class="max-w-310 w-full self-start border border-gray_light border-solid p-24 mr-60 mb-40 lt-lg:(max-w-500 mr-0 border-0 mb-20)"
       >
         <h2
           class="text-28 relative pl-16 py-4 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-blue_dark)"
@@ -30,26 +31,33 @@
           Menu
         </h2>
         <hr class="bg-gray_light h-2 my-16" />
-        <ul class="h-120 overflow-y-auto">
+        <ul
+          class="h-120 pr-16 overflow-y-auto lt-lg:(flex gap-16 h-auto overflow-x-auto pb-12 px-12)"
+        >
           <li
             v-for="productItem in productList"
             :key="productItem.name"
-            class="text-20 pb-16 mb-16 border-0 border-b-1 border-solid border-gray_light"
+            class="text-20 pb-16 mb-16 border-0 border-b-1 border-solid border-gray_light lt-lg:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown )"
           >
             <NuxtLink
-              class="text-gray_dark"
+              class="text-gray_dark lt-lg:(text-white)"
               :to="{ name: 'bookstore-productId', params: { productId: productItem.productId } }"
               >{{ productItem.name }}</NuxtLink
             >
           </li>
         </ul>
       </div>
+
       <div class="max-w-910 w-full">
-        <div class="flex gap-32 mb-44 flex-wrap">
-          <div class="max-w-352 w-full border border-solid px-8 py-32">
-            <img :src="product.imgSrc" alt="productImg" />
+        <div class="flex gap-32 mb-44 lt-md:flex-wrap">
+          <div class="border border-solid p-8 self-start shrink-0 lt-sm:m-auto">
+            <img
+              class="w-334 h-334 object-contain lt-sm:(w-280 h-280)"
+              :src="product.imgSrc"
+              alt="productImg"
+            />
           </div>
-          <div class="mt-20 mb-12 max-w-412 w-full">
+          <div class="max-w-412 w-full shrink-1">
             <h3 class="text-26 text-brown mb-16">{{ product.name }}</h3>
             <ul class="list-disc pl24 mb-16">
               <li v-for="(content, contentIdx) in product.content" :key="contentIdx">

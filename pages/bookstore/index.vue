@@ -17,6 +17,7 @@
       />
       <div class="mask-70"></div>
     </div>
+
     <div
       class="container text-primary flex pt-48 pb-80 font-bold lt-lg:flex-wrap lt-sm:justify-center"
     >
