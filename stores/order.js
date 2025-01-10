@@ -192,16 +192,17 @@ export const useOrderStore = defineStore('order', () => {
           }
         )
 
-        clearAllOrder()
-        await router.push({
-          path: `/cart/success/${info.orderId}`
-        })
-
-        await $api('/api/mail', {
+        const mailRes = await $api('/api/mail', {
           method: 'post',
           body: {
             orderInfo: info
           }
+        })
+        console.log('mailRes', mailRes)
+
+        clearAllOrder()
+        await router.push({
+          path: `/cart/success/${info.orderId}`
         })
 
         notify('info', '訂單資訊已發送至指定信箱')

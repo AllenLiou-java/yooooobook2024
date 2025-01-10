@@ -4,8 +4,6 @@ export default defineEventHandler(async (event) => {
   const { orderInfo } = body
   const { gmailAppPassword } = useRuntimeConfig()
 
-  sendOrderConfirmMail(orderInfo)
-
   function createOrderTable(orderList) {
     let tableTd = ''
     orderList.forEach((item) => {
@@ -151,27 +149,25 @@ export default defineEventHandler(async (event) => {
     </html>`
   }
 
-  async function sendOrderConfirmMail(orderInfo) {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'yooooobook@gmail.com',
-        pass: gmailAppPassword
-      }
-    })
-
-    const mailOptions = {
-      from: '"有良冊股份有限公司" <yooooobook@gmail.com>',
-      to: orderInfo.email,
-      subject: '公司登記實務及案例解析【訂單成立通知】',
-      html: contentHtml(orderInfo)
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'yooooobook@gmail.com',
+      pass: gmailAppPassword
     }
+  })
 
-    const result = await transporter.sendMail(mailOptions)
-    return result
+  const mailOptions = {
+    from: '"有良冊股份有限公司" <yooooobook@gmail.com>',
+    to: orderInfo.email,
+    subject: '公司登記實務及案例解析【訂單成立通知】',
+    html: contentHtml(orderInfo),
+    bcc: 'info@yooooobook.com'
   }
 
+  const sendMail = await transporter.sendMail(mailOptions)
+
   return {
-    status: 'success'
+    status: sendMail
   }
 })
