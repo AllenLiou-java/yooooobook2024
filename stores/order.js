@@ -192,13 +192,12 @@ export const useOrderStore = defineStore('order', () => {
           }
         )
 
-        const mailRes = await $api('/api/mail', {
+        await $api('/api/mail', {
           method: 'post',
           body: {
             orderInfo: info
           }
         })
-        console.log('mailRes', mailRes)
 
         clearAllOrder()
         await router.push({
