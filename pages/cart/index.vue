@@ -30,7 +30,7 @@
         <p class="self-end font-black">合計： NT {{ thousandthsFormat(totalPrice) }}</p>
       </ul>
     </div>
-    <Divider />
+    <Divider id="formHeaderLine" />
     <div class="card flex-center">
       <Stepper v-model:active-step="active">
         <StepperPanel>
@@ -67,6 +67,7 @@
                     id="name"
                     v-bind="nameAttrs"
                     v-model="name"
+                    autofocus
                     type="text"
                     class="rounded-0 border-gray_dark border-1 px-12 py-8 focus:(outline-none ring-2 ring-gray_dark border-0) mb-4"
                     autocomplete="name"
@@ -156,7 +157,7 @@
           <template #header="{ index, clickCallback }">
             <button
               class="bg-transparent border-none inline-flex flex-col gap-2"
-              @click="clickCallback"
+              @click="basicInfoConfirm(basicHandleSubmit(), clickCallback)"
             >
               <span
                 :class="[
@@ -414,6 +415,12 @@ const basicInfoConfirm = (submit, nextCallback) => {
 
   if (errorLength === 0 && valueLength === 4) {
     nextCallback()
+    const formHeaderLine = document.getElementById('formHeaderLine')
+
+    window.scrollTo({
+      top: getPosition(formHeaderLine).y - 120,
+      behavior: 'smooth'
+    })
   }
 }
 

@@ -29,7 +29,14 @@ export default defineNuxtConfig({
     }
   ],
 
-  modules: ['@pinia/nuxt', 'nuxt-primevue', '@unocss/nuxt', 'nuxt-nodemailer'],
+  modules: [
+    '@pinia/nuxt',
+    'nuxt-primevue',
+    '@unocss/nuxt',
+    'nuxt-nodemailer',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots'
+  ],
 
   primevue: {
     options: {
@@ -92,6 +99,35 @@ export default defineNuxtConfig({
     public: {
       googleClientId: ''
     }
+  },
+
+  site: {
+    url: 'https://www.yooooobook.com/',
+    name: 'Yooooobook Website'
+  },
+  sitemap: {
+    exclude: ['/user/**', '/order', '/cart'],
+    sources: ['/api/__sitemap__/bookUrls'],
+    defaults: {
+      lastmod: new Date().toISOString(),
+      priority: 0.5,
+      changefreq: 'weekly'
+    }
+  },
+  // 開始加入GA code
+  'google-gtag': {
+    id: process.env.NUXT_GOOGLE_ANALYTICS_ID, // 必填，請填寫剛申請到的追蹤碼ID
+    config: {
+      // 這裡是填寫對gtag的需求選項
+      anonymize_ip: true,
+      send_page_view: false, // 避免頁面刷新時後的重複追蹤
+      linker: {
+        // 跨域追蹤，追蹤兩個相關但不同網域的頁面
+        domains: ['yooooobook.com']
+      }
+    },
+    debug: true, // 允許在開發中進行追蹤
+    disableAutoPageTrack: false // 關閉追蹤每個頁面路由
   }
 
   // nitro: {

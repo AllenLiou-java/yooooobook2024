@@ -55,8 +55,15 @@
         >
           <div class="flex-center lt-lg:mr-0 gap-12 mb-8 lt-lg:mb-0 lt-md:mb-8">
             <div class="text-white cursor-pointer" @click="emit('setVisible')">
-              <span class="material-icons align-text-top text-22 mr-2"> shopping_cart </span>
-              <span class="text-14 align-middle">購物車({{ qtyInCart }})</span>
+              <span
+                class="material-icons align-text-top text-22 mr-2"
+                :class="qtyInCart > 0 ? 'text-brown_light' : ''"
+              >
+                shopping_cart
+              </span>
+              <span class="text-14 align-middle" :class="qtyInCart > 0 ? 'text-brown_light' : ''"
+                >購物車({{ qtyInCart }})</span
+              >
             </div>
 
             <Button
