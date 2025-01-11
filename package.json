@@ -11,12 +11,12 @@
     "lint": "eslint --ext .js,.vue ."
   },
   "dependencies": {
-    "@nuxtjs/google-gtag": "^1.0.4",
     "@nuxtjs/robots": "^5.1.0",
     "@nuxtjs/sitemap": "^7.0.1",
     "@pinia/nuxt": "^0.5.4",
     "jwt-decode": "^4.0.0",
     "nuxt": "^3.13.0",
+    "nuxt-gtag": "^3.0.2",
     "pinia": "^2.2.2",
     "primevue": "3.53.0",
     "vee-validate": "^4.13.2",

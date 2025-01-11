@@ -35,7 +35,8 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     'nuxt-nodemailer',
     '@nuxtjs/sitemap',
-    '@nuxtjs/robots'
+    '@nuxtjs/robots',
+    'nuxt-gtag'
   ],
 
   primevue: {
@@ -84,7 +85,6 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
-    googleAnalyticsId: '',
     firebaseAuthDomain: '',
     projectId: '',
     storageBucket: '',
@@ -97,7 +97,8 @@ export default defineNuxtConfig({
     webUrl: '',
     gmailAppPassword: '',
     public: {
-      googleClientId: ''
+      googleClientId: '',
+      gtagId: ''
     }
   },
 
@@ -114,20 +115,9 @@ export default defineNuxtConfig({
       changefreq: 'weekly'
     }
   },
-  // 開始加入GA code
-  'google-gtag': {
-    id: process.env.NUXT_GOOGLE_ANALYTICS_ID, // 必填，請填寫剛申請到的追蹤碼ID
-    config: {
-      // 這裡是填寫對gtag的需求選項
-      anonymize_ip: true,
-      send_page_view: false, // 避免頁面刷新時後的重複追蹤
-      linker: {
-        // 跨域追蹤，追蹤兩個相關但不同網域的頁面
-        domains: ['yooooobook.com']
-      }
-    },
-    debug: true, // 允許在開發中進行追蹤
-    disableAutoPageTrack: false // 關閉追蹤每個頁面路由
+  gtag: {
+    id: process.env.NUXT_PUBLIC_GTAG_ID,
+    enabled: process.env.NODE_ENV === 'production'
   }
 
   // nitro: {
