@@ -33,7 +33,7 @@
           >
             <NuxtLink
               :class="queryFileName === file.name ? 'text-blue_light' : 'text-gray_dark'"
-              :to="{ name: 'files-book', params: { book: file.name } }"
+              :to="{ name: 'file-book', params: { book: file.name } }"
               >{{ file.name }}</NuxtLink
             >
           </li>
@@ -160,7 +160,7 @@ const routeList = [
   },
   {
     name: '檔案下載',
-    linkTo: '/files'
+    linkTo: '/file'
   },
   {
     name: `${route.params.book}`,

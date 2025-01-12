@@ -299,7 +299,7 @@ const routeList = ref([
   {
     label: '檔案下載',
     icon: 'cloud_download',
-    route: '/files'
+    route: '/file'
   },
   {
     label: '聯絡我們',

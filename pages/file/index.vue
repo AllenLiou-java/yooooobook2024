@@ -38,7 +38,7 @@
           >
             <NuxtLink
               class="text-gray_dark"
-              :to="{ name: 'files-book', params: { book: file.name } }"
+              :to="{ name: 'file-book', params: { book: file.name } }"
               >{{ file.name }}</NuxtLink
             >
           </li>
@@ -52,7 +52,7 @@
           class="w-251 border border-solid p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
         >
           <NuxtLink
-            :to="{ name: 'files-book', params: { book: file.name } }"
+            :to="{ name: 'file-book', params: { book: file.name } }"
             class="flex-center flex-col text-primary"
           >
             <div class="w-230 h-230 flex-center mb-12">
