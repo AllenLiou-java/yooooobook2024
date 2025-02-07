@@ -52,6 +52,11 @@ const stock = {
     url: '/stock/:id.json',
     serverPath: '/api/stock/:productId',
     method: 'get'
+  },
+  patchStock: {
+    url: '/stock/:id.json',
+    serverPath: '/api/stock/:productId',
+    method: 'patch'
   }
 }
 

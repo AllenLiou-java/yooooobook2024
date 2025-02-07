@@ -25,23 +25,41 @@
     <div class="py-64 bg-[#f2eeeb]">
       <div class="container flex-center flex-wrap gap-32">
         <div class="text-center mb-24">
-          <h2 class="text-blue_dark text-36 mb-16 font-serif">Who Should Read This Book</h2>
-          <p class="text-blue_dark text-24 mb-16" data-aos="flip-left">
+          <h2 class="text-blue_dark text-36 mb-16 font-serif" data-aos="fade-up">
+            Who Should Read This Book
+          </h2>
+          <p class="text-blue_dark text-24 mb-16" data-aos="fade-up" data-aos-delay="50">
             有良冊出版書籍最適合那些讀者呢？
           </p>
-          <img :src="imageSrc('/home/reader02.png')" class="mr-20 h-120" alt="readers" />
           <img
             :src="imageSrc('/home/reader01.png')"
-            class="mr-20 h-120"
+            class="h-120"
             style="transform: rotateY(180deg)"
             alt="readers"
+            data-aos="fade-left"
+            data-aos-duration="1500"
           />
-          <img :src="imageSrc('/home/reader03.png')" class="h-120" alt="readers" />
+          <img
+            :src="imageSrc('/home/reader02.png')"
+            class="mx-20 h-120"
+            alt="readers"
+            data-aos="fade-left"
+            data-aos-delay="100"
+            data-aos-duration="1500"
+          />
+          <img
+            :src="imageSrc('/home/reader03.png')"
+            class="h-120"
+            alt="readers"
+            data-aos="fade-left"
+            data-aos-delay="150"
+            data-aos-duration="1500"
+          />
         </div>
 
         <div class="mb-24 lt-xl:mb-0">
           <ul class="text-blue_dark">
-            <li class="mb-16 flex flex-nowrap">
+            <li class="mb-16 flex flex-nowrap" data-aos="fade-left">
               <span class="material-icons text-brown_dark text-52 mr-4 shrink-0"> task_alt </span>
               <p
                 class="inline-block text-20 lt-md:text-16 border-solid border-3 border-l-none px-12 py-8 rounded-r-[6px]"
@@ -49,7 +67,7 @@
                 會計師、記帳士、記帳及報稅代理人等公司登記從業人員
               </p>
             </li>
-            <li class="mb-16 flex flex-nowrap">
+            <li class="mb-16 flex flex-nowrap" data-aos="fade-left" data-aos-delay="150">
               <span class="material-icons text-brown_dark text-52 mr-4 shrink-0"> task_alt </span>
               <p
                 class="inline-block text-20 lt-md:text-16 border-solid border-3 border-l-none px-12 py-8 rounded-r-[6px]"
@@ -57,7 +75,7 @@
                 公司欲自行辦理公司登記者
               </p>
             </li>
-            <li class="flex flex-nowrap">
+            <li class="flex flex-nowrap" data-aos="fade-left" data-aos-delay="300">
               <span class="material-icons text-brown_dark text-52 mr-4 shrink-0"> task_alt </span>
               <p
                 class="inline-block text-20 lt-md:text-16 border-solid border-3 border-l-none px-12 py-8 rounded-r-[6px]"
@@ -74,15 +92,38 @@
         class="container flex justify-between lt-lg:justify-center max-w-1000 flex-wrap-reverse mb-100"
       >
         <ul class="list-disc pl-24 mr-32">
-          <li class="text-20 lt-md:text-16 mb-8">公司有能力自己辦理公司登記</li>
-          <li class="text-20 lt-md:text-16 mb-8">提升專業知識，協助客戶辦理公司登記</li>
-          <li class="text-20 lt-md:text-16 mb-8">塑造自身專業形象，讓客戶願意花更多錢委託代辦</li>
-          <li class="text-20 lt-md:text-16">建立口碑，讓更多公司成為你的客戶</li>
+          <li class="text-20 lt-md:text-16 mb-8" data-aos="flip-left" data-aos-duration="1500">
+            公司有能力自己辦理公司登記
+          </li>
+          <li
+            class="text-20 lt-md:text-16 mb-8"
+            data-aos="flip-left"
+            data-aos-delay="150"
+            data-aos-duration="1500"
+          >
+            提升專業知識，協助客戶辦理公司登記
+          </li>
+          <li
+            class="text-20 lt-md:text-16 mb-8"
+            data-aos="flip-left"
+            data-aos-delay="300"
+            data-aos-duration="1500"
+          >
+            塑造自身專業形象，讓客戶願意花更多錢委託代辦
+          </li>
+          <li
+            class="text-20 lt-md:text-16"
+            data-aos="flip-left"
+            data-aos-delay="450"
+            data-aos-duration="1500"
+          >
+            建立口碑，讓更多公司成為你的客戶
+          </li>
         </ul>
         <div class="mb-24">
-          <h2 class="text-32 mb-32 font-serif">What Will You Learn?</h2>
+          <h2 class="text-32 mb-32 font-serif" data-aos="zoom-in">What Will You Learn?</h2>
           <ul class="flex justify-between items-center gap-8">
-            <li v-for="(business, idx) in businessImgPath" :key="idx">
+            <li v-for="(business, idx) in businessImgPath" :key="idx" data-aos="flip-right">
               <img class="w-48" :src="imageSrc(business.imgPath)" :alt="business.altName" />
             </li>
           </ul>
@@ -90,9 +131,18 @@
       </div>
       <div class="container flex flex-center flex-col">
         <h2 class="text-80 mb-24 font-serif">You Have To Read This Book</h2>
-        <p class="text-28 text-[#d2c49d] mb-48 italic">為什麼一定要選擇有良冊出版書籍呢？</p>
+        <p class="text-28 text-[#d2c49d] mb-48 italic" data-aos="fade-up">
+          為什麼一定要選擇有良冊出版書籍呢？
+        </p>
         <ul class="flex flex-center flex-wrap relative bottom-[-44px]">
-          <li v-for="feature in features" :key="feature.title" class="mb-16 ml-[-6px]">
+          <li
+            v-for="(feature, i) in features"
+            :key="feature.title"
+            class="mb-16 ml-[-6px]"
+            data-aos="flip-right"
+            :data-aos-delay="300 * i"
+            data-aos-duration="1500"
+          >
             <CardDoc :feature="feature"></CardDoc>
           </li>
         </ul>

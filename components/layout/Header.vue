@@ -154,9 +154,6 @@
                   expand_circle_down
                 </span>
               </div>
-              <div>
-                <ConfirmDialog></ConfirmDialog>
-              </div>
             </template>
           </div>
         </div>
@@ -244,8 +241,13 @@
         <span class="font-bold text-24 block mb-8 mt-20">{{ message.header }}</span>
         <p class="mb-0">{{ message.message }}</p>
         <div class="flex items-center gap-8 mt-20">
-          <Button class="min-w-120" label="登出" @click="acceptCallback"></Button>
-          <Button class="min-w-120" label="取消" outlined @click="rejectCallback"></Button>
+          <Button class="min-w-120" :label="message.acceptLabel" @click="acceptCallback"></Button>
+          <Button
+            class="min-w-120"
+            :label="message.rejectLabel"
+            outlined
+            @click="rejectCallback"
+          ></Button>
         </div>
       </div>
     </template>

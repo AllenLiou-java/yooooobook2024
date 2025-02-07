@@ -24,7 +24,21 @@
             <p class="col-span-3 flex-center">
               NT {{ thousandthsFormat(order.discount * order.qty) }}
             </p>
-            <p class="col-span-1 flex items-center">{{ thousandthsFormat(order.qty) }} 件</p>
+            <div class="flex lt-sm:flex-row-reverse flex-col flex-center gap-12">
+              <button
+                class="material-icons text-20 p-2 cursor-pointer bg-brown rounded-2xl text-white border-0"
+                @click="updateOrderQty('add', order.productId)"
+              >
+                add
+              </button>
+              <p class="col-span-1">{{ thousandthsFormat(order.qty) }} 件</p>
+              <button
+                class="material-icons text-20 p-2 cursor-pointer bg-brown rounded-2xl text-white border-0"
+                @click="updateOrderQty('minus', order.productId)"
+              >
+                remove
+              </button>
+            </div>
           </div>
         </li>
         <p class="self-end font-black">合計： NT {{ thousandthsFormat(totalPrice) }}</p>
@@ -349,6 +363,7 @@ import StepperPanel from 'primevue/stepperpanel'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { storeToRefs } from 'pinia'
+import { useConfirm } from 'primevue/useconfirm'
 import IconTransport from '@/components/icon/Transport.vue'
 import IconInvoice from '@/components/icon/Invoice.vue'
 import IconConfirm from '@/components/icon/Confirm.vue'
@@ -369,8 +384,12 @@ definePageMeta({
 
 const active = ref(0)
 
-const { ordersInCart, isOrderLoading } = storeToRefs(useOrderStore())
-const { patchOrderInfo } = useOrderStore()
+const orderStore = useOrderStore()
+const { ordersInCart, isOrderLoading } = storeToRefs(orderStore)
+const { patchOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder } = orderStore
+
+const { updateStock, getStock } = useProductStore()
+const { stockList } = storeToRefs(useProductStore())
 
 const totalPrice = computed(() => {
   if (ordersInCart.value.length === 0) {
@@ -435,7 +454,10 @@ const [buyer, buyerAttrs] = defineInvoiceField('buyer')
 const [taxId, taxIdAttrs] = defineInvoiceField('taxId')
 
 const userStore = storeToRefs(useUserStore())
-const onSubmit = () => {
+
+const onSubmit = async () => {
+  await updateStock()
+
   patchOrderInfo({
     name: name.value,
     address: address.value,
@@ -445,7 +467,41 @@ const onSubmit = () => {
     buyer: buyer.value || '',
     taxId: taxId.value || ''
   })
+
   console.log('onSubmit')
+}
+
+const confirm = useConfirm()
+const updateOrderQty = async (calculateType, productId) => {
+  const orderList = ordersInCart.value
+  const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
+  if (calculateType === 'minus') {
+    if (orderList[orderIndex].qty - 1 > 0) {
+      updateOrderQtyInCart(productId, -1)
+      setOrderInStorage(productId, -1)
+    } else {
+      confirm.require({
+        group: 'headless',
+        header: '刪除',
+        message: '您確定要刪除嗎?',
+        rejectLabel: '取消',
+        acceptLabel: '確定',
+        accept: () => {
+          deleteOrder(productId)
+        },
+        reject: () => {
+          console.log('cancel')
+        }
+      })
+    }
+  } else {
+    await getStock(productId)
+    const stock = stockList.value[productId]
+    if (orderList[orderIndex].qty + 1 <= stock) {
+      updateOrderQtyInCart(productId, 1)
+      setOrderInStorage(productId, 1)
+    }
+  }
 }
 </script>
 

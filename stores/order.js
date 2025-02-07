@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 export const useOrderStore = defineStore('order', () => {
+  const { stockList } = useProductStore()
   const ordersInCart = ref([])
   const isOrderLoading = ref(false)
   const userOrderInfo = ref([])
@@ -9,31 +10,7 @@ export const useOrderStore = defineStore('order', () => {
     return ordersInCart.value.length
   })
 
-  function addOrderInCart(productInfo, orderQty) {
-    const {
-      name: productName,
-      productId,
-      content,
-      imgSrc,
-      price: { discount }
-    } = productInfo
-
-    const order = {
-      productName,
-      productId,
-      content,
-      imgSrc,
-      discount,
-      qty: orderQty
-    }
-
-    updateOrdersInCart(order, orderQty)
-    setOrderInStorage(order, orderQty)
-  }
-
-  function updateOrdersInCart(order, newOrderQty) {
-    if (order.qty === 0) return
-
+  function addOrderInCart(order) {
     const orderList = ordersInCart.value
     if (orderList.length === 0) {
       orderList.push(order)
@@ -41,29 +18,52 @@ export const useOrderStore = defineStore('order', () => {
       const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === order.productId)
       if (orderIndex < 0) {
         orderList.push(order)
+      } else if (orderList[orderIndex].qty + order.qty <= stockList[order.productId]) {
+        orderList[orderIndex].qty += order.qty
       } else {
-        orderList[orderIndex].qty = orderList[orderIndex].qty + newOrderQty
+        orderList[orderIndex].qty = stockList[order.productId]
       }
       ordersInCart.value = orderList
     }
   }
 
-  function getOrderListInStorage() {
-    return JSON.parse(localStorage.getItem('orderList'))
-  }
-
-  function setOrderInStorage(order, newOrderQty) {
-    if (order.qty === 0) return
-
+  function addOrderInStorage(order) {
     const orderList = JSON.parse(localStorage.getItem('orderList')) || []
     const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === order.productId)
     if (orderIndex < 0) {
       orderList.push(order)
       localStorage.setItem('orderList', JSON.stringify(orderList))
+    } else if (orderList[orderIndex].qty + order.qty <= stockList[order.productId]) {
+      orderList[orderIndex].qty += order.qty
+      localStorage.setItem('orderList', JSON.stringify(orderList))
     } else {
-      orderList[orderIndex].qty = orderList[orderIndex].qty + newOrderQty
+      orderList[orderIndex].qty = stockList[order.productId]
       localStorage.setItem('orderList', JSON.stringify(orderList))
     }
+  }
+
+  function updateOrderQtyInCart(productId, additionalQty) {
+    // if (order.qty === 0) return
+
+    const orderList = ordersInCart.value
+    const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
+    orderList[orderIndex].qty += additionalQty
+    ordersInCart.value = orderList
+  }
+
+  function setOrderInStorage(productId, additionalQty) {
+    // if (order.qty === 0) return
+
+    const orderList = JSON.parse(localStorage.getItem('orderList')) || []
+    const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
+
+    localStorage.setItem('orderList', JSON.stringify(orderList))
+    orderList[orderIndex].qty += additionalQty
+    localStorage.setItem('orderList', JSON.stringify(orderList))
+  }
+
+  function getOrderListInStorage() {
+    return JSON.parse(localStorage.getItem('orderList'))
   }
 
   function deleteOrder(productId) {
@@ -129,6 +129,7 @@ export const useOrderStore = defineStore('order', () => {
   async function patchOrderInfo(oderInfo) {
     isOrderLoading.value = true
     const { name, address, email, phone, bankAccountNo, buyer, taxId } = oderInfo
+
     const orderList = ordersInCart.value.map((orderItem) => {
       const { productName, productId, content, imgSrc, discount, qty } = orderItem
       return {
@@ -224,7 +225,8 @@ export const useOrderStore = defineStore('order', () => {
     isOrderLoading,
     userOrderInfo,
     addOrderInCart,
-    updateOrdersInCart,
+    addOrderInStorage,
+    updateOrderQtyInCart,
     getOrderListInStorage,
     setOrderInStorage,
     deleteOrder,

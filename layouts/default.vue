@@ -36,26 +36,27 @@
               </ClientOnly>
               <div>
                 <p class="mb-8">{{ order.productName }}</p>
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center">
-                    <span
-                      class="material-icons p-2 cursor-pointer"
-                      @click="updateOrderQty('minus', order.productId)"
-                    >
-                      remove
-                    </span>
-                    <span class="mx-8">{{ order.qty }}</span>
-                    <span
-                      class="material-icons p-2 cursor-pointer"
-                      @click="updateOrderQty('add', order.productId)"
-                    >
-                      add
-                    </span>
-                  </div>
+                <p class="mb-8 text-secondary">
                   $ {{ thousandthsFormat(order.discount * order.qty) }}
+                </p>
+
+                <div class="flex items-center">
+                  <button
+                    class="material-icons text-20 p-2 cursor-pointer bg-blue rounded-2xl text-white border-0"
+                    @click="updateOrderQty('minus', order.productId)"
+                  >
+                    remove
+                  </button>
+                  <span class="mx-12 w-24 text-center">{{ order.qty }}</span>
+                  <button
+                    class="material-icons text-20 p-2 cursor-pointer bg-blue rounded-2xl text-white border-0"
+                    @click="updateOrderQty('add', order.productId)"
+                  >
+                    add
+                  </button>
                 </div>
               </div>
-              <span class="material-icons cursor-pointer" @click="deleteOrder(order.productId)">
+              <span class="material-icons cursor-pointer" @click="deleteOrderItem(order.productId)">
                 delete
               </span>
             </div>
@@ -83,9 +84,11 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
+import AOS from 'aos'
 import LayoutHeader from '@/components/layout/Header.vue'
 import LayoutFooter from '@/components/layout/Footer.vue'
 import SideSocialGroup from '@/components/SideSocialGroup.vue'
+import 'aos/dist/aos.css'
 
 const blocked = ref(false)
 
@@ -131,21 +134,57 @@ const setVisible = () => {
 
 const orderStore = useOrderStore()
 const { ordersInCart } = storeToRefs(orderStore)
-const { updateOrdersInCart, setOrderInStorage, deleteOrder } = useOrderStore()
+const { updateOrderQtyInCart, setOrderInStorage, deleteOrder } = useOrderStore()
+const { getStock } = useProductStore()
+const { stockList } = storeToRefs(useProductStore())
 
-const updateOrderQty = (calculateType, productId) => {
-  const orderList = JSON.parse(JSON.stringify(ordersInCart.value))
-
+const confirm = useConfirm()
+const updateOrderQty = async (calculateType, productId) => {
+  const orderList = ordersInCart.value
   const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
-
-  const order = orderList[orderIndex]
   if (calculateType === 'minus') {
-    updateOrdersInCart(order, -1)
-    setOrderInStorage(order, -1)
+    if (orderList[orderIndex].qty - 1 > 0) {
+      updateOrderQtyInCart(productId, -1)
+      setOrderInStorage(productId, -1)
+    } else {
+      confirm.require({
+        group: 'headless',
+        header: '刪除',
+        message: '您確定要刪除嗎?',
+        rejectLabel: '取消',
+        acceptLabel: '確定',
+        accept: () => {
+          deleteOrder(productId)
+        },
+        reject: () => {
+          console.log('cancel')
+        }
+      })
+    }
   } else {
-    updateOrdersInCart(order, 1)
-    setOrderInStorage(order, 1)
+    await getStock(productId)
+    const stock = stockList.value[productId]
+    if (orderList[orderIndex].qty + 1 <= stock) {
+      updateOrderQtyInCart(productId, 1)
+      setOrderInStorage(productId, 1)
+    }
   }
+}
+
+const deleteOrderItem = (productId) => {
+  confirm.require({
+    group: 'headless',
+    header: '刪除',
+    message: '您確定要刪除嗎?',
+    rejectLabel: '取消',
+    acceptLabel: '確定',
+    accept: () => {
+      deleteOrder(productId)
+    },
+    reject: () => {
+      console.log('cancel')
+    }
+  })
 }
 
 onMounted(() => {
@@ -155,6 +194,27 @@ onMounted(() => {
       ordersInCart: orderListInStorage
     })
   }
+
+  AOS.init({
+    // Global settings:
+    disable: false, // accepts following values: 'phone', 'tablet', 'mobile', boolean, expression or function
+    startEvent: 'DOMContentLoaded', // name of the event dispatched on the document, that AOS should initialize on
+    initClassName: 'aos-init', // class applied after initialization
+    animatedClassName: 'aos-animate', // class applied on animation
+    useClassNames: false, // if true, will add content of `data-aos` as classes on scroll
+    disableMutationObserver: false, // disables automatic mutations' detections (advanced)
+    debounceDelay: 50, // the delay on debounce used while resizing window (advanced)
+    throttleDelay: 99, // the delay on throttle used while scrolling the page (advanced)
+
+    // Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
+    offset: 120, // offset (in px) from the original trigger point
+    delay: 0, // values from 0 to 3000, with step 50ms
+    duration: 800, // values from 0 to 3000, with step 50ms
+    easing: 'ease', // default easing for AOS animations
+    once: true, // whether animation should happen only once - while scrolling down
+    mirror: false, // whether elements should animate out while scrolling past them
+    anchorPlacement: 'top-bottom' // defines which position of the element regarding to window should trigger the animation
+  })
 })
 </script>
 

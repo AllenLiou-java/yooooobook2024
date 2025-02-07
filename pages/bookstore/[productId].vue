@@ -84,7 +84,7 @@
                 show-buttons
                 button-layout="horizontal"
                 :min="0"
-                :max="stock.qty"
+                :max="_stock.qty"
                 input-class="w-80"
               >
                 <template #incrementbuttonicon>
@@ -99,7 +99,7 @@
             <div class="flex text-white gap-12">
               <div
                 class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
-                @click="addCart(product)"
+                @click="addOrder(product)"
               >
                 加入購物車
               </div>
@@ -285,10 +285,20 @@ const previewBookPhotos = computed(() => {
   return Object.values(bookImgLink[productId])
 })
 
-const { addOrderInCart } = useOrderStore()
+const { addOrderInCart, addOrderInStorage } = useOrderStore()
 const { ordersInCart } = storeToRefs(useOrderStore())
-const addCart = (product) => {
-  addOrderInCart(product, orderQty.value)
+const addOrder = (product) => {
+  const order = {
+    productName: product.name,
+    productId: product.productId,
+    content: product.content,
+    imgSrc: product.imgSrc,
+    discount: product.price.discount,
+    qty: orderQty.value
+  }
+
+  addOrderInCart(order)
+  addOrderInStorage(order)
   orderQty.value = 0
 }
 
@@ -308,14 +318,13 @@ const stock = computed(() => {
 const { notify } = useToastifyStore()
 const { idToken } = storeToRefs(useUserStore())
 const checkout = (product) => {
-  if (orderQty.value > 0 || ordersInCart.value.length > 0) {
-    router.push('/cart')
-  } else {
+  if (ordersInCart.value.length === 0 && orderQty.value === 0) {
     notify('info', '請選擇訂購的數量')
-  }
-
-  if (idToken.value) {
-    addCart(product)
+  } else if (orderQty.value > 0 && idToken.value) {
+    router.push('/cart')
+    addOrder(product)
+  } else {
+    router.push('/cart')
   }
 }
 
@@ -335,6 +344,8 @@ onMounted(() => {
       productDetailList: detailList
     })
   }
+
+  productStore.setStockList(route.params.productId, _stock.value.qty)
 })
 </script>
 

@@ -2,8 +2,11 @@
   <transition name="slide">
     <div v-if="isShow" class="sideSocialGroup">
       <ul class="list-unstyled">
-        <li class="cursor-pointer" @click="moveToTop">
-          <span class="material-icons text-42 text-white bg-blue_light rounded-full">
+        <li class="cursor-pointer">
+          <span
+            class="material-icons text-42 text-white bg-blue_light rounded-full"
+            @click="moveToTop"
+          >
             expand_less
           </span>
         </li>
