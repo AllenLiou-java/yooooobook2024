@@ -97,12 +97,22 @@
             </div>
             <p class="mb-16">庫存： {{ stock }}</p>
             <div class="flex text-white gap-12">
-              <div
-                class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
-                @click="addOrder(product)"
-              >
-                加入購物車
-              </div>
+              <template v-if="_stock.qty > 0">
+                <div
+                  class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
+                  @click="addOrder(product)"
+                >
+                  加入購物車
+                </div>
+              </template>
+              <template v-else>
+                <a
+                  class="block max-w-200 w-full bg-primary text-center text-white py-16 rounded-3xl cursor-pointer hover:bg-[#444444]"
+                  href="https://lin.ee/f8oZLym"
+                  target="_blank"
+                  >官方LINE洽詢</a
+                >
+              </template>
 
               <div
                 class="max-w-200 w-full bg-secondary text-center text-white py-16 rounded-3xl cursor-pointer hover:bg-[#d80545]"
@@ -111,6 +121,7 @@
                 前往結帳
               </div>
             </div>
+            <p v-if="_stock.qty === 0" class="mt-12 text-blue">來電洽詢（0978-940-828）</p>
           </div>
         </div>
 
@@ -288,6 +299,8 @@ const previewBookPhotos = computed(() => {
 const { addOrderInCart, addOrderInStorage } = useOrderStore()
 const { ordersInCart } = storeToRefs(useOrderStore())
 const addOrder = (product) => {
+  if (orderQty.value === 0) return
+
   const order = {
     productName: product.name,
     productId: product.productId,
