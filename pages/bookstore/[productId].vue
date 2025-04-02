@@ -121,7 +121,18 @@
                 前往結帳
               </div>
             </div>
-            <p v-if="_stock.qty === 0" class="mt-12 text-blue">來電洽詢（0978-940-828）</p>
+            <div v-if="_stock.qty === 0" class="mt-12 bg-light p-16">
+              <p class="mb-12 leading-24">
+                ※ 書籍印刷中，預計「4月中旬」有現貨，可先
+                <a
+                  class="font-700 text-secondary underline inline-block"
+                  target="_blank"
+                  href="https://forms.gle/wkuyDojT4JheDxXb9"
+                  >填寫訂購單📋</a
+                >，補貨後 <u>敝司會主動聯繫您</u> 匯款並安排出貨。
+              </p>
+              <p class="text-blue">有任何問題，請來電洽詢（0978-940-828）</p>
+            </div>
           </div>
         </div>
 
