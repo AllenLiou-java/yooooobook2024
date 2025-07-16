@@ -72,4 +72,7 @@ yarn preview
 bun run preview
 ```
 
+# google font icon
+https://fonts.google.com/icons?hl=zh-tw&selected=Material+Icons:preview:&icon.size=24&icon.color=%231f1f1f&icon.query=preview&icon.set=Material+Icons&icon.style=Filled
+
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

@@ -53,27 +53,27 @@
           <div class="border border-solid p-8 self-start shrink-0 lt-sm:m-auto">
             <img
               class="w-334 h-334 object-contain lt-sm:(w-280 h-280)"
-              :src="product.imgSrc"
+              :src="productDetail.imgSrc"
               alt="productImg"
             />
           </div>
           <div class="max-w-412 w-full shrink-1">
-            <h3 class="text-26 text-brown mb-16">{{ product.name }}</h3>
+            <h3 class="text-26 text-brown mb-16">{{ productDetail.name }}</h3>
             <ul class="list-disc pl24 mb-16">
-              <li v-for="(content, contentIdx) in product.content" :key="contentIdx">
+              <li v-for="(content, contentIdx) in productDetail.content" :key="contentIdx">
                 {{ content }}
               </li>
             </ul>
             <hr class="bg-brown my-12" />
             <div class="flex gap-32">
               <p>
-                定價：<del>{{ thousandthsFormat(product.price.originalPrice) }}元</del>
+                定價：<del>{{ thousandthsFormat(productDetail.price.originalPrice) }}元</del>
               </p>
               <p class="text-secondary">
-                優惠價：{{ thousandthsFormat(product.price.discount) }}元
+                優惠價：{{ thousandthsFormat(productDetail.price.discount) }}元
               </p>
             </div>
-            <div class="mt-10" v-html="product.price.remarkContent"></div>
+            <!-- <div class="mt-10" v-html="productDetail.price.remarkContent"></div> -->
 
             <hr class="bg-brown my-12" />
             <div class="flex items-center mb-16">
@@ -100,7 +100,7 @@
               <template v-if="_stock.qty > 0">
                 <div
                   class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
-                  @click="addOrder(product)"
+                  @click="addOrder(productDetail)"
                 >
                   加入購物車
                 </div>
@@ -116,7 +116,7 @@
 
               <div
                 class="max-w-200 w-full bg-secondary text-center text-white py-16 rounded-3xl cursor-pointer hover:bg-[#d80545]"
-                @click="checkout(product)"
+                @click="checkout(productDetail)"
               >
                 前往結帳
               </div>
@@ -151,6 +151,123 @@
         <hr class="bg-gray_light my-28" />
 
         <div>
+          <h4 class="text-20 text-blue mb-20 text-secondary">
+            <span class="material-icons align-sub"> new_releases </span>
+            <span class="ml-8 align-bottom">勘誤公告</span>
+          </h4>
+
+          <DataTable
+            v-if="productDetail.erratum !== ''"
+            :value="productDetail.erratum"
+            show-gridlines
+            table-style="min-width: 50rem"
+          >
+            <Column
+              :pt="{
+                headerContent: {
+                  class: 'block text-center'
+                }
+              }"
+              header-class="bg-brown text-white"
+              style="width: 12%"
+              field="chapter"
+              header="章節"
+            ></Column>
+            <Column
+              :pt="{
+                headerContent: {
+                  class: 'block text-center'
+                }
+              }"
+              header-class="bg-brown text-white"
+              style="width: 30%"
+              field="title"
+              header="標題"
+            >
+              <template #body="{ data }">
+                <div class="tracking-wide leading-24" v-html="data.title"></div>
+              </template>
+            </Column>
+            <Column
+              :pt="{
+                headerContent: {
+                  class: 'block text-center'
+                }
+              }"
+              header-class="bg-brown text-white"
+              style="width: 50%"
+              field="content"
+              header="更正內容"
+            >
+              <template #body="{ data }">
+                <p
+                  v-for="(dataItem, idx) in data.content"
+                  :key="idx"
+                  class="mb-16 tracking-wide leading-24"
+                  v-html="dataItem"
+                ></p>
+              </template>
+            </Column>
+            <Column
+              :pt="{
+                headerContent: {
+                  class: 'block text-center'
+                }
+              }"
+              header-class="bg-brown text-white"
+              field="preview"
+              header="附件預覽"
+            >
+              <template #body="{ data }">
+                <FileDownload
+                  v-if="data.fileLocate.filename !== ''"
+                  :folder="data.fileLocate.folder"
+                  :filename="data.fileLocate.filename"
+                  mode="preview"
+                >
+                  <span class="material-icons cursor-pointer hover:text-brown_dark"> preview </span>
+                </FileDownload>
+              </template>
+            </Column>
+            <Column
+              :pt="{
+                headerContent: {
+                  class: 'block text-center'
+                }
+              }"
+              header-class="bg-brown text-white"
+              field="download"
+              header="附件下載"
+            >
+              <template #body="{ data }">
+                <FileDownload
+                  v-if="data.fileLocate.filename !== ''"
+                  :folder="data.fileLocate.folder"
+                  :filename="data.fileLocate.filename"
+                  mode="download"
+                >
+                  <span class="material-icons cursor-pointer hover:text-brown_dark">
+                    download
+                  </span>
+                </FileDownload>
+              </template>
+            </Column>
+            <Column
+              :pt="{
+                headerContent: {
+                  class: 'block text-center'
+                }
+              }"
+              header-class="bg-brown text-white"
+              field="postDate"
+              header="勘誤時間"
+            ></Column>
+          </DataTable>
+        </div>
+
+        <hr class="bg-gray_light my-28" />
+
+        <div>
           <h4 class="text-20 text-blue mb-16">團購優惠價格</h4>
           <p class="mb-12">
             若有團購需求，請透過官方
@@ -162,7 +279,7 @@
             >
             或 來電洽詢（0978-940-828）。
           </p>
-          <div v-for="(plan, planIdx) in product.plans" :key="planIdx" class="mb-32">
+          <div v-for="(plan, planIdx) in productDetail.plans" :key="planIdx" class="mb-32">
             <template v-if="plan.isShow">
               <h5
                 v-if="plan.type === 'person'"
@@ -213,7 +330,7 @@
         <div>
           <h4 class="text-20 text-blue mb-20">書籍簡介</h4>
           <div
-            v-for="(summarySegment, idx) in product.bookIntroduction.summary"
+            v-for="(summarySegment, idx) in productDetail.bookIntroduction.summary"
             :key="idx"
             class="mb-16"
             v-html="summarySegment"
@@ -225,7 +342,7 @@
         <div>
           <h4 class="text-20 text-blue mb-20">詳細資料</h4>
           <p
-            v-for="(detailSegment, idx) in product.bookIntroduction.detail"
+            v-for="(detailSegment, idx) in productDetail.bookIntroduction.detail"
             :key="idx"
             class="mb-16"
             v-html="detailSegment"
@@ -247,7 +364,7 @@ const router = useRouter()
 // 取得指定產品資料
 const productStore = useProductStore()
 
-const { data: product } = await useAsyncData('product', () => {
+const { data: productDetail } = await useAsyncData('product', () => {
   const productDetailList = productStore.productDetailList
 
   if (Object.keys(productDetailList).includes(route.params.productId)) {
@@ -271,7 +388,7 @@ const { data: productList } = await useAsyncData('productList', () => {
 })
 
 useHead({
-  title: () => `訂購書籍【${product.value.name}】`
+  title: () => `訂購書籍【${productDetail.value.name}】`
 })
 
 definePageMeta({
@@ -295,7 +412,7 @@ const routeList = [
     linkTo: '/bookstore'
   },
   {
-    name: product.value.name,
+    name: productDetail.value.name,
     linkTo: ''
   }
 ]
@@ -362,7 +479,7 @@ onMounted(() => {
   // 確認product (detail)資料是否存在store的productDetailList中，若無則更新
   const detailList = productStore.productDetailList
   if (!Object.keys(detailList).includes(currentProductId)) {
-    detailList[product.value.productId] = product.value
+    detailList[currentProductId] = productDetail.value
 
     productStore.$patch({
       productDetailList: detailList
