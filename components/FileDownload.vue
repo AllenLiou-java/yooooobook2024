@@ -6,15 +6,11 @@
 
 <script setup>
 const props = defineProps({
-  folder: {
+  filePath: {
     type: String,
     required: true
   },
-  filename: {
-    type: String,
-    required: true
-  },
-  // mode: 'download' | 'preview'
+  /* mode: 'download' | 'preview' */
   mode: {
     type: String,
     default: 'download'
@@ -22,10 +18,20 @@ const props = defineProps({
 })
 
 const handleClick = () => {
-  const { filename, folder, mode } = props
-  const encodedFilename = encodeURIComponent(filename)
+  // const { filename, folder, mode } = props
+  // const encodedFilename = encodeURIComponent(filename)
+  // let fileLocate = ''
+  // if (folder === '') {
+  //   fileLocate = `${encodedFilename}`
+  // } else {
+  //   fileLocate = `${folder}/${encodedFilename}`
+  // }
 
-  const url = `/api/file/${folder}/${encodedFilename}` + (mode === 'preview' ? '?mode=preview' : '')
+  // const url = `/api/file/${fileLocate}` + (mode === 'preview' ? '?mode=preview' : '')
+
+  const { filePath, mode } = props
+
+  const url = `/api/file/${filePath.slice(1)}` + (mode === 'preview' ? '?mode=preview' : '')
 
   if (mode === 'preview') {
     // 新分頁預覽

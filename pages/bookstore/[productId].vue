@@ -219,12 +219,7 @@
               header="附件預覽"
             >
               <template #body="{ data }">
-                <FileDownload
-                  v-if="data.fileLocate.filename !== ''"
-                  :folder="data.fileLocate.folder"
-                  :filename="data.fileLocate.filename"
-                  mode="preview"
-                >
+                <FileDownload v-if="data.filePath" :file-path="data.filePath" mode="preview">
                   <span class="material-icons cursor-pointer hover:text-brown_dark"> preview </span>
                 </FileDownload>
               </template>
@@ -240,12 +235,7 @@
               header="附件下載"
             >
               <template #body="{ data }">
-                <FileDownload
-                  v-if="data.fileLocate.filename !== ''"
-                  :folder="data.fileLocate.folder"
-                  :filename="data.fileLocate.filename"
-                  mode="download"
-                >
+                <FileDownload v-if="data.filePath" :file-path="data.filePath" mode="download">
                   <span class="material-icons cursor-pointer hover:text-brown_dark">
                     download
                   </span>

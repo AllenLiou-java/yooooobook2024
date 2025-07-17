@@ -3,12 +3,13 @@
 export default defineEventHandler(async (event) => {
   const { firebaseApiKey, webUrl } = useRuntimeConfig()
   const { accessToken } = await readBody(event)
+  const { googleApiUrl } = useRuntimeConfig()
 
-  const firebaseOauthLoginApi =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=' + firebaseApiKey
+  const firebaseOauthLoginApi = '/v1/accounts:signInWithIdp?key=' + firebaseApiKey
 
   try {
     const { idToken, refreshToken } = await $fetch(firebaseOauthLoginApi, {
+      baseURL: googleApiUrl,
       method: 'POST',
       body: {
         requestUri: webUrl,
