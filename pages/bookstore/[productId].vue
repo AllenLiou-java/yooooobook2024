@@ -20,39 +20,39 @@
         </div>
 
         <div
-            class="container text-primary flex flex-wrap pt-48 pb-80 font-bold lt-lg:flex-wrap lt-sm:justify-center"
+            class="container text-primary flex pt-48 pb-80 font-bold lt-xl:flex-wrap lt-sm:justify-center gap-x-60 gap-y-36"
         >
             <div
-                class="max-w-310 w-full self-start border border-gray_light border-solid p-24 mr-60 mb-40 lt-lg:(max-w-500 mr-0 border-0 mb-20)"
+                class="max-w-310 shrink-0 w-full self-start border border-gray_light border-solid p-24 lt-xl:(max-w-full mr-0 border-0 p-0)"
             >
                 <h2
                     class="text-28 relative pl-16 py-4 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-blue_dark)"
                 >
                     Menu
                 </h2>
-                <hr class="bg-gray_light h-2 my-16" />
+                <hr class="bg-gray_light h-2" />
                 <ul
-                    class="h-120 pr-16 overflow-y-auto lt-lg:(flex gap-16 h-auto overflow-x-auto pb-12 px-12)"
+                    class="flex flex-col lt-xl:(flex-row gap-16 w-70vw overflow-x-auto h-auto pb-16 px-16) lt-sm:w-full"
                 >
                     <li
-                        v-for="productItem in productList"
-                        :key="productItem.name"
-                        class="text-20 pb-16 mb-16 border-0 border-b-1 border-solid border-gray_light lt-lg:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown )"
+                        v-for="product in productList"
+                        :key="product.name"
+                        class="group hover:bg-blue-dark p-16 text-20 pb-16 border-0 border-b-1 border-solid border-gray_light lt-xl:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown)"
                     >
                         <NuxtLink
-                            class="text-gray_dark lt-lg:(text-white)"
+                            class="text-gray_dark lt-xl:(text-white) group-hover:text-white"
                             :to="{
                                 name: 'bookstore-productId',
-                                params: { productId: productItem.productId }
+                                params: { productId: product.productId }
                             }"
-                            >{{ productItem.name }}</NuxtLink
+                            >{{ product.name }}</NuxtLink
                         >
                     </li>
                 </ul>
             </div>
 
-            <div class="max-w-910 w-full" v-if="productDetail">
-                <div class="flex gap-32 mb-44 lt-md:flex-wrap">
+            <div class="w-full" v-if="productDetail">
+                <div class="flex gap-32 mb-60 lt-md:flex-wrap lt-md:justify-center">
                     <div class="border border-solid p-8 self-start shrink-0 lt-sm:m-auto">
                         <img
                             class="w-334 h-334 object-contain lt-sm:(w-280 h-280)"
@@ -419,7 +419,8 @@ if (productDetailError.value) {
     const { statusCode, statusMessage } = productDetailError.value
     throw createError({
         statusCode,
-        statusMessage
+        statusMessage,
+        fatal: true
     })
 }
 

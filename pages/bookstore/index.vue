@@ -19,27 +19,27 @@
         </div>
 
         <div
-            class="container text-primary flex pt-48 pb-80 font-bold lt-lg:flex-wrap lt-sm:justify-center"
+            class="container text-primary flex pt-48 pb-80 font-bold lt-xl:flex-wrap lt-sm:justify-center gap-x-60 gap-y-36"
         >
             <div
-                class="max-w-310 w-full self-start border border-gray_light border-solid p-24 mr-60 mb-40 lt-lg:(max-w-500 mr-0 border-0 mb-20)"
+                class="max-w-310 shrink-0 w-full self-start border border-gray_light border-solid p-24 lt-xl:(max-w-full mr-0 border-0 p-0)"
             >
                 <h2
                     class="text-28 relative pl-16 py-4 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-blue_dark)"
                 >
                     Menu
                 </h2>
-                <hr class="bg-gray_light h-2 my-16" />
+                <hr class="bg-gray_light h-2" />
                 <ul
-                    class="h-120 pr-16 overflow-y-auto lt-lg:(flex gap-16 h-auto overflow-x-auto pb-12 px-12)"
+                    class="flex flex-col lt-xl:(flex-row gap-16 w-70vw overflow-x-auto h-auto pb-16 px-16) lt-sm:w-full"
                 >
                     <li
                         v-for="product in productList"
                         :key="product.name"
-                        class="text-20 pb-16 mb-16 border-0 border-b-1 border-solid border-gray_light lt-lg:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown )"
+                        class="group hover:bg-blue-dark p-16 text-20 pb-16 border-0 border-b-1 border-solid border-gray_light lt-xl:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown)"
                     >
                         <NuxtLink
-                            class="text-gray_dark lt-lg:(text-white)"
+                            class="text-gray_dark lt-xl:(text-white) group-hover:text-white"
                             :to="{
                                 name: 'bookstore-productId',
                                 params: { productId: product.productId }
@@ -50,11 +50,11 @@
                 </ul>
             </div>
 
-            <ul class="flex flex-wrap lt-sm:(justify-center)">
+            <ul class="flex flex-wrap gap-x-16 gap-y-32 lt-sm:(flex-nowrap flex-col)">
                 <li
                     v-for="product in productList"
                     :key="product.productId"
-                    class="relative w-251 border border-solid p-12 mx-16 mb-32 group hover:(shadow-2xl translate-y-4 duration-500) lt-sm:mx-0"
+                    class="relative w-251 border border-solid p-16 group hover:(shadow-2xl translate-y-4 duration-500)"
                 >
                     <div v-if="product.isNew">
                         <div class="bg"></div>
@@ -74,10 +74,19 @@
                         }"
                         class="flex-center flex-col text-primary"
                     >
-                        <div class="w-230 h-230 flex-center mb-12">
+                        <!-- <div class="w-230 h-230 flex-center mb-12">
                             <img class="h-215" :src="product.imgSrc" alt="bookImg" />
-                        </div>
-                        <h3 class="mb-20 h-44">{{ product.name }}</h3>
+                        </div> -->
+
+                        <img
+                            class="w-230 h-230 object-contain mb-12"
+                            :src="product.imgSrc"
+                            alt="bookImg"
+                        />
+
+                        <h3 class="mb-20 h-44">
+                            {{ product.name }}
+                        </h3>
                         <p class="mb-4 text-14 line-through">
                             定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
                         </p>
