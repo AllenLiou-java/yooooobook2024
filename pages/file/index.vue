@@ -19,31 +19,17 @@
             <div class="mask-70"></div>
         </div>
         <div
-            class="container text-primary flex pt-48 pb-80 font-bold lt-lg:flex-wrap lt-sm:justify-center"
+            class="container text-primary flex pt-48 pb-80 font-bold lt-xl:flex-wrap lt-sm:justify-center gap-x-60 gap-y-36"
         >
-            <div
-                class="max-w-310 w-full h-230 border border-gray_light border-solid p-24 mr-60 mb-40 lt-sm:mr-0"
-            >
-                <h2
-                    class="text-28 relative pl-16 py-4 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-blue_dark)"
-                >
-                    Menu
-                </h2>
-                <hr class="bg-gray_light h-2 my-16" />
-                <ul class="h-120 overflow-y-auto">
-                    <li
-                        v-for="file in fileList"
-                        :key="file.name"
-                        class="text-20 pb-16 mb-16 border-0 border-b-1 border-solid border-gray_light"
+            <MenuList class="max-w-310 shrink-0 self-start lt-xl:max-w-full" :dataList="fileList">
+                <template #item="itemProp">
+                    <NuxtLink
+                        class="text-gray_dark p-16 block hover:(text-white bg-blue_light) lt-xl:text-white"
+                        :to="{ name: 'file-book', params: { book: itemProp.name } }"
+                        >{{ itemProp.name }}</NuxtLink
                     >
-                        <NuxtLink
-                            class="text-gray_dark"
-                            :to="{ name: 'file-book', params: { book: file.name } }"
-                            >{{ file.name }}</NuxtLink
-                        >
-                    </li>
-                </ul>
-            </div>
+                </template>
+            </MenuList>
 
             <ul class="flex flex-wrap lt-sm:(justify-center)">
                 <li
