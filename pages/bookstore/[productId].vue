@@ -22,37 +22,24 @@
         <div
             class="container text-primary flex pt-48 pb-80 font-bold lt-xl:flex-wrap lt-sm:justify-center gap-x-60 gap-y-36"
         >
-            <div
-                class="max-w-310 shrink-0 w-full self-start border border-gray_light border-solid p-24 lt-xl:(max-w-full mr-0 border-0 p-0)"
+            <MenuList
+                class="max-w-310 shrink-0 self-start lt-xl:max-w-full"
+                :dataList="productList"
             >
-                <h2
-                    class="text-28 relative pl-16 py-4 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-blue_dark)"
-                >
-                    Menu
-                </h2>
-                <hr class="bg-gray_light h-2" />
-                <ul
-                    class="flex flex-col lt-xl:(flex-row gap-16 w-70vw overflow-x-auto h-auto pb-16 px-16) lt-sm:w-full"
-                >
-                    <li
-                        v-for="product in productList"
-                        :key="product.name"
-                        class="group hover:bg-blue-dark p-16 text-20 pb-16 border-0 border-b-1 border-solid border-gray_light lt-xl:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown)"
+                <template #item="itemProp">
+                    <NuxtLink
+                        :to="{
+                            name: 'bookstore-productId',
+                            params: { productId: itemProp.productId }
+                        }"
+                        class="text-gray_dark p-16 block hover:(text-white bg-blue_light) lt-xl:text-white"
+                        >{{ itemProp.name }}</NuxtLink
                     >
-                        <NuxtLink
-                            class="text-gray_dark lt-xl:(text-white) group-hover:text-white"
-                            :to="{
-                                name: 'bookstore-productId',
-                                params: { productId: product.productId }
-                            }"
-                            >{{ product.name }}</NuxtLink
-                        >
-                    </li>
-                </ul>
-            </div>
+                </template>
+            </MenuList>
 
             <div class="w-full" v-if="productDetail">
-                <div class="flex gap-32 mb-60 lt-md:flex-wrap lt-md:justify-center">
+                <div class="flex gap-32 mb-32 lt-md:flex-wrap lt-md:justify-center">
                     <div class="border border-solid p-8 self-start shrink-0 lt-sm:m-auto">
                         <img
                             class="w-334 h-334 object-contain lt-sm:(w-280 h-280)"
@@ -62,7 +49,7 @@
                     </div>
                     <div class="max-w-412 w-full shrink-1">
                         <h3 class="text-26 text-brown mb-16">{{ productDetail.name }}</h3>
-                        <ul class="list-disc pl24 mb-16">
+                        <ul class="list-disc pl-24 mb-16">
                             <li
                                 v-for="(content, contentIdx) in productDetail.content"
                                 :key="contentIdx"
@@ -131,19 +118,16 @@
                                 前往結帳
                             </div>
                         </div>
-                        <div v-if="_stock.qty === 0" class="mt-12 bg-light p-16">
-                            <p class="mb-12 leading-24">
-                                ※ 書籍印刷中，預計「4月中旬」有現貨，可先
-                                <a
-                                    class="font-700 text-secondary underline inline-block"
-                                    target="_blank"
-                                    href="https://forms.gle/wkuyDojT4JheDxXb9"
-                                    >填寫訂購單📋</a
-                                >，補貨後 <u>敝司會主動聯繫您</u> 匯款並安排出貨。
-                            </p>
-                            <p class="text-blue">有任何問題，請來電洽詢（0978-940-828）</p>
-                        </div>
                     </div>
+                </div>
+
+                <div v-if="productDetail.notice" class="mb-32 bg-light p-16">
+                    <div
+                        v-for="(noticeSegment, idx) in productDetail.notice"
+                        :key="idx"
+                        class="mb-16 leading-[1.5]"
+                        v-html="noticeSegment"
+                    />
                 </div>
 
                 <div>
@@ -160,7 +144,7 @@
 
                 <hr class="bg-gray_light my-28" />
 
-                <div>
+                <div id="erratum">
                     <h4 class="text-20 text-blue mb-20 text-secondary">
                         <span class="material-icons align-sub"> new_releases </span>
                         <span class="ml-8 align-bottom">勘誤公告</span>
@@ -195,7 +179,7 @@
                             header="標題"
                         >
                             <template #body="{ data }">
-                                <div class="tracking-wide leading-24" v-html="data.title"></div>
+                                <div class="tracking-wide leading-[1.5]" v-html="data.title"></div>
                             </template>
                         </Column>
                         <Column
@@ -213,7 +197,7 @@
                                 <p
                                     v-for="(dataItem, idx) in data.content"
                                     :key="idx"
-                                    class="mb-16 tracking-wide leading-24"
+                                    class="mb-16 tracking-wide leading-[1.5]"
                                     v-html="dataItem"
                                 ></p>
                             </template>
@@ -355,9 +339,9 @@
                     <div
                         v-for="(summarySegment, idx) in productDetail.bookIntroduction.summary"
                         :key="idx"
-                        class="mb-16"
+                        class="mb-16 leading-[1.5]"
                         v-html="summarySegment"
-                    ></div>
+                    />
                 </div>
 
                 <hr class="bg-gray_light my-28" />
@@ -367,7 +351,7 @@
                     <p
                         v-for="(detailSegment, idx) in productDetail.bookIntroduction.detail"
                         :key="idx"
-                        class="mb-16"
+                        class="mb-16 leading-[1.5]"
                         v-html="detailSegment"
                     ></p>
                 </div>
@@ -498,9 +482,18 @@ const addOrder = (product) => {
 }
 
 // 取得產品庫存
-const { data: _stock } = await useAPI(
+const { data: _stock, error: stockError } = await useAPI(
     apiList.stock.getStock.serverPath.replace(':productId', route.params.productId)
 )
+
+if (stockError.value) {
+    const { statusCode, statusMessage } = stockError.value
+    throw createError({
+        statusCode,
+        statusMessage,
+        fatal: true
+    })
+}
 
 const stock = computed(() => {
     if (_stock.value.qty >= 100) {
@@ -516,8 +509,8 @@ const checkout = (product) => {
     if (ordersInCart.value.length === 0 && orderQty.value === 0) {
         notify('info', '請選擇訂購的數量')
     } else if (orderQty.value > 0 && idToken.value) {
-        router.push('/cart')
         addOrder(product)
+        router.push('/cart')
     } else {
         router.push('/cart')
     }

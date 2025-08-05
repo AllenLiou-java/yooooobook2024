@@ -1,4 +1,5 @@
 module.exports = {
+    unocss,
     root: true,
     env: {
         browser: true,

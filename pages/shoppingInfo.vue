@@ -39,7 +39,7 @@
                                     ? 'text-blue_light'
                                     : 'text-gray_dark'
                             "
-                            to="#purchase-description"
+                            to="/shoppingInfo#purchase-description"
                             >書籍購買相關</NuxtLink
                         >
                     </li>
@@ -52,7 +52,7 @@
                                     ? 'text-blue_light'
                                     : 'text-gray_dark'
                             "
-                            to="#exchange-policy"
+                            to="/shoppingInfo#exchange-policy"
                             >退換貨相關辦法</NuxtLink
                         >
                     </li>

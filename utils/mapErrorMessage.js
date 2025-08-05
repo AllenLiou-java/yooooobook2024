@@ -66,6 +66,11 @@ const statusList = [
     },
     {
         code: 404,
+        error: 'Stock Not Found',
+        errorCH: '查無庫存資料'
+    },
+    {
+        code: 404,
         error: 'Firebase not find',
         errorCH: '外部伺服器連接失敗'
     },

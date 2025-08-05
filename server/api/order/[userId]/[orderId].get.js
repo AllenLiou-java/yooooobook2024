@@ -1,31 +1,31 @@
 import { serverApi } from '@/server/utils/database'
 
 export default defineEventHandler(async (event) => {
-  const userId = getRouterParam(event, 'userId') || parseCookies(event).userId
-  const orderId = getRouterParam(event, 'orderId')
-  const idToken = getRequestHeader(event, 'idToken')
+    const userId = getRouterParam(event, 'userId') || parseCookies(event).userId
+    const orderId = getRouterParam(event, 'orderId')
+    const idToken = getRequestHeader(event, 'idToken')
 
-  const data = await serverApi(`/order/${userId}/${orderId}.json`, {
-    query: {
-      auth: idToken
-    }
-  })
-    .then((result) => result)
-    .catch((error) => {
-      const statusCode = error.statusCode
-      const message = error.data.error
-      const statusMessage = error.statusMessage
-
-      throw createError({
-        statusCode,
-        message,
-        statusMessage
-      })
+    const data = await serverApi(`/order/${userId}/${orderId}.json`, {
+        query: {
+            auth: idToken
+        }
     })
+        .then((result) => result)
+        .catch((error) => {
+            const statusCode = error.statusCode
+            const message = error.data.error
+            const statusMessage = error.statusMessage
 
-  if (data === null) {
-    return {}
-  } else {
-    return data
-  }
+            throw createError({
+                statusCode,
+                message,
+                statusMessage
+            })
+        })
+
+    if (data === null) {
+        return {}
+    } else {
+        return data
+    }
 })

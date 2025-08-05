@@ -21,34 +21,21 @@
         <div
             class="container text-primary flex pt-48 pb-80 font-bold lt-xl:flex-wrap lt-sm:justify-center gap-x-60 gap-y-36"
         >
-            <div
-                class="max-w-310 shrink-0 w-full self-start border border-gray_light border-solid p-24 lt-xl:(max-w-full mr-0 border-0 p-0)"
+            <MenuList
+                class="max-w-310 shrink-0 self-start lt-xl:max-w-full"
+                :dataList="productList"
             >
-                <h2
-                    class="text-28 relative pl-16 py-4 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-blue_dark)"
-                >
-                    Menu
-                </h2>
-                <hr class="bg-gray_light h-2" />
-                <ul
-                    class="flex flex-col lt-xl:(flex-row gap-16 w-70vw overflow-x-auto h-auto pb-16 px-16) lt-sm:w-full"
-                >
-                    <li
-                        v-for="product in productList"
-                        :key="product.name"
-                        class="group hover:bg-blue-dark p-16 text-20 pb-16 border-0 border-b-1 border-solid border-gray_light lt-xl:(text-16 border-none px-12 py-8 mb-0 rounded-full shrink-0 bg-brown)"
+                <template #item="itemProp">
+                    <NuxtLink
+                        :to="{
+                            name: 'bookstore-productId',
+                            params: { productId: itemProp.productId }
+                        }"
+                        class="text-gray_dark p-16 block hover:(text-white bg-blue_light) lt-xl:text-white"
+                        >{{ itemProp.name }}</NuxtLink
                     >
-                        <NuxtLink
-                            class="text-gray_dark lt-xl:(text-white) group-hover:text-white"
-                            :to="{
-                                name: 'bookstore-productId',
-                                params: { productId: product.productId }
-                            }"
-                            >{{ product.name }}</NuxtLink
-                        >
-                    </li>
-                </ul>
-            </div>
+                </template>
+            </MenuList>
 
             <ul class="flex flex-wrap gap-x-16 gap-y-32 lt-sm:(flex-nowrap flex-col)">
                 <li
