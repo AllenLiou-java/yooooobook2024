@@ -194,9 +194,9 @@ const { imageSrc } = getImageSrc()
 
 const banners = ref([
     {
-        imgPath: '/banner/home_01_pc.jpg',
-        altName: 'book-2',
-        linkTo: '/bookstore/AA00002'
+        imgPath: '/banner/home_03_pc.jpg',
+        altName: 'book-4',
+        linkTo: '/bookstore/AA00004'
     }
 ])
 
@@ -258,6 +258,11 @@ function getBannerInfo(windowWidth = 1400) {
     const banners = [
         {
             imgPath: '',
+            altName: 'book-4',
+            linkTo: '/bookstore/AA00004'
+        },
+        {
+            imgPath: '',
             altName: 'book-2',
             linkTo: '/bookstore/AA00002'
         },
@@ -268,17 +273,21 @@ function getBannerInfo(windowWidth = 1400) {
         }
     ]
     if (windowWidth <= 450) {
-        banners[0].imgPath = '/banner/home_01_m.jpg'
-        banners[1].imgPath = '/banner/home_02_m.jpg'
+        banners[0].imgPath = '/banner/home_03_m.jpg'
+        banners[1].imgPath = '/banner/home_01_m.jpg'
+        banners[2].imgPath = '/banner/home_02_m.jpg'
     } else if (windowWidth <= 768) {
-        banners[0].imgPath = '/banner/home_01_t.jpg'
-        banners[1].imgPath = '/banner/home_02_t.jpg'
+        banners[0].imgPath = '/banner/home_03_t.jpg'
+        banners[1].imgPath = '/banner/home_01_t.jpg'
+        banners[2].imgPath = '/banner/home_02_t.jpg'
     } else if (windowWidth <= 1200) {
-        banners[0].imgPath = '/banner/home_01_pad.jpg'
-        banners[1].imgPath = '/banner/home_02_pad.jpg'
+        banners[0].imgPath = '/banner/home_03_pad.jpg'
+        banners[1].imgPath = '/banner/home_01_pad.jpg'
+        banners[2].imgPath = '/banner/home_02_pad.jpg'
     } else {
-        banners[0].imgPath = '/banner/home_01_pc.jpg'
-        banners[1].imgPath = '/banner/home_02_pc.jpg'
+        banners[0].imgPath = '/banner/home_03_pc.jpg'
+        banners[1].imgPath = '/banner/home_01_pc.jpg'
+        banners[2].imgPath = '/banner/home_02_pc.jpg'
     }
 
     return banners
