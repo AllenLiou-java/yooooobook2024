@@ -191,7 +191,7 @@ const { imageSrc } = getImageSrc()
 const banners = ref([
     {
         imgPath: '/banner/home_03_pc.jpg',
-        altName: 'book-4',
+        altName: 'home_03',
         linkTo: '/bookstore/AA00004'
     }
 ])
@@ -250,52 +250,37 @@ const features = [
     }
 ]
 
-function getBannerInfo(windowWidth = 1400) {
-    const banners = [
-        {
-            imgPath: '',
-            altName: 'book-4',
-            linkTo: '/bookstore/AA00004'
-        },
-        {
-            imgPath: '',
-            altName: 'book-2',
-            linkTo: '/bookstore/AA00002'
-        },
-        {
-            imgPath: '',
-            altName: 'book-1',
-            linkTo: '/bookstore/AA00001'
-        }
-    ]
+function getBannerInfo() {
+    const windowWidth = window.innerWidth
+    let suffix = 'pc'
+
     if (windowWidth <= 450) {
-        banners[0].imgPath = '/banner/home_03_m.jpg'
-        banners[1].imgPath = '/banner/home_01_m.jpg'
-        banners[2].imgPath = '/banner/home_02_m.jpg'
+        suffix = 'm'
     } else if (windowWidth <= 768) {
-        banners[0].imgPath = '/banner/home_03_t.jpg'
-        banners[1].imgPath = '/banner/home_01_t.jpg'
-        banners[2].imgPath = '/banner/home_02_t.jpg'
+        suffix = 't'
     } else if (windowWidth <= 1200) {
-        banners[0].imgPath = '/banner/home_03_pad.jpg'
-        banners[1].imgPath = '/banner/home_01_pad.jpg'
-        banners[2].imgPath = '/banner/home_02_pad.jpg'
-    } else {
-        banners[0].imgPath = '/banner/home_03_pc.jpg'
-        banners[1].imgPath = '/banner/home_01_pc.jpg'
-        banners[2].imgPath = '/banner/home_02_pc.jpg'
+        suffix = 'pad'
     }
 
-    return banners
+    const bannerList = [
+        { altName: 'home_03', linkTo: '/bookstore/AA00004', fileName: 'home_03' },
+        { altName: 'home_01', linkTo: '/bookstore/AA00002', fileName: 'home_01' },
+        { altName: 'home_02', linkTo: '/bookstore/AA00001', fileName: 'home_02' }
+    ]
+
+    banners.value = bannerList.map((banner) => ({
+        ...banner,
+        imgPath: `/banner/${banner.fileName}_${suffix}.jpg`
+    }))
 }
 
 onMounted(() => {
-    const windowWidth = window.innerWidth
-    banners.value = getBannerInfo(windowWidth)
-    window.addEventListener('resize', () => {
-        const windowWidth = window.innerWidth
-        banners.value = getBannerInfo(windowWidth)
-    })
+    getBannerInfo()
+    window.addEventListener('resize', getBannerInfo)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', getBannerInfo)
 })
 </script>
 

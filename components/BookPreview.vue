@@ -9,7 +9,7 @@
             :circular="true"
             :full-screen="true"
             :show-item-navigators="true"
-            :thumbnails-position="thubnailsPosition"
+            :thumbnails-position="thumbnailsPosition"
             vertical-thumbnail-view-port-height="400px"
             @update:visible="closePreviewMode"
         >
@@ -61,7 +61,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const thubnailsPosition = ref('left')
+const thumbnailsPosition = ref('')
 const images = ref()
 const responsiveOptions = ref([
     {
@@ -92,6 +92,15 @@ defineExpose({
     openPreviewMode
 })
 
+const setThubnailsPositionByScreenSize = () => {
+    const windowWidth = window.innerWidth
+    if (windowWidth >= 768) {
+        thumbnailsPosition.value = 'left'
+    } else {
+        thumbnailsPosition.value = 'bottom'
+    }
+}
+
 onMounted(() => {
     images.value = props.imageUrls.map((url, idx) => {
         return {
@@ -102,14 +111,13 @@ onMounted(() => {
         }
     })
 
-    window.addEventListener('resize', () => {
-        const windowWidth = window.innerWidth
-        if (windowWidth >= 768) {
-            thubnailsPosition.value = 'left'
-        } else {
-            thubnailsPosition.value = 'bottom'
-        }
-    })
+    setThubnailsPositionByScreenSize()
+
+    window.addEventListener('resize', setThubnailsPositionByScreenSize)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', setThubnailsPositionByScreenSize)
 })
 </script>
 

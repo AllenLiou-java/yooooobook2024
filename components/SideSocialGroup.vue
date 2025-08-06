@@ -31,21 +31,11 @@
 </template>
 
 <script setup>
-const route = useRoute()
-
-watch(route, (newRoute) => {
-    showSocialGroup(newRoute.path)
-})
-
 const isShow = ref(false)
 
-const showSocialGroup = (pathname) => {
-    if (pathname === '/') {
-        if (getScrollTop() > 500) {
-            isShow.value = true
-        } else {
-            isShow.value = false
-        }
+const showSocialGroup = () => {
+    if (getScrollTop() > 500) {
+        isShow.value = true
     } else {
         isShow.value = false
     }
@@ -72,13 +62,13 @@ function getScrollTop() {
 }
 
 onMounted(() => {
-    const pathname = location.pathname
-    showSocialGroup(pathname)
+    showSocialGroup()
 
-    window.addEventListener('scroll', () => {
-        const pathname = location.pathname
-        showSocialGroup(pathname)
-    })
+    window.addEventListener('scroll', showSocialGroup)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', showSocialGroup)
 })
 </script>
 
