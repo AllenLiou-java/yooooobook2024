@@ -31,7 +31,7 @@
                     <p class="text-blue_dark text-24 mb-16" data-aos="fade-up" data-aos-delay="50">
                         有良冊出版書籍最適合那些讀者呢？
                     </p>
-                    <img
+                    <!-- <img
                         :src="imageSrc('/home/reader01.png')"
                         class="h-120"
                         style="transform: rotateY(180deg)"
@@ -54,12 +54,12 @@
                         data-aos="fade-left"
                         data-aos-delay="150"
                         data-aos-duration="1500"
-                    />
+                    /> -->
                 </div>
 
                 <div class="mb-24 lt-xl:mb-0">
                     <ul class="text-blue_dark">
-                        <li class="mb-16 flex flex-nowrap" data-aos="fade-left">
+                        <li class="mb-16 flex flex-nowrap" data-aos="fade-up">
                             <span class="material-icons text-brown_dark text-52 mr-4 shrink-0">
                                 task_alt
                             </span>
@@ -69,11 +69,7 @@
                                 會計師、記帳士、記帳及報稅代理人等公司登記從業人員
                             </p>
                         </li>
-                        <li
-                            class="mb-16 flex flex-nowrap"
-                            data-aos="fade-left"
-                            data-aos-delay="150"
-                        >
+                        <li class="mb-16 flex flex-nowrap" data-aos="fade-up" data-aos-delay="150">
                             <span class="material-icons text-brown_dark text-52 mr-4 shrink-0">
                                 task_alt
                             </span>
@@ -83,7 +79,7 @@
                                 公司欲自行辦理公司登記者
                             </p>
                         </li>
-                        <li class="flex flex-nowrap" data-aos="fade-left" data-aos-delay="300">
+                        <li class="flex flex-nowrap" data-aos="fade-up" data-aos-delay="300">
                             <span class="material-icons text-brown_dark text-52 mr-4 shrink-0">
                                 task_alt
                             </span>
