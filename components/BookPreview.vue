@@ -11,6 +11,7 @@
             :show-item-navigators="true"
             :thumbnails-position="thubnailsPosition"
             vertical-thumbnail-view-port-height="400px"
+            @update:visible="closePreviewMode"
         >
             <template #item="slotProps">
                 <div class="bg-black max-w-650">
@@ -39,7 +40,7 @@
         <Button
             class="bg-blue_light hover:bg-blue border-none"
             :label="tagName"
-            @click="displayBasic = true"
+            @click="openPreviewMode"
         />
     </div>
 </template>
@@ -59,10 +60,9 @@ const props = defineProps({
     }
 })
 
+const router = useRouter()
 const thubnailsPosition = ref('left')
-
 const images = ref()
-
 const responsiveOptions = ref([
     {
         breakpoint: '1200px',
@@ -73,8 +73,24 @@ const responsiveOptions = ref([
         numVisible: 5
     }
 ])
-
 const displayBasic = ref(false)
+
+const openPreviewMode = () => {
+    router.push({
+        query: {
+            preview: props.tagName
+        }
+    })
+    displayBasic.value = true
+}
+
+const closePreviewMode = () => {
+    router.replace({ query: {} })
+}
+
+defineExpose({
+    openPreviewMode
+})
 
 onMounted(() => {
     images.value = props.imageUrls.map((url, idx) => {

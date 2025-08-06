@@ -134,6 +134,11 @@
                     <h4 class="text-20 text-blue mb-20">書籍試閱 (請點擊篇名)</h4>
                     <div v-if="previewBookPhotos" class="flex flex-wrap gap-12">
                         <BookPreview
+                            :ref="
+                                (el) => {
+                                    previewRefs[`ref_preview_${book.name}`] = el
+                                }
+                            "
                             v-for="book in previewBookPhotos"
                             :key="book.name"
                             :tag-name="book.name"
@@ -368,6 +373,8 @@ const orderQty = ref(0)
 const route = useRoute()
 const router = useRouter()
 
+const previewRefs = ref({})
+
 // 取得指定產品資料
 const productStore = useProductStore()
 
@@ -516,10 +523,24 @@ const checkout = (product) => {
     }
 }
 
+const openBookPreview = () => {
+    const queryBookName = route.query.preview
+    if (!queryBookName) return
+
+    const refBookList = Object.keys(previewRefs.value)
+    const isExisted = refBookList.includes(`ref_preview_${queryBookName}`)
+
+    if (isExisted) {
+        previewRefs.value[`ref_preview_${queryBookName}`].openPreviewMode()
+    }
+}
+
 onMounted(() => {
     if (_stock.value?.qty) {
         productStore.setStockList(route.params.productId, _stock.value.qty)
     }
+
+    openBookPreview()
 })
 </script>
 
