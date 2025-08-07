@@ -1,5 +1,6 @@
 <template>
-    <div class="bg-blue_dark tracking-widest z-999 fixed w-full">
+    <!-- fixed -->
+    <div class="bg-blue_dark tracking-widest z-999 w-full">
         <BlockUI :blocked="blocked" full-screen />
         <div class="container py-18 flex-center">
             <div

@@ -2,7 +2,8 @@
     <div class="layout relative">
         <CustomLoading />
         <LayoutHeader @set-visible="setVisible" />
-        <div class="min-h-[calc(100vh-316px)] pt-96 lt-md-pt-137">
+        <!-- pt-96 lt-md-pt-13 -->
+        <div class="min-h-[calc(100vh-316px)] 7">
             <slot />
         </div>
         <LayoutFooter />
