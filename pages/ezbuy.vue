@@ -89,6 +89,21 @@
 </template>
 
 <script setup>
+useHead({
+    title: '【優惠活動】訂購表單'
+})
+
+definePageMeta({
+    title: '【優惠活動】訂購表單'
+})
+useSeoMeta({
+    description: '首波新書出版優惠活動。',
+    ogDescription: '首波新書出版優惠活動。。',
+    ogTitle: '【優惠活動】訂購表單 - 有良冊股份有限公司',
+    ogImage: '/yooooobook.jpg',
+    ogUrl: 'https://www.yooooobook.com/ezbuy'
+})
+
 const newBookList = ref([
     {
         bookName: '公司登記實務及案例解析【減資篇】',
