@@ -31,19 +31,19 @@
                     <p class="text-blue_dark text-24 mb-16" data-aos="fade-up" data-aos-delay="50">
                         有良冊出版書籍最適合那些讀者呢？
                     </p>
-                    <!-- <img
+                    <img
                         :src="imageSrc('/home/reader01.png')"
                         class="h-120"
                         style="transform: rotateY(180deg)"
                         alt="readers"
-                        data-aos="fade-left"
+                        data-aos="fade-up"
                         data-aos-duration="1500"
                     />
                     <img
                         :src="imageSrc('/home/reader02.png')"
                         class="mx-20 h-120"
                         alt="readers"
-                        data-aos="fade-left"
+                        data-aos="fade-up"
                         data-aos-delay="100"
                         data-aos-duration="1500"
                     />
@@ -51,10 +51,10 @@
                         :src="imageSrc('/home/reader03.png')"
                         class="h-120"
                         alt="readers"
-                        data-aos="fade-left"
+                        data-aos="fade-up"
                         data-aos-delay="150"
                         data-aos-duration="1500"
-                    /> -->
+                    />
                 </div>
 
                 <div class="mb-24 lt-xl:mb-0">
