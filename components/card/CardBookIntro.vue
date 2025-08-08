@@ -30,7 +30,7 @@
                         </p>
                         <!-- :style="{ backgroundColor: bookInfo.primaryColor }" -->
                         <div class="mb-24">
-                            <a
+                            <!-- <a
                                 v-for="previewItem in bookInfo.preview"
                                 :key="previewItem.name"
                                 target="_blank"
@@ -41,7 +41,27 @@
                                     visibility
                                 </span>
                                 預覽【{{ previewItem.name }}】</a
+                            > -->
+
+                            <BookPreview
+                                v-for="book in previewBookPhotos"
+                                :key="book.name"
+                                :tag-name="book.name"
+                                :image-urls="book.links"
                             >
+                                <template #openButton>
+                                    <button
+                                        class="w-full border-0 mb-8 p-4 rounded-6 text-center bg-[#e8e8e7] text-black h-32 hover:(border-2 border-solid border-gray)"
+                                    >
+                                        <span
+                                            class="material-icons align-sub text-gray_dark text-20"
+                                        >
+                                            visibility
+                                        </span>
+                                        預覽【{{ book.name }}】
+                                    </button>
+                                </template>
+                            </BookPreview>
                         </div>
 
                         <p
@@ -67,11 +87,22 @@
 </template>
 
 <script setup>
-defineProps({
+import bookImgLink from '@/assets/js/bookImgLink'
+
+const props = defineProps({
     bookInfo: {
         type: Object,
         required: true
     }
+})
+
+const route = useRoute()
+
+// 載入預覽圖
+const previewBookPhotos = computed(() => {
+    const productId = props.bookInfo.productId
+    if (typeof bookImgLink[productId] !== 'object') return []
+    return Object.values(bookImgLink[productId])
 })
 </script>
 

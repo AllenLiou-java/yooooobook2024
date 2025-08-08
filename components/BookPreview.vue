@@ -1,5 +1,5 @@
 <template>
-    <div class="card flex justify-content-center">
+    <div class="flex justify-center">
         <Galleria
             v-model:visible="displayBasic"
             :value="images"
@@ -37,11 +37,20 @@
             </template>
         </Galleria>
 
-        <Button
+        <!-- <Button
             class="bg-blue_light hover:bg-blue border-none"
             :label="tagName"
             @click="openPreviewMode"
-        />
+        /> -->
+        <div class="flex-1" @click="openPreviewMode">
+            <slot name="openButton">
+                <Button
+                    class="bg-blue_light hover:bg-blue border-none"
+                    :label="tagName"
+                    @click="openPreviewMode"
+                />
+            </slot>
+        </div>
     </div>
 </template>
 <script setup>

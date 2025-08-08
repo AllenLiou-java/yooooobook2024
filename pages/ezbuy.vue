@@ -107,6 +107,7 @@ useSeoMeta({
 const newBookList = ref([
     {
         bookName: '公司登記實務及案例解析【減資篇】',
+        productId: 'AA00004',
         bookImageUrl:
             'https://firebasestorage.googleapis.com/v0/b/yooooobook-a7f4d.appspot.com/o/Products%2Fbook5.png?alt=media',
         slogan: '★ 書表齊全、案例精選，減資申請好幫手！',
@@ -128,6 +129,7 @@ const newBookList = ref([
     },
     {
         bookName: '公司登記實務及案例解析【增資 · 發行新股增補篇】',
+        productId: 'AA00003',
         bookImageUrl:
             'https://firebasestorage.googleapis.com/v0/b/yooooobook-a7f4d.appspot.com/o/Products%2Fbook4-2.png?alt=media',
         slogan: '★ 查核報告書與附表全公開，節省撰寫時間！',
@@ -155,6 +157,7 @@ const newBookList = ref([
 const oldBookList = ref([
     {
         bookName: '公司登記實務及案例解析【增資·發行新股篇】',
+        productId: 'AA00002',
         bookImageUrl:
             'https://firebasestorage.googleapis.com/v0/b/yooooobook-a7f4d.appspot.com/o/Products%2Fbook4-1.png?alt=media',
         slogan: '★ 聚焦實務操作，一書掌握增資與發行新股關鍵！',
@@ -177,6 +180,7 @@ const oldBookList = ref([
     },
     {
         bookName: '《公司登記實務及案例解析【共三冊】》',
+        productId: 'AA00001',
         bookImageUrl:
             'https://firebasestorage.googleapis.com/v0/b/yooooobook-a7f4d.appspot.com/o/Products%2Fbook1%262%263.png?alt=media',
         slogan: '★ 基礎實務技巧全面掌握，協助擴展您的業務！',
