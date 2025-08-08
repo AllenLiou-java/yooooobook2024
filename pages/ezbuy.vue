@@ -36,7 +36,7 @@
             </div>
         </div>
         <div
-            id="orderFrom"
+            id="orderForm"
             style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
             class="w-full py-20 rounded-6 bg-[#c8bcab]"
         >
