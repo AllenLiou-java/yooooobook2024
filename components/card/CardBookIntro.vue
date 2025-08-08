@@ -44,6 +44,11 @@
                             > -->
 
                             <BookPreview
+                                :ref="
+                                    (el) => {
+                                        previewRefs[`ref_preview_${book.name}`] = el
+                                    }
+                                "
                                 v-for="book in previewBookPhotos"
                                 :key="book.name"
                                 :tag-name="book.name"
@@ -97,12 +102,29 @@ const props = defineProps({
 })
 
 const route = useRoute()
+const previewRefs = ref({})
 
 // 載入預覽圖
 const previewBookPhotos = computed(() => {
     const productId = props.bookInfo.productId
     if (typeof bookImgLink[productId] !== 'object') return []
     return Object.values(bookImgLink[productId])
+})
+
+const openBookPreview = () => {
+    const queryBookName = route.query.preview
+    if (!queryBookName) return
+
+    const refBookList = Object.keys(previewRefs.value)
+    const isExisted = refBookList.includes(`ref_preview_${queryBookName}`)
+
+    if (isExisted) {
+        previewRefs.value[`ref_preview_${queryBookName}`].openPreviewMode()
+    }
+}
+
+onMounted(() => {
+    openBookPreview()
 })
 </script>
 

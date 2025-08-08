@@ -35,47 +35,52 @@
         <div
             id="orderFrom"
             style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-            class="w-full py-20 pr-12 rounded-6 bg-[#c8bcab]"
+            class="w-full py-20 rounded-6 bg-[#c8bcab]"
         >
-            <div class="ml-32 mb-24">
+            <div class="w-[92%] mx-auto mb-24">
                 <h2
                     class="text-black text-32 relative pl-16 py-4 mb-16 before:(content-[''] absolute top-1/2 left-0 -translate-y-1/2 w-2 h-[100%] bg-black)"
                 >
                     訂購表單
                 </h2>
-                <p class="text-20 font-bold mb-12">★ 購買流程</p>
-                <ul class="list-decimal pl-28 tracking-wide leading-[1.5] text-16">
-                    <li>填寫表單 (下方)</li>
-                    <li>
-                        提交表單後，依據以下匯款資訊 安排匯款
-                        <ul class="my-6">
-                            <li>
-                                <span class="text-secondary font-bold">匯款銀行：</span
-                                ><span class="text-blue_dark">玉山銀行 - 台中分行</span>
-                            </li>
-                            <li>
-                                <span class="text-secondary font-bold">銀行代碼：</span
-                                ><span class="text-blue_dark">808</span>
-                            </li>
-                            <li>
-                                <span class="text-secondary font-bold">銀行帳戶：</span
-                                ><span class="text-blue_dark">1366940052966</span>
-                            </li>
-                            <li>
-                                <span class="text-secondary font-bold">戶名：</span
-                                ><span class="text-blue_dark">有良冊股份有限公司</span>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        透過官方line帳號(
-                        <a href="https://lin.ee/f8oZLym" target="_blank">@yooooobook</a>
-                        )，或是撥打電話 (0978-940-828) 告知匯款 完成
-                    </li>
-                </ul>
+                <div class="px-16 py-12 bg-white rounded-6">
+                    <p class="text-20 font-bold mb-12">★ 購買流程</p>
+                    <ul class="list-decimal pl-28 tracking-wide leading-[1.5] text-16">
+                        <li class="mb-8">填寫表單 (下方)</li>
+                        <li class="mb-8">
+                            提交表單後，依據以下匯款資訊 安排匯款
+                            <ul class="mt-4">
+                                <li>
+                                    <span class="text-secondary font-bold">匯款銀行：</span
+                                    ><span class="text-blue_dark">玉山銀行 - 台中分行</span>
+                                </li>
+                                <li>
+                                    <span class="text-secondary font-bold">銀行代碼：</span
+                                    ><span class="text-blue_dark">808</span>
+                                </li>
+                                <li>
+                                    <span class="text-secondary font-bold">銀行帳戶：</span
+                                    ><span class="text-blue_dark">1366940052966</span>
+                                </li>
+                                <li>
+                                    <span class="text-secondary font-bold">戶名：</span
+                                    ><span class="text-blue_dark">有良冊股份有限公司</span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            透過官方line帳號(
+                            <a class="underline" href="https://lin.ee/f8oZLym" target="_blank"
+                                >@yooooobook</a
+                            >
+                            )，或是撥打電話 (0978-940-828) 告知匯款 完成
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <iframe
+                class="pr-12"
                 src="https://docs.google.com/forms/d/e/1FAIpQLSf_ND-SCQdSDrHWSmsI9F0VZ9Gq51bG-38vHfcn6XgHQcGNbw/viewform?embedded=true"
                 width="100%"
                 height="600"
@@ -149,7 +154,7 @@ const newBookList = ref([
         ],
         primaryColor: '#877254',
         notice: [
-            '本書籍僅包含【增資．發行新股篇】中查核報告書各式附表，如要瞭解完整案例內容，須加購【增資．發行新股篇】'
+            '本書僅包含【增資．發行新股篇】中查核報告書各式附表，如要瞭解完整案例內容，須加購【增資．發行新股篇】'
         ]
     }
 ])
