@@ -455,10 +455,7 @@ const totalPrice = computed(() => {
     if (ordersInCart.value.length === 0) {
         return 0
     } else {
-        let total = null
-        ordersInCart.value.forEach((order) => {
-            total += order.discount * order.qty
-        })
+        const total = ordersInCart.value.reduce((sum, order) => sum + order.discount * order.qty, 0)
         return total
     }
 })
@@ -516,9 +513,11 @@ const [taxId, taxIdAttrs] = defineInvoiceField('taxId')
 const userStore = storeToRefs(useUserStore())
 
 const onSubmit = async () => {
-    await updateStock()
+    orderStore.$patch((state) => {
+        state.isOrderLoading = true
+    })
 
-    patchOrderInfo({
+    await patchOrderInfo({
         name: name.value,
         address: address.value,
         email: userStore.email.value,
@@ -526,6 +525,12 @@ const onSubmit = async () => {
         bankAccountNo: bankAccountNo.value,
         buyer: buyer.value || '',
         taxId: taxId.value || ''
+    })
+
+    await updateStock()
+
+    orderStore.$patch((state) => {
+        state.isOrderLoading = false
     })
 }
 

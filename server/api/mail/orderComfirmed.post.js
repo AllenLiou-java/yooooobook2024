@@ -1,38 +1,38 @@
-import nodemailer from 'nodemailer'
+import transporter from '../../utils/mailTransporter'
+
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const { orderInfo } = body
-    const { gmailAppPassword } = useRuntimeConfig()
 
     function createOrderTable(orderList) {
         let tableTd = ''
         orderList.forEach((item) => {
             tableTd += `
-        <tr>
-            <td>${thousandthsFormat(item.productName)}</td>
-            <td>${thousandthsFormat(item.qty)}</td>
-            <td>${thousandthsFormat(item.totalPrice)}</td>
-        </tr>`
+            <tr>
+                <td>${thousandthsFormat(item.productName)}</td>
+                <td>${thousandthsFormat(item.qty)}</td>
+                <td>${thousandthsFormat(item.totalPrice)}</td>
+            </tr>`
         })
 
         return `
-    <ul style="font-size: 16px; list-style: none; padding-left: 0px; margin-top: 0">
-        <li>訂單日期：${orderInfo.oderDate}</li>
-        <li>訂單編號：${orderInfo.orderId}</li>   
-        <li>訂單總金額：${thousandthsFormat(orderInfo.totalPrice)}</li>
-    </ul>
-    <table class="gmail-table">
-        <thead>
-            <tr>
-            <th>商品名稱</th>
-            <th>商品數量</th>
-            <th>商品金額</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${tableTd}
-        </tbody>
-    </table>`
+            <ul style="font-size: 16px; list-style: none; padding-left: 0px; margin-top: 0">
+                <li>訂單日期：${orderInfo.oderDate}</li>
+                <li>訂單編號：${orderInfo.orderId}</li>   
+                <li>訂單總金額：${thousandthsFormat(orderInfo.totalPrice)}</li>
+            </ul>
+            <table class="gmail-table">
+                <thead>
+                    <tr>
+                    <th>商品名稱</th>
+                    <th>商品數量</th>
+                    <th>商品金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableTd}
+                </tbody>
+            </table>`
     }
 
     function thousandthsFormat(value) {
@@ -149,14 +149,6 @@ export default defineEventHandler(async (event) => {
         </html>`
     }
 
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'yooooobook@gmail.com',
-            pass: gmailAppPassword
-        }
-    })
-
     const mailOptions = {
         from: '"有良冊股份有限公司" <yooooobook@gmail.com>',
         to: orderInfo.email,
@@ -165,7 +157,7 @@ export default defineEventHandler(async (event) => {
         bcc: 'info@yooooobook.com'
     }
 
-    const sendMail = await transporter.sendMail(mailOptions)
+    const sendMail = await transporter().sendMail(mailOptions)
 
     return {
         status: sendMail

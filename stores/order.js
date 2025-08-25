@@ -131,7 +131,6 @@ export const useOrderStore = defineStore('order', () => {
     }
 
     async function patchOrderInfo(oderInfo) {
-        isOrderLoading.value = true
         const { name, address, email, phone, bankAccountNo, buyer, taxId } = oderInfo
 
         const orderList = ordersInCart.value.map((orderItem) => {
@@ -147,10 +146,7 @@ export const useOrderStore = defineStore('order', () => {
             }
         })
 
-        let orderListTotalPrice = null
-        orderList.forEach((orderItem) => {
-            orderListTotalPrice += orderItem.totalPrice
-        })
+        const orderListTotalPrice = orderList.reduce((sum, item) => sum + item.totalPrice, 0)
 
         const info = {
             buyer,
@@ -179,7 +175,6 @@ export const useOrderStore = defineStore('order', () => {
         }
 
         const { notify } = useToastifyStore()
-        const router = useRouter()
         const { idToken, userId } = useUserStore()
 
         if (idToken) {
@@ -197,7 +192,7 @@ export const useOrderStore = defineStore('order', () => {
                     }
                 )
 
-                await $api('/api/mail', {
+                await $api('/api/mail/orderComfirmed', {
                     method: 'post',
                     body: {
                         orderInfo: info
@@ -205,12 +200,12 @@ export const useOrderStore = defineStore('order', () => {
                 })
 
                 clearAllOrder()
-                await router.push({
+
+                await useRouter().push({
                     path: `/cart/success/${info.orderId}`
                 })
 
                 notify('info', '訂單資訊已發送至指定信箱')
-                isOrderLoading.value = false
             } catch (e) {
                 notify('error', e.message, e.statusCode)
             }

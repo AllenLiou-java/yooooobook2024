@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="pageInfo">
         <div class="relative text-white bg-gradient-to-r from-[#153D5B] to-[#082C4B]">
             <div class="container h-500 lt-md:h-360 relative flex items-end lt-sm:flex-col-reverse">
                 <div class="w-full ml-40 mb-20 z-100">
@@ -19,6 +19,9 @@
                 />
             </div>
         </div>
+        <NuxtPage></NuxtPage>
+    </div>
+    <div class="h-full" v-else>
         <NuxtPage></NuxtPage>
     </div>
 </template>

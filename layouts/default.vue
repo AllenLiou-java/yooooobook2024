@@ -1,6 +1,34 @@
 <template>
     <div class="layout relative">
         <CustomLoading />
+
+        <ConfirmDialog group="headless">
+            <template #container="{ message, acceptCallback, rejectCallback }">
+                <div class="flex flex-col items-center p-28 rounded-full">
+                    <div
+                        class="rounded-full inline-flex justify-center items-center bg-white h-84 w-84 -mt-72"
+                    >
+                        <span class="material-icons text-blue text-104"> help </span>
+                    </div>
+                    <span class="font-bold text-24 block mb-8 mt-20">{{ message.header }}</span>
+                    <p class="mb-0">{{ message.message }}</p>
+                    <div class="flex items-center gap-8 mt-20">
+                        <Button
+                            class="min-w-120"
+                            :label="message.acceptLabel"
+                            @click="acceptCallback"
+                        ></Button>
+                        <Button
+                            class="min-w-120"
+                            :label="message.rejectLabel"
+                            outlined
+                            @click="rejectCallback"
+                        ></Button>
+                    </div>
+                </div>
+            </template>
+        </ConfirmDialog>
+
         <LayoutHeader @set-visible="setVisible" />
         <!-- pt-96 lt-md-pt-13 -->
         <div class="min-h-[calc(100vh-316px)] 7">
@@ -89,10 +117,11 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import AOS from 'aos'
+import 'aos/dist/aos.css'
 import LayoutHeader from '@/components/layout/Header.vue'
 import LayoutFooter from '@/components/layout/Footer.vue'
 import SideSocialGroup from '@/components/SideSocialGroup.vue'
-import 'aos/dist/aos.css'
+import ConfirmDialog from 'primevue/confirmdialog'
 
 const blocked = ref(false)
 
