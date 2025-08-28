@@ -33,9 +33,19 @@ const member = {
         serverPath: '/api/auth/getUserData',
         method: 'post'
     },
-    passwordReset: {
+    sendPasswordResetEmail: {
         url: '/v1/accounts:sendOobCode',
-        serverPath: '/api/auth/resetPassword',
+        serverPath: '/api/auth/sendPasswordResetEmail',
+        method: 'post'
+    },
+    verifyPasswordResetCode: {
+        url: '/v1/accounts:resetPassword',
+        serverPath: '/api/auth/verifyPasswordResetCode',
+        method: 'post'
+    },
+    confirmPasswordReset: {
+        url: '/v1/accounts:resetPassword',
+        serverPath: '/api/auth/confirmPasswordReset',
         method: 'post'
     },
     // 取得會員資料

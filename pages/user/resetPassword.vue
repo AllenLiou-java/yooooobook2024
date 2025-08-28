@@ -73,7 +73,7 @@ const onSubmit = handleSubmit(async (values) => {
 
     const { email } = values
     try {
-        await resetPasswordPromise(email)
+        await sendPasswordResetEmailPromise(email)
 
         userStore.$patch({
             isUserLoading: false
@@ -95,11 +95,11 @@ const onSubmit = handleSubmit(async (values) => {
     }
 })
 
-const resetPasswordPromise = (email) => {
-    const resetPassword = apiList.member.passwordReset
+const sendPasswordResetEmailPromise = (email) => {
+    const sendPasswordResetEmail = apiList.member.sendPasswordResetEmail
 
-    return $api(resetPassword.serverPath, {
-        method: resetPassword.method,
+    return $api(sendPasswordResetEmail.serverPath, {
+        method: sendPasswordResetEmail.method,
         body: {
             email
         }

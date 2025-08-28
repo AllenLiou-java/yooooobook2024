@@ -2,14 +2,13 @@ import { serverApi } from '@/server/utils/database'
 
 export default defineEventHandler(async (event) => {
     const { googleApiUrl } = useRuntimeConfig()
-    const { email } = await readBody(event)
+    const { oobCode } = await readBody(event)
 
-    const data = await serverApi('/v1/accounts:sendOobCode', {
+    const data = await serverApi('/v1/accounts:resetPassword', {
         baseURL: googleApiUrl,
         method: 'post',
         body: {
-            requestType: 'PASSWORD_RESET',
-            email
+            oobCode
         }
     })
         .then((result) => result)
@@ -25,5 +24,8 @@ export default defineEventHandler(async (event) => {
             })
         })
 
-    return data
+    return {
+        status: 200,
+        data
+    }
 })
