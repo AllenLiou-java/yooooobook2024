@@ -41,6 +41,11 @@ const statusList = [
     },
     {
         code: 400,
+        error: 'INVALID_OOB_CODE',
+        errorCH: '您的電子郵件地址驗證要求已過期，或是先前已使用過驗證電子郵件地址的連結'
+    },
+    {
+        code: 400,
         error: 'Bad Request',
         errorCH: '請再檢查您填寫的資料是否正確'
     },

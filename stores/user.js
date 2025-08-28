@@ -89,6 +89,7 @@ export const useUserStore = defineStore('user', () => {
         const cookieIdToken = useCookie('idToken').value
         const cookieRefreshToken = useCookie('refreshToken').value
         const cookieUserName = useCookie('userName').value
+        const cookieEmailVerified = useCookie('emailVerified')
 
         if (cookieIdToken) {
             const idTokenDecode = jwtDecode(cookieIdToken)
@@ -96,7 +97,7 @@ export const useUserStore = defineStore('user', () => {
             isUserLoggedIn.value = true
             userName.value = idTokenDecode.name || cookieUserName
             email.value = idTokenDecode.email
-            emailVerified.value = idTokenDecode.email_verified
+            emailVerified.value = cookieEmailVerified
             photoUrl.value = idTokenDecode.picture
             userId.value = idTokenDecode.user_id
             idToken.value = cookieIdToken

@@ -1,6 +1,36 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
     <div>
+        <Dialog
+            v-model:visible="isVisible"
+            modal
+            header="Email 信箱驗證"
+            :style="{ width: '25rem' }"
+            @after-hide="mailSent = false"
+        >
+            <div class="overflow-hidden" v-if="!mailSent">
+                <p class="block mb-16 leading-24">
+                    <span class="text-secondary">{{ email }}</span> 信箱尚未驗證，請先前往驗證。
+                </p>
+
+                <div class="flex justify-end gap-2">
+                    <Button type="button" label="送出驗證信" @click="sendEmailVerify"></Button>
+                </div>
+            </div>
+            <div v-else>
+                <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                    >驗證信已寄出，請前往
+                    <span class="text-secondary">Eamil 信箱</span> 驗證。</span
+                >
+                <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                    >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
+                >
+                <div class="flex justify-end gap-2">
+                    <Button type="button" label="了解" @click="isVisible = false"></Button>
+                </div>
+            </div>
+        </Dialog>
+
         <div class="relative text-white">
             <div class="container h-500 lt-md:h-320 relative">
                 <div class="absolute bottom-20 w-[calc(100%-80px)] left-60 z-100 lt-md:left-30">
@@ -377,6 +407,7 @@ const previewRefs = ref({})
 
 // 取得指定產品資料
 const productStore = useProductStore()
+const { notify } = useToastifyStore()
 
 const { data: productDetail, error: productDetailError } = await useAsyncData(
     'product',
@@ -510,15 +541,16 @@ const stock = computed(() => {
     }
 })
 
-const { notify } = useToastifyStore()
-const { idToken } = storeToRefs(useUserStore())
+const { idToken, emailVerified, email } = storeToRefs(useUserStore())
 const checkout = (product) => {
-    if (ordersInCart.value.length === 0 && orderQty.value === 0) {
-        notify('info', '請選擇訂購的數量')
-    } else if (orderQty.value > 0 && idToken.value) {
-        addOrder(product)
-        router.push('/cart')
+    if (!idToken.value) {
+        navigateTo('/user/login')
+    } else if (!emailVerified.value) {
+        isVisible.value = true
+    } else if (ordersInCart.value.length === 0 && orderQty.value === 0) {
+        notify('error', '請選擇訂購數量')
     } else {
+        addOrder(product)
         router.push('/cart')
     }
 }
@@ -532,6 +564,26 @@ const openBookPreview = () => {
 
     if (isExisted) {
         previewRefs.value[`ref_preview_${queryBookName}`].openPreviewMode()
+    }
+}
+
+const { $api } = useNuxtApp()
+const isVisible = ref(false)
+const mailSent = ref(false)
+
+const sendEmailVerify = async () => {
+    const emailVerify = apiList.member.sendEmailVerify
+    try {
+        await $api(emailVerify.serverPath, {
+            method: emailVerify.method,
+            body: {
+                idToken: idToken.value
+            }
+        })
+
+        mailSent.value = true
+    } catch (e) {
+        notify('error', e.message, e.statusCode)
     }
 }
 

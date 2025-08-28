@@ -1,5 +1,22 @@
 <template>
     <div v-if="pageInfo">
+        <Dialog
+            v-model:visible="isVisible"
+            modal
+            header="Email 信箱驗證"
+            :style="{ width: '25rem' }"
+        >
+            <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                >驗證信已寄出，請前往 <span class="text-secondary">Eamil 信箱</span> 驗證。</span
+            >
+            <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
+            >
+            <div class="flex justify-end gap-2">
+                <Button type="button" label="了解" @click="changeDialogVisible(false)"></Button>
+            </div>
+        </Dialog>
+
         <div class="relative text-white bg-gradient-to-r from-[#153D5B] to-[#082C4B]">
             <div class="container h-500 lt-md:h-360 relative flex items-end lt-sm:flex-col-reverse">
                 <div class="w-full ml-40 mb-20 z-100">
@@ -19,7 +36,7 @@
                 />
             </div>
         </div>
-        <NuxtPage></NuxtPage>
+        <NuxtPage @changeVisible="changeDialogVisible"></NuxtPage>
     </div>
     <div class="h-full" v-else>
         <NuxtPage></NuxtPage>
@@ -84,6 +101,12 @@ const routeList = computed(() => {
         }
     ]
 })
+
+const isVisible = ref(false)
+
+const changeDialogVisible = (status) => {
+    isVisible.value = status
+}
 </script>
 
 <style lang="scss" scoped></style>

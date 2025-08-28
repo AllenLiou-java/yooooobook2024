@@ -58,7 +58,6 @@ import * as yup from 'yup'
 const { $api } = useNuxtApp()
 const userStore = useUserStore()
 const { isUserLoading } = storeToRefs(userStore)
-const { notify } = useToastifyStore()
 const errorMsg = ref('')
 
 useHead({
@@ -74,6 +73,8 @@ useSeoMeta({
     ogImage: '/yooooobook.jpg',
     ogUrl: 'https://www.yooooobook.com/user/signup'
 })
+
+const emit = defineEmits(['changeVisible'])
 
 const { handleSubmit } = useForm({
     validationSchema: yup.object({
@@ -100,24 +101,21 @@ const onSubmit = handleSubmit(async (values) => {
         await patchMemberInfoPromise({ name, email, localId }, idToken)
         await sendEmailVerifyPromise(idToken)
 
-        userStore.$patch({
-            isUserLoading: false
-        })
+        emit('changeVisible', true)
 
         await navigateTo({
             path: '/user/login'
         })
-        notify('info', '驗證信已寄出，請前往信箱驗證。')
     } catch (e) {
         const { statusCode, message } = e
         const errorMessage = mapErrorMessage(message, statusCode)
 
         errorMsg.value = errorMessage
-
-        userStore.$patch({
-            isUserLoading: false
-        })
     }
+
+    userStore.$patch({
+        isUserLoading: false
+    })
 })
 
 const signUpPromise = (values) => {

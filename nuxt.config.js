@@ -68,7 +68,8 @@ export default defineNuxtConfig({
                 'Row',
                 'Galleria',
                 'OverlayPanel',
-                'BlockUI'
+                'BlockUI',
+                'Dialog'
             ]
         },
         cssLayerOrder: 'reset, primevue'
