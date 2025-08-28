@@ -144,7 +144,7 @@ const patchMemberInfoPromise = (info, idToken) => {
         userName: info.name,
         email: info.email,
         userUid: info.localId,
-        emailVerified: false,
+        // emailVerified: false,
         picture: ''
     }
 

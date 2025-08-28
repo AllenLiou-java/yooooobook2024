@@ -476,15 +476,15 @@ const updateEmailVerify = async () => {
 
     useCookie('emailVerified').value = user.emailVerified
 
-    const patchMemberInfo = apiList.member.patchMemberInfo
-    await $api(patchMemberInfo.serverPath.replace(':memberId', user.localId), {
-        method: patchMemberInfo.method,
-        body: {
-            memberInfo: {
-                emailVerified: user.emailVerified
-            }
-        }
-    })
+    // const patchMemberInfo = apiList.member.patchMemberInfo
+    // await $api(patchMemberInfo.serverPath.replace(':memberId', user.localId), {
+    //     method: patchMemberInfo.method,
+    //     body: {
+    //         memberInfo: {
+    //             emailVerified: user.emailVerified
+    //         }
+    //     }
+    // })
 }
 
 onMounted(async () => {

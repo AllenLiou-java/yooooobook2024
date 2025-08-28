@@ -58,27 +58,10 @@ const confirmAndSaveEmailVerification = async () => {
     if (!oobCode) return
 
     try {
-        const { data } = await $fetch(apiList.member.confirmEmailVerification.serverPath, {
+        await $fetch(apiList.member.confirmEmailVerification.serverPath, {
             method: apiList.member.confirmEmailVerification.method,
             body: {
                 oobCode
-            }
-        })
-
-        const { emailVerified } = data
-        userStore.$patch({
-            emailVerified: emailVerified
-        })
-
-        useCookie('emailVerified').value = emailVerified
-
-        const patchMemberInfo = apiList.member.patchMemberInfo
-        await $api(patchMemberInfo.serverPath.replace(':memberId', user.localId), {
-            method: patchMemberInfo.method,
-            body: {
-                memberInfo: {
-                    emailVerified: emailVerified
-                }
             }
         })
     } catch (e) {

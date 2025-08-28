@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', () => {
     const refreshToken = ref('')
     const signInProvider = ref('')
     const isUserLoading = ref(false)
+    const { notify } = useToastifyStore()
 
     const setUserLoggedin = async (id_token, refresh_token, name) => {
         const router = useRouter()
@@ -46,7 +47,7 @@ export const useUserStore = defineStore('user', () => {
                 userName: idTokenDecode.name,
                 email: idTokenDecode.email,
                 userUid: idTokenDecode.user_id,
-                emailVerified: true,
+                // emailVerified: true,
                 picture: idTokenDecode.picture
             }
 
@@ -82,7 +83,8 @@ export const useUserStore = defineStore('user', () => {
 
         // 導向至首頁
         // await navigateTo('/user/login')
-        reloadNuxtApp()
+        // reloadNuxtApp()
+        notify('info', '登出成功')
     }
 
     const initProfile = () => {
