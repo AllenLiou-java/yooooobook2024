@@ -1,26 +1,5 @@
 <template>
     <div class="container flex-center flex-col h-[calc(100vh-96px-346px)]">
-        <Dialog
-            v-model:visible="isDialogVisible"
-            modal
-            header="Email 信箱驗證"
-            :style="{ width: '25rem' }"
-            @after-hide="mailSent = false"
-        >
-            <div>
-                <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                    >驗證信已寄出，請前往
-                    <span class="text-secondary">Eamil 信箱</span> 驗證。</span
-                >
-                <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                    >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
-                >
-                <div class="flex justify-end gap-2">
-                    <Button type="button" label="了解" @click="isDialogVisible = false"></Button>
-                </div>
-            </div>
-        </Dialog>
-
         <template v-if="mode === 'verifyEmail'">
             <template v-if="verifyEmailData">
                 <div class="text-center">
@@ -79,12 +58,12 @@
 </template>
 
 <script setup>
-const { mode, oobCode } = useRoute().query
-const isDialogVisible = ref(false)
-const userStore = useUserStore()
-const { isUserLoading } = storeToRefs(userStore)
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
+
+const { mode, oobCode } = useRoute().query
+const userStore = useUserStore()
+const { isUserLoading } = storeToRefs(userStore)
 
 const { data: verifyEmailData, error: verifyEmailError } = useAsyncData('verifyEmail', () => {
     if (mode === 'verifyEmail') {
@@ -137,8 +116,9 @@ const { handleSubmit } = useForm({
     })
 })
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (values, { resetForm }) => {
     confirmPasswordReset(values.password)
+    resetForm()
 })
 </script>
 

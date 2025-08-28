@@ -1,5 +1,24 @@
 <template>
     <div class="container font-bold">
+        <Dialog
+            v-model:visible="isDialogVisible"
+            modal
+            header="Email 信箱驗證"
+            :style="{ width: '25rem' }"
+            @after-hide="mailSent = false"
+        >
+            <div>
+                <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                    >重置信件已寄出，請前往 <span class="text-secondary">Eamil 信箱</span> 。</span
+                >
+                <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                    >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
+                >
+                <div class="flex justify-end gap-2">
+                    <Button type="button" label="了解" @click="isDialogVisible = false"></Button>
+                </div>
+            </div>
+        </Dialog>
         <div
             class="ml-40 mt-30 mb-60 border border-solid border-blue_light px-20 py-30 lt-md:(flex-col ml-0)"
         >
@@ -23,11 +42,13 @@
                         }"
                         @click="onSubmit"
                     />
-                    <NuxtLink
-                        class="bg-gray p-12 hover:bg-gray_dark grow-1 text-center lt-sm:grow-1"
-                        to="/user/login"
-                        ><span class="text-gray_dark text-white">返回</span></NuxtLink
+
+                    <div
+                        class="bg-gray p-12 hover:bg-gray_dark grow-1 text-center lt-sm:grow-1 cursor-pointer"
+                        @click="$router.back()"
                     >
+                        <span class="text-gray_dark text-white">返回</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -38,6 +59,8 @@
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 import { storeToRefs } from 'pinia'
+
+const isDialogVisible = ref(false)
 
 const userStore = useUserStore()
 const { isUserLoading } = storeToRefs(userStore)
@@ -58,7 +81,6 @@ useSeoMeta({
 
 const { $api } = useNuxtApp()
 const errorMsg = ref('')
-const { notify } = useToastifyStore()
 
 const { handleSubmit } = useForm({
     validationSchema: yup.object({
@@ -66,7 +88,7 @@ const { handleSubmit } = useForm({
     })
 })
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (values, { resetForm }) => {
     userStore.$patch({
         isUserLoading: true
     })
@@ -79,10 +101,8 @@ const onSubmit = handleSubmit(async (values) => {
             isUserLoading: false
         })
 
-        await navigateTo({
-            path: '/user/login'
-        })
-        notify('info', '請前往信箱變更密碼。')
+        isDialogVisible.value = true
+        resetForm()
     } catch (e) {
         const { statusCode, message } = e
         const errorMessage = mapErrorMessage(message, statusCode)
