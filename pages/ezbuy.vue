@@ -2,9 +2,7 @@
     <div class="container flex gap-x-40 gap-y-60 flex-col py-40">
         <div class="w-full">
             <h1 class="mb-16 text-blue_dark">【2025新書優惠活動】</h1>
-            <p class="mb-8 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">
-                優惠期間：即日起 - 8/31
-            </p>
+            <p class="mb-8 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">優惠期間：即日起 - 9/7</p>
             <img class="mb-16" src="@/assets/images/banner/home_03_pc.jpg" alt="banner_cover" />
 
             <ul class="mb-32 tracking-wide leading-[1.5] text-20">
