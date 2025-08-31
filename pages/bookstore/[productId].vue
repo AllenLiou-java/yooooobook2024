@@ -544,7 +544,7 @@ const stock = computed(() => {
 const { idToken, emailVerified, email } = storeToRefs(useUserStore())
 const checkout = (product) => {
     if (!idToken.value) {
-        navigateTo('/user/login')
+        navigateTo('/user/logIn')
     } else if (!emailVerified.value) {
         isVisible.value = true
     } else if (ordersInCart.value.length === 0 && orderQty.value === 0) {

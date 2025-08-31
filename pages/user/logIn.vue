@@ -70,13 +70,14 @@ useHead({
 })
 
 definePageMeta({
-    title: '會員登入'
+    title: '會員登入',
+    middleware: 'logged-in-redirect'
 })
 
 useSeoMeta({
     ogTitle: '會員登入 - 有良冊股份有限公司',
     ogImage: '/yooooobook.jpg',
-    ogUrl: 'https://www.yooooobook.com/user/login'
+    ogUrl: 'https://www.yooooobook.com/user/logIn'
 })
 
 const { handleSubmit } = useForm({
@@ -86,7 +87,7 @@ const { handleSubmit } = useForm({
     })
 })
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (values, { resetForm }) => {
     userStore.$patch({
         isUserLoading: true
     })
@@ -107,6 +108,7 @@ const onSubmit = handleSubmit(async (values) => {
         )
 
         await setUserLoggedin(idToken, refreshToken, userName)
+        resetForm()
         userStore.$patch({
             isUserLoading: false
         })

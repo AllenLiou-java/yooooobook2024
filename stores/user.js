@@ -82,7 +82,7 @@ export const useUserStore = defineStore('user', () => {
         useCookie('signInProvider').value = null
 
         // 導向至首頁
-        // await navigateTo('/user/login')
+        // await navigateTo('/user/logIn')
         // reloadNuxtApp()
         notify('info', '登出成功')
     }

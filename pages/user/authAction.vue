@@ -14,7 +14,14 @@
             <template v-else>
                 <div class="text-center">
                     <h1 class="mb-24">請再次驗證您的電子郵件地址</h1>
-                    <p>您的電子郵件地址驗證要求已過期，或是先前已使用過驗證電子郵件地址的連結</p>
+                    <p class="mb-16">
+                        您的電子郵件地址驗證要求已過期，或是先前已使用過驗證電子郵件地址的連結
+                    </p>
+                    <NuxtLink
+                        class="bg-secondary hover:bg-[#d80545] px-16 py-12 text-white font-bold cursor-pointer inline-block"
+                        to="/user/logIn"
+                        >會員登入</NuxtLink
+                    >
                     <!-- <p>{{ verifyEmailData }}</p>
                     <p>{{ verifyEmailError?.data.message }}</p> -->
                 </div>

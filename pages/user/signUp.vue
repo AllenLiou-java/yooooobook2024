@@ -40,7 +40,7 @@
                     @click="onSubmit"
                 />
 
-                <NuxtLink class="text-center block" to="/user/login"
+                <NuxtLink class="text-center block" to="/user/logIn"
                     ><span
                         class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
                         >已是會員了嗎？馬上登入！</span
@@ -89,7 +89,7 @@ const { handleSubmit } = useForm({
     })
 })
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (values, { resetForm }) => {
     userStore.$patch({
         isUserLoading: true
     })
@@ -102,9 +102,10 @@ const onSubmit = handleSubmit(async (values) => {
         await sendEmailVerifyPromise(idToken)
 
         emit('changeVisible', true)
+        resetForm()
 
         await navigateTo({
-            path: '/user/login'
+            path: '/user/logIn'
         })
     } catch (e) {
         const { statusCode, message } = e

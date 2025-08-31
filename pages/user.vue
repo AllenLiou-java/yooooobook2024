@@ -46,15 +46,15 @@
 <script setup>
 definePageMeta({
     middleware: (to, from) => {
-        if (to.fullPath === '/user') {
+        if (to.path === '/user') {
             return navigateTo({
-                path: '/user/login'
+                path: '/user/logIn'
             })
         }
 
         const idToken = useCookie('idToken')
-        const signUpBlock = idToken.value && to.fullPath === '/user/signup'
-        const loginBlock = idToken.value && to.fullPath === '/user/login'
+        const signUpBlock = idToken.value && to.path === '/user/signup'
+        const loginBlock = idToken.value && to.path === '/user/logIn'
 
         if (signUpBlock || loginBlock) {
             return navigateTo({
@@ -71,22 +71,20 @@ const route = useRoute()
 const pageInfo = computed(() => {
     const pages = [
         {
-            fullPath: '/user/login',
+            path: '/user/logIn',
             name: '會員登入'
         },
         {
-            fullPath: '/user/signup',
+            path: '/user/signup',
             name: '會員註冊'
         },
         {
-            fullPath: '/user/resetPassword',
+            path: '/user/resetPassword',
             name: '忘記密碼'
         }
     ]
 
-    const fullPath = route.fullPath
-
-    return pages.filter((page) => page.fullPath === fullPath)[0]
+    return pages.filter((page) => page.path === route.path)[0]
 })
 
 const routeList = computed(() => {

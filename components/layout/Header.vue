@@ -1,6 +1,22 @@
 <template>
     <!-- fixed -->
     <div class="bg-blue_dark tracking-widest z-999 w-full">
+        <Dialog
+            v-model:visible="isDialogVisible"
+            modal
+            header="Email 信箱驗證"
+            :style="{ width: '25rem' }"
+        >
+            <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                >驗證信已寄出，請前往 <span class="text-secondary">Eamil 信箱</span> 驗證。</span
+            >
+            <span class="text-surface-500 dark:text-surface-400 block mb-8"
+                >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
+            >
+            <div class="flex justify-end gap-2">
+                <Button type="button" label="了解" @click="isDialogVisible = false"></Button>
+            </div>
+        </Dialog>
         <BlockUI :blocked="blocked" full-screen />
         <div class="container py-18 flex-center">
             <div
@@ -123,7 +139,7 @@
                         <template v-if="!isUserLoggedIn">
                             <NuxtLink
                                 no-prefetch
-                                to="/user/login"
+                                to="/user/logIn"
                                 class="text-brown_light cursor-pointer"
                             >
                                 <span class="material-icons align-text-top text-22 mr-6">
@@ -159,7 +175,7 @@
                                     @hide="onPopup = false"
                                 >
                                     <template #item="{ item, props }">
-                                        <NuxtLink
+                                        <!-- <NuxtLink
                                             v-if="item.route"
                                             class="gap-8"
                                             :to="item.route"
@@ -171,7 +187,27 @@
                                         <p v-else class="px-12 py-8 gap-8" v-bind="props.action">
                                             <span class="material-icons"> {{ item.icon }} </span>
                                             <span>{{ item.label }}</span>
-                                        </p>
+                                        </p> -->
+                                        <template v-if="item.route">
+                                            <NuxtLink
+                                                class="gap-8"
+                                                :to="item.route"
+                                                v-bind="props.action"
+                                            >
+                                                <span class="material-icons">
+                                                    {{ item.icon }}
+                                                </span>
+                                                <span>{{ item.label }}</span>
+                                            </NuxtLink>
+                                        </template>
+                                        <template v-else>
+                                            <p class="px-12 py-8 gap-8" :class="props.action.class">
+                                                <span class="material-icons">
+                                                    {{ item.icon }}
+                                                </span>
+                                                <span>{{ item.label }}</span>
+                                            </p>
+                                        </template>
                                     </template>
                                 </TieredMenu>
                                 <span
@@ -276,9 +312,12 @@ import { useConfirm } from 'primevue/useconfirm'
 import { storeToRefs } from 'pinia'
 
 const router = useRouter()
+const route = useRoute()
+
 const { notify } = useToastifyStore()
 const visible = ref(false)
 const blocked = ref(false)
+const isDialogVisible = ref(false)
 
 const orderStore = useOrderStore()
 const { qtyInCart } = storeToRefs(orderStore)
@@ -406,7 +445,7 @@ const confirmEmailVerify = async () => {
                 idToken
             }
         })
-        notify('info', '請前往信箱收取驗證信')
+        isDialogVisible.value = true
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }
