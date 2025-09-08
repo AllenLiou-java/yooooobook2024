@@ -11,6 +11,7 @@
             :toggle-mask="toggleMask"
             :feedback="feedback"
             class="mb-4"
+            :placeholder="placeholder"
         >
             <template #footer>
                 <Divider />
@@ -46,6 +47,10 @@ const props = defineProps({
     feedback: {
         type: Boolean,
         default: true
+    },
+    placeholder: {
+        type: String,
+        default: ''
     }
 })
 // The `name` is returned in a function because we want to make sure it stays reactive

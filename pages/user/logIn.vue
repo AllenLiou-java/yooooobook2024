@@ -64,6 +64,8 @@ const userStore = useUserStore()
 const { isUserLoading } = storeToRefs(userStore)
 const { setUserLoggedin } = useUserStore()
 const errorMsg = ref('')
+const route = useRoute()
+const router = useRouter()
 
 useHead({
     title: '會員登入'
@@ -77,7 +79,7 @@ definePageMeta({
 useSeoMeta({
     ogTitle: '會員登入 - 有良冊股份有限公司',
     ogImage: '/yooooobook.jpg',
-    ogUrl: 'https://www.yooooobook.com/user/logIn'
+    ogUrl: 'https://www.yooooobook.com/user/login'
 })
 
 const { handleSubmit } = useForm({
@@ -112,6 +114,8 @@ const onSubmit = handleSubmit(async (values, { resetForm }) => {
         userStore.$patch({
             isUserLoading: false
         })
+
+        await navigateTo(route.query.redirect_to ?? '/')
     } catch (e) {
         const { statusCode, message } = e
         const errorMessage = mapErrorMessage(message, statusCode)
@@ -122,8 +126,6 @@ const onSubmit = handleSubmit(async (values, { resetForm }) => {
             isUserLoading: false
         })
     }
-
-    // alert(JSON.stringify(values, null, 2))
 })
 
 const signInPromise = (email, password) => {

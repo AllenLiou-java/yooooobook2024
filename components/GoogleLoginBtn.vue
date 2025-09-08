@@ -21,6 +21,7 @@ import { googleTokenLogin } from 'vue3-google-login'
 const userStore = useUserStore()
 const { setUserLoggedin } = userStore
 
+const { $api } = useNuxtApp()
 const { notify } = useToastifyStore()
 
 const runtimeConfig = useRuntimeConfig()
@@ -38,7 +39,7 @@ const handleGoogleLogin = async () => {
             return
         }
 
-        const { idToken, refreshToken } = await $fetch('/api/auth/google', {
+        const { idToken, refreshToken } = await $api('/api/auth/google', {
             method: 'POST',
             body: {
                 accessToken

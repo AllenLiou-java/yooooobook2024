@@ -10,7 +10,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const api = $fetch.create({
         async onResponseError({ response }) {
-            if (response.status === 401) {
+            const {
+                _data: { statusCode, message, statusMessage }
+            } = response
+
+            if (response.status === 400 && message === 'INVALID_ID_TOKEN') {
                 userNameCookie.value = null
                 emailCookie.value = null
                 photoUrlCookie.value = null
@@ -19,12 +23,9 @@ export default defineNuxtPlugin((nuxtApp) => {
                 refreshTokenCookie.value = null
                 emailVerifiedCookie.value = null
                 signInProviderCookie.value = null
-                await nuxtApp.runWithContext(() => navigateTo('/user/logIn'))
+                await nuxtApp.runWithContext(() => navigateTo('/user/login'))
+                // reloadNuxtApp()
             }
-
-            const {
-                _data: { statusCode, message, statusMessage }
-            } = response
 
             throw createError({ statusCode, message, statusMessage })
         }

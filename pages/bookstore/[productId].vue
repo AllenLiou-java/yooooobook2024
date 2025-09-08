@@ -2,32 +2,52 @@
 <template>
     <div>
         <Dialog
-            v-model:visible="isVisible"
+            v-model:visible="isDialogVisible"
             modal
             header="Email 信箱驗證"
-            :style="{ width: '25rem' }"
-            @after-hide="mailSent = false"
+            :showHeader="false"
+            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
+            @after-hide="isVerifyMailSent = false"
         >
-            <div class="overflow-hidden" v-if="!mailSent">
-                <p class="block mb-16 leading-24">
-                    <span class="text-secondary">{{ email }}</span> 信箱尚未驗證，請先前往驗證。
-                </p>
-
-                <div class="flex justify-end gap-2">
-                    <Button type="button" label="送出驗證信" @click="sendEmailVerify"></Button>
+            <div class="overflow-hidden flex-center flex-col" v-if="!isVerifyMailSent">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
+                </div>
+                <p class="font-bold mb-24 text-20">信箱尚未驗證！</p>
+                <div class="flex-center w-full gap-12">
+                    <Button
+                        class="w-[50%]"
+                        type="button"
+                        label="送出驗證信"
+                        @click="sendEmailVerify"
+                    ></Button>
+                    <Button
+                        class="w-[50%] bg-gray hover:bg-gray_dark border-none"
+                        type="button"
+                        label="取消"
+                        @click="isDialogVisible = false"
+                    ></Button>
                 </div>
             </div>
-            <div v-else>
-                <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                    >驗證信已寄出，請前往
-                    <span class="text-secondary">Eamil 信箱</span> 驗證。</span
-                >
-                <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                    >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
-                >
-                <div class="flex justify-end gap-2">
-                    <Button type="button" label="了解" @click="isVisible = false"></Button>
+            <div v-else class="flex-center flex-col">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
                 </div>
+                <p class="font-bold mb-16 text-20">驗證信已寄出囉！</p>
+                <p class="block mb-16">
+                    請前往
+                    <span class="text-secondary">{{ email }}</span> 收取驗證信喔！
+                </p>
+                <p class="block mb-24">
+                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
+                </p>
+
+                <Button
+                    class="w-full"
+                    type="button"
+                    label="了解"
+                    @click="isDialogVisible = false"
+                ></Button>
             </div>
         </Dialog>
 
@@ -401,7 +421,7 @@ import BookPreview from '@/components/BookPreview.vue'
 import bookImgLink from '@/assets/js/bookImgLink'
 const orderQty = ref(0)
 const route = useRoute()
-const router = useRouter()
+const { $api } = useNuxtApp()
 
 const previewRefs = ref({})
 
@@ -422,7 +442,7 @@ const { data: productDetail, error: productDetailError } = await useAsyncData(
 
             return productDetailInfo
         } else {
-            const res = await $fetch(
+            const res = await $api(
                 apiList.product.getItemInfo.serverPath.replace(':productId', currentProductId)
             )
 
@@ -454,7 +474,7 @@ const { data: productList } = await useAsyncData('productList', async () => {
         return productList
     }
 
-    const res = await $fetch(apiList.product.getListInfo.serverPath)
+    const res = await $api(apiList.product.getListInfo.serverPath)
 
     // 將productList更新到store
     productStore.$patch({
@@ -544,14 +564,15 @@ const stock = computed(() => {
 const { idToken, emailVerified, email } = storeToRefs(useUserStore())
 const checkout = (product) => {
     if (!idToken.value) {
-        navigateTo('/user/logIn')
+        navigateTo('/user/login')
     } else if (!emailVerified.value) {
-        isVisible.value = true
+        isDialogVisible.value = true
     } else if (ordersInCart.value.length === 0 && orderQty.value === 0) {
         notify('error', '請選擇訂購數量')
     } else {
         addOrder(product)
-        router.push('/cart')
+        // router.push('/cart')
+        navigateTo('/cart')
     }
 }
 
@@ -567,9 +588,8 @@ const openBookPreview = () => {
     }
 }
 
-const { $api } = useNuxtApp()
-const isVisible = ref(false)
-const mailSent = ref(false)
+const isDialogVisible = ref(false)
+const isVerifyMailSent = ref(false)
 
 const sendEmailVerify = async () => {
     const emailVerify = apiList.member.sendEmailVerify
@@ -581,7 +601,7 @@ const sendEmailVerify = async () => {
             }
         })
 
-        mailSent.value = true
+        isVerifyMailSent.value = true
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }

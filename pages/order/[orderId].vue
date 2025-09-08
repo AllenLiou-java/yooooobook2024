@@ -155,6 +155,7 @@ const userStore = useUserStore()
 const { userId, idToken } = storeToRefs(userStore)
 const orderStore = useOrderStore()
 const { userOrderInfo } = storeToRefs(orderStore)
+const { $api } = useNuxtApp()
 
 definePageMeta({
     middleware: (to, from) => {
@@ -183,7 +184,7 @@ const routeList = [
 const { data: orderInfo, error } = await useAsyncData('orderInfo', () => {
     if (!idToken.value) return {}
     if (userOrderInfo.value.length === 0) {
-        return $fetch(
+        return $api(
             apiList.order.getOrderInfo.serverPath.replace(
                 ':userId/:orderId',
                 `${userId.value}/${route.params.orderId}`
@@ -204,7 +205,7 @@ if (error.value?.statusCode === 401) {
     userStore.setUserLogout()
     orderStore.$reset()
     notify('error', '權限失效，請重新登入')
-    await navigateTo('/user/logIn')
+    await navigateTo('/user/login')
 }
 
 const isOrderInfoShow = computed(() => {

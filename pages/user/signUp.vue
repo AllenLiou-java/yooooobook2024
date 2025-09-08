@@ -40,7 +40,7 @@
                     @click="onSubmit"
                 />
 
-                <NuxtLink class="text-center block" to="/user/logIn"
+                <NuxtLink class="text-center block" to="/user/login"
                     ><span
                         class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
                         >已是會員了嗎？馬上登入！</span
@@ -59,13 +59,15 @@ const { $api } = useNuxtApp()
 const userStore = useUserStore()
 const { isUserLoading } = storeToRefs(userStore)
 const errorMsg = ref('')
+const route = useRoute()
 
 useHead({
     title: '會員註冊'
 })
 
 definePageMeta({
-    title: '會員註冊'
+    title: '會員註冊',
+    middleware: 'logged-in-redirect'
 })
 
 useSeoMeta({
@@ -105,7 +107,7 @@ const onSubmit = handleSubmit(async (values, { resetForm }) => {
         resetForm()
 
         await navigateTo({
-            path: '/user/logIn'
+            path: '/user/login'
         })
     } catch (e) {
         const { statusCode, message } = e

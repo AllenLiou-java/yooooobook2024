@@ -120,6 +120,7 @@ const routeList = [
     }
 ]
 
+const { $api } = useNuxtApp()
 const { notify } = useToastifyStore()
 
 const productStore = useProductStore()
@@ -128,7 +129,7 @@ const { data: productList, error } = await useAsyncData('products', () => {
     if (Object.keys(productList).length > 0) {
         return productList
     } else {
-        return $fetch(apiList.product.getListInfo.serverPath)
+        return $api(apiList.product.getListInfo.serverPath)
     }
 })
 

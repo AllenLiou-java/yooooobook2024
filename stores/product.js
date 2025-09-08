@@ -46,7 +46,7 @@ export const useProductStore = defineStore('product', () => {
     const getStock = async (productId) => {
         const productIdList = Object.keys(stockList.value)
         if (productIdList.length === 0 || !productIdList.includes(productId)) {
-            const { qty } = await $fetch(
+            const { qty } = await $api(
                 apiList.stock.getStock.serverPath.replace(':productId', productId)
             )
 

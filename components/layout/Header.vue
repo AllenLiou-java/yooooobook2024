@@ -5,16 +5,56 @@
             v-model:visible="isDialogVisible"
             modal
             header="Email 信箱驗證"
-            :style="{ width: '25rem' }"
+            :showHeader="false"
+            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
         >
-            <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                >驗證信已寄出，請前往 <span class="text-secondary">Eamil 信箱</span> 驗證。</span
-            >
-            <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
-            >
-            <div class="flex justify-end gap-2">
-                <Button type="button" label="了解" @click="isDialogVisible = false"></Button>
+            <div class="flex-center flex-col">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
+                </div>
+                <p class="font-bold mb-16 text-20">驗證信已寄出囉！</p>
+                <p class="block mb-16">
+                    記得前往
+                    <span class="text-secondary">{{ email }}</span> 收取驗證信喔！
+                </p>
+                <p class="block mb-24">
+                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
+                </p>
+
+                <Button
+                    class="w-full"
+                    type="button"
+                    label="了解"
+                    @click="isDialogVisible = false"
+                ></Button>
+            </div>
+        </Dialog>
+        <Dialog
+            v-model:visible="isResetPasswordDialogVisible"
+            modal
+            header="密碼重置"
+            :showHeader="false"
+            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
+        >
+            <div class="flex-center flex-col">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
+                </div>
+                <p class="font-bold mb-16 text-20">重置信件已寄出囉！</p>
+                <p class="block mb-16">
+                    請前往
+                    <span class="text-secondary">{{ email }}</span> 收取重置信喔！
+                </p>
+                <p class="block mb-24">
+                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
+                </p>
+
+                <Button
+                    class="w-full"
+                    type="button"
+                    label="了解"
+                    @click="isResetPasswordDialogVisible = false"
+                ></Button>
             </div>
         </Dialog>
         <BlockUI :blocked="blocked" full-screen />
@@ -139,7 +179,7 @@
                         <template v-if="!isUserLoggedIn">
                             <NuxtLink
                                 no-prefetch
-                                to="/user/logIn"
+                                to="/user/login"
                                 class="text-brown_light cursor-pointer"
                             >
                                 <span class="material-icons align-text-top text-22 mr-6">
@@ -175,24 +215,11 @@
                                     @hide="onPopup = false"
                                 >
                                     <template #item="{ item, props }">
-                                        <!-- <NuxtLink
-                                            v-if="item.route"
-                                            class="gap-8"
-                                            :to="item.route"
-                                            v-bind="props.action"
-                                        >
-                                            <span class="material-icons"> {{ item.icon }} </span>
-                                            <span>{{ item.label }}</span>
-                                        </NuxtLink>
-                                        <p v-else class="px-12 py-8 gap-8" v-bind="props.action">
-                                            <span class="material-icons"> {{ item.icon }} </span>
-                                            <span>{{ item.label }}</span>
-                                        </p> -->
                                         <template v-if="item.route">
                                             <NuxtLink
                                                 class="gap-8"
                                                 :to="item.route"
-                                                v-bind="props.action"
+                                                :class="props.action.class"
                                             >
                                                 <span class="material-icons">
                                                     {{ item.icon }}
@@ -310,14 +337,15 @@
 import TieredMenu from 'primevue/tieredmenu'
 import { useConfirm } from 'primevue/useconfirm'
 import { storeToRefs } from 'pinia'
+const { $api } = useNuxtApp()
 
 const router = useRouter()
-const route = useRoute()
 
 const { notify } = useToastifyStore()
 const visible = ref(false)
 const blocked = ref(false)
 const isDialogVisible = ref(false)
+const isResetPasswordDialogVisible = ref(false)
 
 const orderStore = useOrderStore()
 const { qtyInCart } = storeToRefs(orderStore)
@@ -370,7 +398,7 @@ const { data: productList, error } = await useAsyncData('products', () => {
     if (Object.keys(productList).length > 0) {
         return productList
     } else {
-        return $fetch(apiList.product.getListInfo.serverPath)
+        return $api(apiList.product.getListInfo.serverPath)
     }
 })
 
@@ -398,7 +426,7 @@ const onProductSelect = (event) => {
 
 const userStore = useUserStore()
 const { setUserLogout } = userStore
-const { isUserLoggedIn, userName, idToken, signInProvider } = storeToRefs(userStore)
+const { isUserLoggedIn, userName, idToken, signInProvider, email } = storeToRefs(userStore)
 
 const menu = ref()
 
@@ -417,7 +445,7 @@ const confirmLogout = () => {
     confirm.require({
         group: 'headless',
         header: '登出',
-        message: '您是否確定要登出?',
+        message: '確定要登出?',
         rejectLabel: '取消',
         acceptLabel: '登出',
         accept: () => {
@@ -430,7 +458,23 @@ const confirmLogout = () => {
     })
 }
 
-const { $api } = useNuxtApp()
+const confirmResetPassword = () => {
+    confirm.require({
+        group: 'headless',
+        header: '重設密碼',
+        message: '確定要重設密碼?',
+        rejectLabel: '取消',
+        acceptLabel: '確定',
+        accept: async () => {
+            // setUserLogout()
+            resetPassword()
+        },
+        reject: () => {
+            console.log('logout cancel')
+        }
+    })
+}
+
 const confirmEmailVerify = async () => {
     const emailVerified = useCookie('emailVerified').value
     if (emailVerified) return
@@ -446,6 +490,23 @@ const confirmEmailVerify = async () => {
             }
         })
         isDialogVisible.value = true
+    } catch (e) {
+        notify('error', e.message, e.statusCode)
+    }
+}
+
+const resetPassword = async () => {
+    if (!idToken.value) return
+
+    const sendPasswordResetEmail = apiList.member.sendPasswordResetEmail
+    try {
+        await $api(sendPasswordResetEmail.serverPath, {
+            method: sendPasswordResetEmail.method,
+            body: {
+                email: email.value
+            }
+        })
+        isResetPasswordDialogVisible.value = true
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }
@@ -467,7 +528,12 @@ const updateLoginMenuItem = () => {
         loginMenu.value.push({
             label: '重設密碼',
             icon: 'password',
-            route: '/user/resetPassword'
+            command: () => {
+                // resetPassword()
+                // isResetPasswordDialogVisible.value = true
+                confirmResetPassword()
+            }
+            // route: '/user/resetPassword'
         })
     }
     const emailVerifiedCookie = useCookie('emailVerified').value
@@ -503,7 +569,8 @@ const updateEmailVerify = async () => {
             idToken: cookieidToken
         }
     }).catch((e) => {
-        console.log('e', e.message, e.statusCode)
+        notify('error', e.message, e.statusCode)
+        // console.log('e', e.message, e.statusCode)
     })
 
     if (!userDataResponse) return

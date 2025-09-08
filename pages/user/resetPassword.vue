@@ -3,20 +3,30 @@
         <Dialog
             v-model:visible="isDialogVisible"
             modal
-            header="Email 信箱驗證"
-            :style="{ width: '25rem' }"
+            header="密碼重置"
+            :showHeader="false"
+            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
             @after-hide="mailSent = false"
         >
-            <div>
-                <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                    >重置信件已寄出，請前往 <span class="text-secondary">Eamil 信箱</span> 。</span
-                >
-                <span class="text-surface-500 dark:text-surface-400 block mb-8"
-                    >※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。</span
-                >
-                <div class="flex justify-end gap-2">
-                    <Button type="button" label="了解" @click="isDialogVisible = false"></Button>
+            <div class="flex-center flex-col">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
                 </div>
+                <p class="font-bold mb-16 text-20">重置信件已寄出囉！</p>
+                <p class="block mb-16">
+                    請前往
+                    <span class="text-secondary">{{ email }}</span> 收取重置信喔！
+                </p>
+                <p class="block mb-24">
+                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
+                </p>
+
+                <Button
+                    class="w-full"
+                    type="button"
+                    label="了解"
+                    @click="isDialogVisible = false"
+                ></Button>
             </div>
         </Dialog>
         <div
@@ -63,14 +73,15 @@ import { storeToRefs } from 'pinia'
 const isDialogVisible = ref(false)
 
 const userStore = useUserStore()
-const { isUserLoading } = storeToRefs(userStore)
+const { isUserLoading, email } = storeToRefs(userStore)
 
 useHead({
     title: '忘記密碼'
 })
 
 definePageMeta({
-    title: '忘記密碼'
+    title: '忘記密碼',
+    middleware: 'logged-in-redirect'
 })
 
 useSeoMeta({
