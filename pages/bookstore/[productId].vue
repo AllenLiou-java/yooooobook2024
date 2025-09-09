@@ -60,13 +60,19 @@
                         <hr class="bg-brown my-12" />
                         <div class="flex gap-32">
                             <p>
-                                定價：<del
+                                定價：
+                                <del v-if="isShowDiscountPrice"
                                     >{{
                                         thousandthsFormat(productDetail.price.originalPrice)
                                     }}元</del
                                 >
+                                <span v-else
+                                    >{{
+                                        thousandthsFormat(productDetail.price.originalPrice)
+                                    }}元</span
+                                >
                             </p>
-                            <p class="text-secondary">
+                            <p v-if="isShowDiscountPrice" class="text-secondary">
                                 優惠價：{{ thousandthsFormat(productDetail.price.discount) }}元
                             </p>
                         </div>
@@ -462,6 +468,10 @@ const routeList = [
     }
 ]
 
+const isShowDiscountPrice = computed(() => {
+    return productDetail.value.price.discount > 0
+})
+
 // 載入預覽圖
 const previewBookPhotos = computed(() => {
     const productId = route.params.productId
@@ -474,12 +484,13 @@ const { ordersInCart } = storeToRefs(useOrderStore())
 const addOrder = (product) => {
     if (orderQty.value === 0) return
 
+    // price的部分：如果discount = 0 則使用 originalPrice
     const order = {
         productName: product.name,
         productId: product.productId,
         content: product.content,
         imgSrc: product.imgSrc,
-        discount: product.price.discount,
+        discount: product.price.discount > 0 ? product.price.discount : product.price.originalPrice,
         qty: orderQty.value
     }
 
