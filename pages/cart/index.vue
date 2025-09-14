@@ -517,6 +517,8 @@ const onSubmit = async () => {
         state.isOrderLoading = true
     })
 
+    await updateStock()
+
     await patchOrderInfo({
         name: name.value,
         address: address.value,
@@ -526,8 +528,6 @@ const onSubmit = async () => {
         buyer: buyer.value || '',
         taxId: taxId.value || ''
     })
-
-    await updateStock()
 
     orderStore.$patch((state) => {
         state.isOrderLoading = false

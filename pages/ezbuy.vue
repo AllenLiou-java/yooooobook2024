@@ -1,10 +1,8 @@
 <template>
-    <div class="container flex gap-x-40 gap-y-60 flex-col py-40">
+    <div v-if="isShow" class="container flex gap-x-40 gap-y-60 flex-col py-40">
         <div class="w-full">
             <h1 class="mb-16 text-blue_dark">【2025新書優惠活動】</h1>
-            <p class="mb-8 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">
-                優惠期間：即日起 - 8/31
-            </p>
+            <p class="mb-8 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">優惠期間：即日起 - 9/7</p>
             <img class="mb-16" src="@/assets/images/banner/home_03_pc.jpg" alt="banner_cover" />
 
             <ul class="mb-32 tracking-wide leading-[1.5] text-20">
@@ -94,6 +92,27 @@
             >
         </div>
     </div>
+    <div v-else class="container flex-center gap-x-40 gap-y-60 flex-col py-40">
+        <h1>首波優惠活動已結束</h1>
+        <div class="text-20">
+            <p class="mb-12">
+                感謝各位熱烈支持，《減資篇》與《增資．發行新股增補篇》首波優惠活動已結束。
+            </p>
+            <p class="mb-32">
+                若您仍有購書需求，請持續關注我們的最新消息，或留下聯絡資料，我們將在下次優惠活動時主動通知您。
+            </p>
+            <iframe
+                class="pr-12"
+                src="https://forms.gle/aWdUeppATzAhPvbYA"
+                width="100%"
+                height="600"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0"
+                >載入中…</iframe
+            >
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -111,6 +130,8 @@ useSeoMeta({
     ogImage: '/yooooobook.jpg',
     ogUrl: 'https://www.yooooobook.com/ezbuy'
 })
+
+const isShow = ref(false)
 
 const newBookList = ref([
     {

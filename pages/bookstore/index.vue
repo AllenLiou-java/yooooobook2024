@@ -74,12 +74,20 @@
                         <h3 class="mb-20 h-44">
                             {{ product.name }}
                         </h3>
-                        <p class="mb-4 text-14 line-through">
-                            定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
-                        </p>
-                        <p class="text-secondary mb-12">
-                            優惠價：{{ thousandthsFormat(product.price.discount) }} 元
-                        </p>
+                        <div v-if="product.price.discount > 0">
+                            <p class="mb-4 text-14 line-through">
+                                定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
+                            </p>
+                            <p class="text-secondary mb-12">
+                                優惠價：{{ thousandthsFormat(product.price.discount) }} 元
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p class="mb-32">
+                                定價：{{ thousandthsFormat(product.price.originalPrice) }} 元
+                            </p>
+                        </div>
+
                         <div
                             class="w-full text-blue text-center border border-solid p-8 group-hover:(bg-blue text-white duration-300) lt-md:(bg-blue text-white)"
                         >
