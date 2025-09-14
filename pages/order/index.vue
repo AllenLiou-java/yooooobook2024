@@ -147,7 +147,7 @@
                     <p class="text-20">
                         若要查詢訂單，請先進行<NuxtLink
                             class="underline underline-offset-4"
-                            to="/user/login"
+                            to="/user/logIn"
                             >登入</NuxtLink
                         >
                     </p>

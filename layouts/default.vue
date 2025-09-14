@@ -29,6 +29,64 @@
             </template>
         </ConfirmDialog>
 
+        <Dialog
+            v-model:visible="isVerifyEmailDialogVisible"
+            modal
+            header="Email 信箱驗證"
+            :showHeader="false"
+            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
+        >
+            <div class="flex-center flex-col">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
+                </div>
+                <p class="font-bold mb-16 text-20">驗證信已寄出囉！</p>
+                <p class="block mb-16">
+                    記得前往
+                    <span class="text-secondary">{{ email }}</span> 收取驗證信喔！
+                </p>
+                <p class="block mb-24">
+                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
+                </p>
+
+                <Button
+                    class="w-full"
+                    type="button"
+                    label="了解"
+                    @click="utilityStore.setVerifyEmailDialogVisible(false)"
+                ></Button>
+            </div>
+        </Dialog>
+
+        <Dialog
+            v-model:visible="isResetPasswordDialogVisible"
+            modal
+            header="密碼重置"
+            :showHeader="false"
+            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
+        >
+            <div class="flex-center flex-col">
+                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
+                    <div class="i-me-rocket_launch size-36"></div>
+                </div>
+                <p class="font-bold mb-16 text-20">重置信件已寄出囉！</p>
+                <p class="block mb-16">
+                    請前往
+                    <span class="text-secondary">{{ email }}</span> 收取重置信喔！
+                </p>
+                <p class="block mb-24">
+                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
+                </p>
+
+                <Button
+                    class="w-full"
+                    type="button"
+                    label="了解"
+                    @click="utilityStore.setResetPasswordDialogVisible(false)"
+                ></Button>
+            </div>
+        </Dialog>
+
         <LayoutHeader @set-visible="setVisible" />
         <!-- pt-96 lt-md-pt-13 -->
         <div class="min-h-[calc(100vh-316px)] 7">
@@ -122,6 +180,12 @@ import LayoutHeader from '@/components/layout/Header.vue'
 import LayoutFooter from '@/components/layout/Footer.vue'
 import SideSocialGroup from '@/components/SideSocialGroup.vue'
 import ConfirmDialog from 'primevue/confirmdialog'
+
+const utilityStore = useUtilityStore()
+const { isVerifyEmailDialogVisible, isResetPasswordDialogVisible } = storeToRefs(utilityStore)
+
+const userStore = useUserStore()
+const { email } = storeToRefs(userStore)
 
 const blocked = ref(false)
 

@@ -1,62 +1,6 @@
 <template>
     <!-- fixed -->
     <div class="bg-blue_dark tracking-widest z-999 w-full">
-        <Dialog
-            v-model:visible="isDialogVisible"
-            modal
-            header="Email 信箱驗證"
-            :showHeader="false"
-            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
-        >
-            <div class="flex-center flex-col">
-                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
-                    <div class="i-me-rocket_launch size-36"></div>
-                </div>
-                <p class="font-bold mb-16 text-20">驗證信已寄出囉！</p>
-                <p class="block mb-16">
-                    記得前往
-                    <span class="text-secondary">{{ email }}</span> 收取驗證信喔！
-                </p>
-                <p class="block mb-24">
-                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
-                </p>
-
-                <Button
-                    class="w-full"
-                    type="button"
-                    label="了解"
-                    @click="isDialogVisible = false"
-                ></Button>
-            </div>
-        </Dialog>
-        <Dialog
-            v-model:visible="isResetPasswordDialogVisible"
-            modal
-            header="密碼重置"
-            :showHeader="false"
-            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
-        >
-            <div class="flex-center flex-col">
-                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
-                    <div class="i-me-rocket_launch size-36"></div>
-                </div>
-                <p class="font-bold mb-16 text-20">重置信件已寄出囉！</p>
-                <p class="block mb-16">
-                    請前往
-                    <span class="text-secondary">{{ email }}</span> 收取重置信喔！
-                </p>
-                <p class="block mb-24">
-                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
-                </p>
-
-                <Button
-                    class="w-full"
-                    type="button"
-                    label="了解"
-                    @click="isResetPasswordDialogVisible = false"
-                ></Button>
-            </div>
-        </Dialog>
         <BlockUI :blocked="blocked" full-screen />
         <div class="container py-18 flex-center">
             <div
@@ -161,7 +105,7 @@
                                         />
                                     </template>
                                 </Column>
-                                <Column
+                                <!-- <Column
                                     field="price"
                                     header="價格"
                                     sortable
@@ -170,7 +114,7 @@
                                     <template #body="slotProps">
                                         $ {{ slotProps.data.price.discount }}
                                     </template>
-                                </Column>
+                                </Column> -->
                             </DataTable>
                         </OverlayPanel>
                     </div>
@@ -179,7 +123,7 @@
                         <template v-if="!isUserLoggedIn">
                             <NuxtLink
                                 no-prefetch
-                                to="/user/login"
+                                to="/user/logIn"
                                 class="text-brown_light cursor-pointer"
                             >
                                 <span class="material-icons align-text-top text-22 mr-6">
@@ -344,8 +288,8 @@ const router = useRouter()
 const { notify } = useToastifyStore()
 const visible = ref(false)
 const blocked = ref(false)
-const isDialogVisible = ref(false)
-const isResetPasswordDialogVisible = ref(false)
+
+const utilityStore = useUtilityStore()
 
 const orderStore = useOrderStore()
 const { qtyInCart } = storeToRefs(orderStore)
@@ -489,7 +433,7 @@ const confirmEmailVerify = async () => {
                 idToken
             }
         })
-        isDialogVisible.value = true
+        utilityStore.setVerifyEmailDialogVisible(true)
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }
@@ -506,7 +450,7 @@ const resetPassword = async () => {
                 email: email.value
             }
         })
-        isResetPasswordDialogVisible.value = true
+        utilityStore.setResetPasswordDialogVisible(true)
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }
@@ -529,11 +473,8 @@ const updateLoginMenuItem = () => {
             label: '重設密碼',
             icon: 'password',
             command: () => {
-                // resetPassword()
-                // isResetPasswordDialogVisible.value = true
                 confirmResetPassword()
             }
-            // route: '/user/resetPassword'
         })
     }
     const emailVerifiedCookie = useCookie('emailVerified').value
@@ -570,7 +511,6 @@ const updateEmailVerify = async () => {
         }
     }).catch((e) => {
         notify('error', e.message, e.statusCode)
-        // console.log('e', e.message, e.statusCode)
     })
 
     if (!userDataResponse) return
@@ -581,16 +521,6 @@ const updateEmailVerify = async () => {
     })
 
     useCookie('emailVerified').value = user.emailVerified
-
-    // const patchMemberInfo = apiList.member.patchMemberInfo
-    // await $api(patchMemberInfo.serverPath.replace(':memberId', user.localId), {
-    //     method: patchMemberInfo.method,
-    //     body: {
-    //         memberInfo: {
-    //             emailVerified: user.emailVerified
-    //         }
-    //     }
-    // })
 }
 
 onMounted(async () => {

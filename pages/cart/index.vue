@@ -435,7 +435,7 @@ definePageMeta({
 
             if (!idToken.value) {
                 return navigateTo({
-                    path: '/user/login'
+                    path: '/user/logIn'
                 })
             }
         }

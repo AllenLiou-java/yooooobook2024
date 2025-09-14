@@ -1,34 +1,5 @@
 <template>
     <div v-if="pageInfo">
-        <Dialog
-            v-model:visible="isVisible"
-            modal
-            header="Email 信箱驗證"
-            :showHeader="false"
-            :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
-        >
-            <div class="flex-center flex-col">
-                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
-                    <div class="i-me-rocket_launch size-36"></div>
-                </div>
-                <p class="font-bold mb-16 text-20">感謝您加入會員！</p>
-                <p class="block mb-8">
-                    驗證信已寄出，請前往
-                    <span class="text-secondary">Eamil 信箱</span> 驗證！
-                </p>
-                <p class="block mb-24">
-                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
-                </p>
-
-                <Button
-                    class="w-full"
-                    type="button"
-                    label="了解"
-                    @click="changeDialogVisible(false)"
-                ></Button>
-            </div>
-        </Dialog>
-
         <div class="relative text-white bg-gradient-to-r from-[#153D5B] to-[#082C4B]">
             <div class="container h-500 lt-md:h-360 relative flex items-end lt-sm:flex-col-reverse">
                 <div class="w-full ml-40 mb-20 z-100">
@@ -48,7 +19,7 @@
                 />
             </div>
         </div>
-        <NuxtPage @changeVisible="changeDialogVisible"></NuxtPage>
+        <NuxtPage></NuxtPage>
     </div>
     <div class="h-full" v-else>
         <NuxtPage></NuxtPage>
@@ -60,13 +31,13 @@ definePageMeta({
     middleware: (to, from) => {
         if (to.path === '/user') {
             return navigateTo({
-                path: '/user/login'
+                path: '/user/logIn'
             })
         }
 
         const idToken = useCookie('idToken')
-        const signUpBlock = idToken.value && to.path === '/user/signup'
-        const loginBlock = idToken.value && to.path === '/user/login'
+        const signUpBlock = idToken.value && to.path === '/user/signUp'
+        const loginBlock = idToken.value && to.path === '/user/logIn'
 
         if (signUpBlock || loginBlock) {
             return navigateTo({
@@ -83,11 +54,11 @@ const route = useRoute()
 const pageInfo = computed(() => {
     const pages = [
         {
-            path: '/user/login',
+            path: '/user/logIn',
             name: '會員登入'
         },
         {
-            path: '/user/signup',
+            path: '/user/signUp',
             name: '會員註冊'
         },
         {
@@ -111,12 +82,6 @@ const routeList = computed(() => {
         }
     ]
 })
-
-const isVisible = ref(false)
-
-const changeDialogVisible = (status) => {
-    isVisible.value = status
-}
 </script>
 
 <style lang="scss" scoped></style>

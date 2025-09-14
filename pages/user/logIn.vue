@@ -13,7 +13,12 @@
                         </div>
                         <div class="flex flex-col gap-2 mb-16">
                             <label class="mb-8" for="password">密碼 Password</label>
-                            <VPassword input-id="password" name="password" :feedback="false" />
+                            <VPassword
+                                input-id="password"
+                                name="password"
+                                :feedback="false"
+                                :belongForm="loginForm"
+                            />
                         </div>
                         <p class="text-14 text-red-6">{{ errorMsg }}</p>
                         <NuxtLink
@@ -31,9 +36,9 @@
                                     class: 'absolute left-[calc(50%-36px)]'
                                 }
                             }"
-                            @click="onSubmit"
+                            @click="onLogin"
                         />
-                        <NuxtLink class="text-center" to="/user/signup"
+                        <NuxtLink class="text-center" to="/user/signUp"
                             ><span
                                 class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
                                 >還不是會員嗎?馬上註冊!</span
@@ -79,17 +84,17 @@ definePageMeta({
 useSeoMeta({
     ogTitle: '會員登入 - 有良冊股份有限公司',
     ogImage: '/yooooobook.jpg',
-    ogUrl: 'https://www.yooooobook.com/user/login'
+    ogUrl: 'https://www.yooooobook.com/user/logIn'
 })
 
-const { handleSubmit } = useForm({
+const loginForm = useForm({
     validationSchema: yup.object({
         email: yup.string().email('請確認Email是否正確').required('請填入Email'),
         password: yup.string().min(8, '密碼至少需要8位數').required('請填入密碼')
     })
 })
 
-const onSubmit = handleSubmit(async (values, { resetForm }) => {
+const onLogin = loginForm.handleSubmit(async (values, { resetForm }) => {
     userStore.$patch({
         isUserLoading: true
     })

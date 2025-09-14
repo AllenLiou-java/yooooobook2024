@@ -7,9 +7,8 @@
             header="Email 信箱驗證"
             :showHeader="false"
             :style="{ width: '30rem', margin: '0px 16px', paddingTop: '24px' }"
-            @after-hide="isVerifyMailSent = false"
         >
-            <div class="overflow-hidden flex-center flex-col" v-if="!isVerifyMailSent">
+            <div class="flex-center flex-col">
                 <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
                     <div class="i-me-rocket_launch size-36"></div>
                 </div>
@@ -28,26 +27,6 @@
                         @click="isDialogVisible = false"
                     ></Button>
                 </div>
-            </div>
-            <div v-else class="flex-center flex-col">
-                <div class="border-blue border-solid inline-block p-10 rounded-full mb-24">
-                    <div class="i-me-rocket_launch size-36"></div>
-                </div>
-                <p class="font-bold mb-16 text-20">驗證信已寄出囉！</p>
-                <p class="block mb-16">
-                    請前往
-                    <span class="text-secondary">{{ email }}</span> 收取驗證信喔！
-                </p>
-                <p class="block mb-24">
-                    ※若收件匣無信件，請 <span class="text-secondary">檢查垃圾郵件匣</span>。
-                </p>
-
-                <Button
-                    class="w-full"
-                    type="button"
-                    label="了解"
-                    @click="isDialogVisible = false"
-                ></Button>
             </div>
         </Dialog>
 
@@ -561,10 +540,11 @@ const stock = computed(() => {
     }
 })
 
-const { idToken, emailVerified, email } = storeToRefs(useUserStore())
+const { idToken, emailVerified } = storeToRefs(useUserStore())
+
 const checkout = (product) => {
     if (!idToken.value) {
-        navigateTo('/user/login')
+        navigateTo('/user/logIn')
     } else if (!emailVerified.value) {
         isDialogVisible.value = true
     } else if (ordersInCart.value.length === 0 && orderQty.value === 0) {
@@ -589,9 +569,11 @@ const openBookPreview = () => {
 }
 
 const isDialogVisible = ref(false)
-const isVerifyMailSent = ref(false)
+const utilityStore = useUtilityStore()
 
 const sendEmailVerify = async () => {
+    isDialogVisible.value = false
+
     const emailVerify = apiList.member.sendEmailVerify
     try {
         await $api(emailVerify.serverPath, {
@@ -601,7 +583,7 @@ const sendEmailVerify = async () => {
             }
         })
 
-        isVerifyMailSent.value = true
+        utilityStore.setVerifyEmailDialogVisible(true)
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }

@@ -23,7 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                 refreshTokenCookie.value = null
                 emailVerifiedCookie.value = null
                 signInProviderCookie.value = null
-                await nuxtApp.runWithContext(() => navigateTo('/user/login'))
+                await nuxtApp.runWithContext(() => navigateTo('/user/logIn'))
                 // reloadNuxtApp()
             }
 

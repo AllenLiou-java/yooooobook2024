@@ -205,7 +205,7 @@ if (error.value?.statusCode === 401) {
     userStore.setUserLogout()
     orderStore.$reset()
     notify('error', '權限失效，請重新登入')
-    await navigateTo('/user/login')
+    await navigateTo('/user/logIn')
 }
 
 const isOrderInfoShow = computed(() => {

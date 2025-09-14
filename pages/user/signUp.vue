@@ -40,7 +40,7 @@
                     @click="onSubmit"
                 />
 
-                <NuxtLink class="text-center block" to="/user/login"
+                <NuxtLink class="text-center block" to="/user/logIn"
                     ><span
                         class="text-gray_dark mb-16 pb-4 border-0 border-b-1 border-solid hover:text-black"
                         >已是會員了嗎？馬上登入！</span
@@ -73,10 +73,10 @@ definePageMeta({
 useSeoMeta({
     ogTitle: '會員註冊 - 有良冊股份有限公司',
     ogImage: '/yooooobook.jpg',
-    ogUrl: 'https://www.yooooobook.com/user/signup'
+    ogUrl: 'https://www.yooooobook.com/user/signUp'
 })
 
-const emit = defineEmits(['changeVisible'])
+const utilityStore = useUtilityStore()
 
 const { handleSubmit } = useForm({
     validationSchema: yup.object({
@@ -103,11 +103,11 @@ const onSubmit = handleSubmit(async (values, { resetForm }) => {
         await patchMemberInfoPromise({ name, email, localId }, idToken)
         await sendEmailVerifyPromise(idToken)
 
-        emit('changeVisible', true)
+        utilityStore.setVerifyEmailDialogVisible(true)
         resetForm()
 
         await navigateTo({
-            path: '/user/login'
+            path: '/user/logIn'
         })
     } catch (e) {
         const { statusCode, message } = e
