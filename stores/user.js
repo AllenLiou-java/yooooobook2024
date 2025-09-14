@@ -57,7 +57,7 @@ export const useUserStore = defineStore('user', () => {
             })
         }
 
-        router.back()
+        // router.back()
     }
 
     const setUserLogout = () => {
@@ -80,8 +80,6 @@ export const useUserStore = defineStore('user', () => {
         useCookie('idToken').value = null
         useCookie('refreshToken').value = null
         useCookie('signInProvider').value = null
-
-        notify('info', '登出成功')
     }
 
     const initProfile = () => {

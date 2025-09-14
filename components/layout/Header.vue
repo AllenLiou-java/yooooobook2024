@@ -410,7 +410,6 @@ const confirmResetPassword = () => {
         rejectLabel: '取消',
         acceptLabel: '確定',
         accept: async () => {
-            // setUserLogout()
             resetPassword()
         },
         reject: () => {

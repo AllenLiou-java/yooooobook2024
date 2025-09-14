@@ -24,7 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                 emailVerifiedCookie.value = null
                 signInProviderCookie.value = null
                 await nuxtApp.runWithContext(() => navigateTo('/user/logIn'))
-                // reloadNuxtApp()
+                useUserStore().setUserLogout()
             }
 
             throw createError({ statusCode, message, statusMessage })
