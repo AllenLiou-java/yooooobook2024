@@ -29,20 +29,17 @@
 <script setup>
 definePageMeta({
     middleware: (to, from) => {
-        if (to.path === '/user') {
-            return navigateTo({
-                path: '/user/logIn'
-            })
-        }
-
-        const idToken = useCookie('idToken')
-        const signUpBlock = idToken.value && to.path === '/user/signUp'
-        const loginBlock = idToken.value && to.path === '/user/logIn'
-
-        if (signUpBlock || loginBlock) {
-            return navigateTo({
-                path: '/'
-            })
+        const idToken = useCookie('idToken').value
+        if (idToken) {
+            if (to.path === '/user/signUp' || to.path === '/user/logIn' || to.path === '/user') {
+                return navigateTo('/')
+            }
+        } else {
+            if (to.path === '/user') {
+                return navigateTo({
+                    path: '/user/logIn'
+                })
+            }
         }
     }
 })

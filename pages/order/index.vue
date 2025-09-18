@@ -210,8 +210,6 @@ const { data: orderList, error } = await useAPI(
 
 if (error.value?.statusCode === 401) {
     notify('error', '權限失效，請重新登入')
-    userStore.$reset()
-    orderStore.$reset()
 }
 
 const isTableShow = computed(() => {
@@ -224,10 +222,13 @@ const isTableShow = computed(() => {
 })
 
 onMounted(() => {
-    if (typeof orderList.value === 'string') return
-    orderStore.$patch({
-        userOrderInfo: Object.values(orderList.value)
-    })
+    const orderListArray = Object.values(orderList.value)
+
+    if (orderListArray.lengt > 0) {
+        orderStore.$patch({
+            userOrderInfo: orderListArray
+        })
+    }
 })
 </script>
 

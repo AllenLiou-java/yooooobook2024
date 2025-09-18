@@ -213,7 +213,7 @@ export const useOrderStore = defineStore('order', () => {
     }
 
     function $reset() {
-        ordersInCart.value = []
+        // ordersInCart.value = []
         isOrderLoading.value = false
         userOrderInfo.value = []
     }

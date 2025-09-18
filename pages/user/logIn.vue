@@ -70,7 +70,6 @@ const { isUserLoading } = storeToRefs(userStore)
 const { setUserLoggedin } = useUserStore()
 const errorMsg = ref('')
 const route = useRoute()
-const router = useRouter()
 
 useHead({
     title: '會員登入'

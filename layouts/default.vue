@@ -42,7 +42,7 @@
                 </div>
                 <p class="font-bold mb-16 text-20">驗證信已寄出囉！</p>
                 <p class="block mb-16">
-                    記得前往
+                    記得前往信箱
                     <span class="text-secondary">{{ email }}</span> 收取驗證信喔！
                 </p>
                 <p class="block mb-24">
@@ -71,7 +71,7 @@
                 </div>
                 <p class="font-bold mb-16 text-20">重置信件已寄出囉！</p>
                 <p class="block mb-16">
-                    請前往
+                    請前往信箱
                     <span class="text-secondary">{{ email }}</span> 收取重置信喔！
                 </p>
                 <p class="block mb-24">
@@ -89,7 +89,7 @@
 
         <LayoutHeader @set-visible="setVisible" />
         <!-- pt-96 lt-md-pt-13 -->
-        <div class="min-h-[calc(100vh-316px)] 7">
+        <div>
             <slot />
         </div>
         <LayoutFooter />

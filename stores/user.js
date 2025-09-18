@@ -14,7 +14,6 @@ export const useUserStore = defineStore('user', () => {
     const refreshToken = ref('')
     const signInProvider = ref('')
     const isUserLoading = ref(false)
-    const { notify } = useToastifyStore()
 
     const setUserLoggedin = async (id_token, refresh_token, name) => {
         const router = useRouter()

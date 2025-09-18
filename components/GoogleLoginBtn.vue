@@ -17,6 +17,7 @@
 
 <script setup>
 import { googleTokenLogin } from 'vue3-google-login'
+const route = useRoute()
 
 const userStore = useUserStore()
 const { setUserLoggedin } = userStore
@@ -48,6 +49,7 @@ const handleGoogleLogin = async () => {
         })
 
         if (idToken && refreshToken) setUserLoggedin(idToken, refreshToken)
+        await navigateTo(route.query.redirect_to ?? '/')
     } catch (err) {
         const { status, statusMessage } = err
         if (status && statusMessage) notify('error', '登入失敗')
