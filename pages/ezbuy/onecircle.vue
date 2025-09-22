@@ -1,13 +1,36 @@
 <template>
     <div v-if="isShow" class="container flex gap-x-40 gap-y-60 flex-col py-40">
         <div class="w-full">
-            <h1 class="mb-16 text-blue_dark">【2025新書優惠活動】</h1>
-            <p class="mb-8 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">優惠期間：即日起 - 9/7</p>
-            <img class="mb-16" src="@/assets/images/banner/home_03_pc.jpg" alt="banner_cover" />
+            <h1 class="mb-24 text-blue_dark">【2025同心圓團購活動】</h1>
+            <p class="mb-16 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">
+                優惠期間：即日起 - 9/30
+            </p>
+            <div class="mb-24">
+                <p class="mb-8 leading-24">各位會員，您是否錯過了同心圓的團購了呢？</p>
+                <p class="mb-8 leading-24">
+                    又或者您想追加購買【公司登記實務及案例解析(共三冊)】與
+                    【公司登記實務及案例解析(增資 · 發行新股篇)】呢？
+                </p>
+                <p class="mb-8 leading-24">若您仍有購書需求，記得把握最後的優惠期間唷！</p>
+            </div>
+            <div>
+                <img
+                    class="mb-16 lt-md:hidden"
+                    src="@/assets/images/banner/home_03_pc.jpg"
+                    alt="banner_cover"
+                />
+                <img
+                    class="mb-16 hidden lt-md:block"
+                    src="@/assets/images/banner/home_03_t.jpg"
+                    alt="banner_cover"
+                />
+            </div>
 
             <ul class="mb-32 tracking-wide leading-[1.5] text-20">
                 <li>📘《公司登記實務及案例解析【減資篇】》</li>
                 <li>📘《公司登記實務及案例解析【增資 · 發行新股增補篇】》</li>
+                <li>📘《公司登記實務及案例解析【增資 · 發行新股篇】》</li>
+                <li>📘《公司登記實務及案例解析【共三冊】》</li>
             </ul>
             <div class="mb-32">
                 <h2 class="mb-16 text-blue_dark">【新書簡介】</h2>
@@ -46,7 +69,7 @@
                 </h2>
                 <div class="px-16 py-12 bg-white rounded-6">
                     <p class="text-20 font-bold mb-12">★ 購買流程</p>
-                    <ul class="list-decimal pl-28 tracking-wide leading-[1.5] text-16">
+                    <ul class="list-decimal pl-28 tracking-wide leading-[1.5] text-16 mb-24">
                         <li class="mb-8">填寫表單 (下方)</li>
                         <li class="mb-8">
                             提交表單後，依據以下匯款資訊 安排匯款
@@ -77,12 +100,56 @@
                             )，或是撥打電話 (0978-940-828) 告知匯款 完成
                         </li>
                     </ul>
+                    <div>
+                        <p class="text-20 font-bold mb-12">★ 價目表</p>
+
+                        <table class="text-16 border border-solid border mb-20">
+                            <tbody>
+                                <tr>
+                                    <th class="border border-solid">品項</th>
+                                    <th class="border border-solid">優惠價</th>
+                                </tr>
+                                <tr>
+                                    <td class="border border-solid px-12 py-8 font-semibold w-225">
+                                        【 減資篇 】
+                                    </td>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        1500
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        【 增資 · 發行新股增補篇 】
+                                    </td>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        500
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        【 增資 · 發行新股篇 】
+                                    </td>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        1500
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        套書【共三冊】
+                                    </td>
+                                    <td class="border border-solid px-12 py-8 font-semibold">
+                                        3600
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <iframe
                 class="pr-12"
-                src="https://docs.google.com/forms/d/e/1FAIpQLSf_ND-SCQdSDrHWSmsI9F0VZ9Gq51bG-38vHfcn6XgHQcGNbw/viewform?embedded=true"
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdwZo77QKM3M0kfEhnkOT9kSANyDF-_ISV0iOailA0J2tCaEw/viewform?embedded=true"
                 width="100%"
                 height="600"
                 frameborder="0"
@@ -131,7 +198,7 @@ useSeoMeta({
     ogUrl: 'https://www.yooooobook.com/ezbuy'
 })
 
-const isShow = ref(false)
+const isShow = ref(true)
 
 const newBookList = ref([
     {
@@ -142,7 +209,7 @@ const newBookList = ref([
         slogan: '★ 書表齊全、案例精選，減資申請好幫手！',
         price: {
             originalPrice: 2000,
-            discountPrice: 1800
+            discountPrice: 1500
         },
         preview: [
             {
@@ -164,7 +231,7 @@ const newBookList = ref([
         slogan: '★ 查核報告書附表全公開，節省撰寫時間！',
         price: {
             originalPrice: 800,
-            discountPrice: 600
+            discountPrice: 500
         },
         preview: [
             {
@@ -192,7 +259,7 @@ const oldBookList = ref([
         slogan: '★ 聚焦實務操作，一書掌握增資與發行新股關鍵！',
         price: {
             originalPrice: 2200,
-            discountPrice: 1800
+            discountPrice: 1500
         },
         preview: [
             {
@@ -215,7 +282,7 @@ const oldBookList = ref([
         slogan: '★ 基礎實務技巧全面掌握，協助擴展您的業務！',
         price: {
             originalPrice: 5500,
-            discountPrice: 4500
+            discountPrice: 3600
         },
         preview: [
             {
