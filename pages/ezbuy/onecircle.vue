@@ -26,7 +26,7 @@
                 />
             </div>
 
-            <ul class="mb-32 tracking-wide leading-[1.5] text-20">
+            <ul class="mb-32 tracking-wide leading-[1.5] text-20 lt-md:text-14">
                 <li>📘《公司登記實務及案例解析【減資篇】》</li>
                 <li>📘《公司登記實務及案例解析【增資 · 發行新股增補篇】》</li>
                 <li>📘《公司登記實務及案例解析【增資 · 發行新股篇】》</li>
