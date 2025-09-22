@@ -44,11 +44,7 @@
         /> -->
         <div class="flex-1" @click="openPreviewMode">
             <slot name="openButton">
-                <Button
-                    class="bg-blue_light hover:bg-blue border-none"
-                    :label="tagName"
-                    @click="openPreviewMode"
-                />
+                <Button class="bg-blue_light hover:bg-blue border-none" :label="tagName" />
             </slot>
         </div>
     </div>

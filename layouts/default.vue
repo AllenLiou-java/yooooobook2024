@@ -88,7 +88,7 @@
         </Dialog>
 
         <LayoutHeader @set-visible="setVisible" />
-        <!-- pt-96 lt-md-pt-13 -->
+
         <div>
             <slot />
         </div>

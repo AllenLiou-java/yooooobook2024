@@ -428,7 +428,7 @@ const { data: productDetail, error: productDetailError } = await useAsyncData(
             return productDetailInfo
         } else {
             const res = await $api(
-                apiList.product.getItemInfo.serverPath.replace(':productId', currentProductId)
+                apiList.product.getDetailItemInfo.serverPath.replace(':productId', currentProductId)
             )
 
             // 將productDetail更新到store的productDetailList
@@ -459,7 +459,7 @@ const { data: productList } = await useAsyncData('productList', async () => {
         return productList
     }
 
-    const res = await $api(apiList.product.getListInfo.serverPath)
+    const res = await $api(apiList.product.getSimpleListInfo.serverPath)
 
     // 將productList更新到store
     productStore.$patch({
@@ -523,6 +523,8 @@ const addOrder = (product) => {
         discount: product.price.discount > 0 ? product.price.discount : product.price.originalPrice,
         qty: orderQty.value
     }
+
+    console.log(order)
 
     addOrderInCart(order)
     addOrderInStorage(order)

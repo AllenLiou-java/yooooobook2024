@@ -76,14 +76,26 @@ const stock = {
 }
 
 const product = {
-    getListInfo: {
+    getSimpleListInfo: {
         url: '/products.json',
-        serverPath: '/api/products',
+        serverPath: '/api/products/simple',
         method: 'get'
     },
-    getItemInfo: {
+    getDetailListInfo: {
+        url: '/products_simple.json',
+        serverPath: '/api/products/detail',
+        method: 'get'
+    },
+    getDetailItemInfo: {
         url: '/products/:id.json',
-        serverPath: '/api/products/:productId',
+        serverPath: '/api/products/detail/:productId',
+        method: 'get'
+    }
+}
+
+const groupBuying = {
+    getGroupBuyingPlan: {
+        serverPath: '/api/groupBuying/:groupId/:planId',
         method: 'get'
     }
 }
@@ -117,5 +129,6 @@ export const apiList = {
     member,
     stock,
     product,
+    groupBuying,
     order
 }

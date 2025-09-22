@@ -1,5 +1,8 @@
 <template>
-    <div v-if="isShow" class="container flex gap-x-40 gap-y-60 flex-col py-40">
+    <div
+        v-if="isShow"
+        class="container flex gap-x-40 gap-y-60 flex-col py-40 min-h-[calc(100vh-96px-346px)]"
+    >
         <div class="w-full">
             <h1 class="mb-16 text-blue_dark">【2025新書優惠活動】</h1>
             <p class="mb-8 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">優惠期間：即日起 - 9/7</p>
@@ -131,7 +134,7 @@ useSeoMeta({
     ogUrl: 'https://www.yooooobook.com/ezbuy'
 })
 
-const isShow = ref(false)
+const isShow = ref(true)
 
 const newBookList = ref([
     {
@@ -144,12 +147,12 @@ const newBookList = ref([
             originalPrice: 2000,
             discountPrice: 1800
         },
-        preview: [
-            {
-                name: '減資篇',
-                linkUrl: 'https://www.yooooobook.com/bookstore/AA00004?preview=減資篇'
-            }
-        ],
+        // preview: [
+        //     {
+        //         name: '減資篇',
+        //         linkUrl: 'https://www.yooooobook.com/bookstore/AA00004?preview=減資篇'
+        //     }
+        // ],
         content: [
             '針對 有限公司、股份有限公司 及 無票面金額股股份有限公司之 減資變更登記 實務，蒐集多起特殊案例，詳列 應備書表與案例中 查核報告書應製附表 ，協助辦理相關變更登記事項。'
         ],
@@ -166,12 +169,12 @@ const newBookList = ref([
             originalPrice: 800,
             discountPrice: 600
         },
-        preview: [
-            {
-                name: '增資·發行新股增補篇',
-                linkUrl: 'https://www.yooooobook.com/bookstore/AA00003?preview=增資·發行新股增補篇'
-            }
-        ],
+        // preview: [
+        //     {
+        //         name: '增資·發行新股增補篇',
+        //         linkUrl: 'https://www.yooooobook.com/bookstore/AA00003?preview=增資·發行新股增補篇'
+        //     }
+        // ],
         content: [
             '依據【增資．發行新股篇】一書中各項變更登記案例情形，彙編製作查核報告書所需的各式查核附表。',
             '增補資料包括： 資本額變動表、減資明細表、股東繳納現金股款明細表、股息紅利轉增資配股明細表、盈餘分配表 等附表。'
@@ -194,12 +197,12 @@ const oldBookList = ref([
             originalPrice: 2200,
             discountPrice: 1800
         },
-        preview: [
-            {
-                name: '增資·發行新股篇',
-                linkUrl: 'https://www.yooooobook.com/bookstore/AA00002?preview=增資·發行新股篇'
-            }
-        ],
+        // preview: [
+        //     {
+        //         name: '增資·發行新股篇',
+        //         linkUrl: 'https://www.yooooobook.com/bookstore/AA00002?preview=增資·發行新股篇'
+        //     }
+        // ],
         content: [
             '建立在「公司登記實務及案例解析(共三冊)」之基礎下，做更進一步的延伸探討。',
             '將各種常見之有限公司增資及股份有限公司發行新股時，可能會涉及其他變更登記事項情形，以個案方式呈現該類型變更登記應附送書表之注意事項。'
@@ -217,20 +220,20 @@ const oldBookList = ref([
             originalPrice: 5500,
             discountPrice: 4500
         },
-        preview: [
-            {
-                name: '有限公司篇',
-                linkUrl: 'https://www.yooooobook.com/bookstore/AA00001?preview=有限公司篇'
-            },
-            {
-                name: '股份有限公司篇',
-                linkUrl: 'https://www.yooooobook.com/bookstore/AA00001?preview=股份有限公司篇'
-            },
-            {
-                name: '應備文件詳析篇',
-                linkUrl: 'https://www.yooooobook.com/bookstore/AA00001?preview=應備文件詳析篇'
-            }
-        ],
+        // preview: [
+        //     {
+        //         name: '有限公司篇',
+        //         linkUrl: 'https://www.yooooobook.com/bookstore/AA00001?preview=有限公司篇'
+        //     },
+        //     {
+        //         name: '股份有限公司篇',
+        //         linkUrl: 'https://www.yooooobook.com/bookstore/AA00001?preview=股份有限公司篇'
+        //     },
+        //     {
+        //         name: '應備文件詳析篇',
+        //         linkUrl: 'https://www.yooooobook.com/bookstore/AA00001?preview=應備文件詳析篇'
+        //     }
+        // ],
         content: [
             '完整收錄有限公司、股份有限公司各式登記事項範例，讓您一目了然。',
             '將法令規定與實務完美連結，易讀好懂且於法有據，為您提供最實用的指引'

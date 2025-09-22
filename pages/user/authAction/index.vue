@@ -1,28 +1,6 @@
 <template>
     <div class="container flex-center flex-col h-[calc(100vh-96px-346px)]">
         <template v-if="mode === 'verifyEmail'">
-            <!-- <template v-if="verifyEmailData">
-                <div class="flex-center flex-col">
-                    <i class="i-me-verification-success size-80 text-blue mb-40" />
-                    <h1 class="mb-24">信箱驗證成功</h1>
-                    <p class="mb-40 text-20">
-                        歡迎加入有良冊，您的帳號已正式啟用，快開始探索更多優良的出版品吧！
-                    </p>
-                    <div class="flex-center gap-16">
-                        <NuxtLink
-                            class="bg-blue hover:bg-blue_dark px-16 py-12 text-white font-bold cursor-pointer inline-block"
-                            to="/"
-                            >前往首頁</NuxtLink
-                        >
-                        <NuxtLink
-                            class="bg-secondary hover:bg-[#d80545] px-16 py-12 text-white font-bold cursor-pointer inline-block"
-                            to="/bookstore"
-                            >前往書籍專區</NuxtLink
-                        >
-                    </div>
-                </div>
-            </template> -->
-
             <template v-if="verifyEmailError">
                 <div class="text-center">
                     <i class="i-me-verification-failed size-80 text-secondary mb-40" />
