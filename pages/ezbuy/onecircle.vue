@@ -3,7 +3,7 @@
         <div class="w-full">
             <h1 class="mb-24 text-blue_dark">【2025同心圓團購活動】</h1>
             <p class="mb-16 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">
-                優惠期間：即日起 - 9/30
+                優惠期間：即日起 - 10/3
             </p>
             <div class="mb-24">
                 <p class="mb-8 leading-24">各位會員，您是否錯過了同心圓的團購了呢？</p>
@@ -26,11 +26,11 @@
                 />
             </div>
 
-            <ul class="mb-32 tracking-wide leading-[1.5] text-20 lt-md:text-14">
-                <li>📘《公司登記實務及案例解析【減資篇】》</li>
-                <li>📘《公司登記實務及案例解析【增資 · 發行新股增補篇】》</li>
-                <li>📘《公司登記實務及案例解析【增資 · 發行新股篇】》</li>
-                <li>📘《公司登記實務及案例解析【共三冊】》</li>
+            <ul class="mb-32 tracking-wide leading-[1.5] text-20">
+                <li>📘【減資篇】</li>
+                <li>📘【增資 · 發行新股增補篇】</li>
+                <li>📘【增資 · 發行新股篇】</li>
+                <li>📘 基礎篇【共三冊】</li>
             </ul>
             <div class="mb-32">
                 <h2 class="mb-16 text-blue_dark">【新書簡介】</h2>
