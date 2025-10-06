@@ -163,7 +163,7 @@
         <h1>首波優惠活動已結束</h1>
         <div class="text-20">
             <p class="mb-12">
-                感謝各位熱烈支持，《減資篇》與《增資．發行新股增補篇》首波優惠活動已結束。
+                感謝各位同圓心會計師的熱烈支持，《減資篇》與《增資．發行新股增補篇》首波優惠活動已結束。
             </p>
             <p class="mb-32">
                 若您仍有購書需求，請持續關注我們的最新消息，或留下聯絡資料，我們將在下次優惠活動時主動通知您。
@@ -198,7 +198,7 @@ useSeoMeta({
     ogUrl: 'https://www.yooooobook.com/ezbuy'
 })
 
-const isShow = ref(true)
+const isShow = ref(false)
 
 const newBookList = ref([
     {
