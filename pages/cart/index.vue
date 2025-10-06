@@ -109,18 +109,20 @@
                                     }}</small>
                                 </div>
                                 <!-- <div class="flex flex-col gap-2 mb-16">
-                  <label class="mb-8" for="email">Email</label>
-                  <input
-                    id="email"
-                    v-bind="emailAttrs"
-                    v-model="email"
-                    type="email"
-                    class="rounded-0 border-gray_dark border-1 px-12 py-8 focus:(outline-none ring-2 ring-gray_dark border-0) mb-4"
-                    autocomplete="email"
-                    placeholder="example@gmail.com"
-                  />
-                  <small class="text-secondary text-14">{{ basicErrors.email }}</small>
-                </div> -->
+                                    <label class="mb-8" for="email">Email</label>
+                                    <input
+                                        id="email"
+                                        v-bind="emailAttrs"
+                                        v-model="email"
+                                        type="email"
+                                        class="rounded-0 border-gray_dark border-1 px-12 py-8 focus:(outline-none ring-2 ring-gray_dark border-0) mb-4"
+                                        autocomplete="email"
+                                        placeholder="example@gmail.com"
+                                    />
+                                    <small class="text-secondary text-14">{{
+                                        basicErrors.email
+                                    }}</small>
+                                </div> -->
                                 <div class="flex flex-col gap-2 mb-16">
                                     <label class="mb-8" for="phone">聯絡電話</label>
                                     <input
@@ -329,9 +331,15 @@
                                             </td>
                                         </tr>
                                         <!-- <tr>
-                      <td class="border border-solid px-12 py-8 font-semibold">Email</td>
-                      <td class="border border-solid px-12 py-8">{{ email }}</td>
-                    </tr> -->
+                                            <td
+                                                class="border border-solid px-12 py-8 font-semibold"
+                                            >
+                                                Email
+                                            </td>
+                                            <td class="border border-solid px-12 py-8">
+                                                {{ email }}
+                                            </td>
+                                        </tr> -->
                                         <tr>
                                             <td
                                                 class="border border-solid px-12 py-8 font-semibold"
@@ -414,6 +422,7 @@
                 </StepperPanel>
             </Stepper>
         </div>
+        <button @click="getAllStock">test</button>
     </div>
 </template>
 
@@ -431,9 +440,9 @@ import IconConfirm from '@/components/icon/Confirm.vue'
 definePageMeta({
     middleware: [
         function (to, from) {
-            const idToken = useCookie('idToken')
+            const idToken = useCookie('idToken').value
 
-            if (!idToken.value) {
+            if (!idToken) {
                 return navigateTo({
                     path: '/user/logIn'
                 })
@@ -446,9 +455,10 @@ const active = ref(0)
 
 const orderStore = useOrderStore()
 const { ordersInCart, isOrderLoading } = storeToRefs(orderStore)
-const { patchOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder } = orderStore
+const { patchOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder, clearAllOrder } =
+    orderStore
 
-const { updateStock, getStock } = useProductStore()
+const { updateStock, getStockById, getAllStock } = useProductStore()
 const { stockList } = storeToRefs(useProductStore())
 
 const totalPrice = computed(() => {
@@ -517,8 +527,6 @@ const onSubmit = async () => {
         state.isOrderLoading = true
     })
 
-    await updateStock()
-
     await patchOrderInfo({
         name: name.value,
         address: address.value,
@@ -528,6 +536,9 @@ const onSubmit = async () => {
         buyer: buyer.value || '',
         taxId: taxId.value || ''
     })
+
+    await updateStock()
+    clearAllOrder()
 
     orderStore.$patch((state) => {
         state.isOrderLoading = false
@@ -558,7 +569,7 @@ const updateOrderQty = async (calculateType, productId) => {
             })
         }
     } else {
-        await getStock(productId)
+        await getStockById(productId)
         const stock = stockList.value[productId]
         if (orderList[orderIndex].qty + 1 <= stock) {
             updateOrderQtyInCart(productId, 1)

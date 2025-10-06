@@ -27,7 +27,7 @@
             <CardBookOrder
                 class="w-[calc(33%-16px)] lt-xl:w-[calc(50%-20px)] lt-md:w-full shrink-0"
                 v-for="productDetail in groupBuyingPlan.products"
-                :bookInfo="productDetail"
+                v-bind="productDetail"
                 @addOrder="addOrderEmit"
                 @checkout="checkoutEmit"
             />
@@ -38,6 +38,7 @@
 <script setup>
 const route = useRoute()
 const { groupId, planId } = route.params
+const router = useRouter()
 
 const { $api } = useNuxtApp()
 
@@ -57,12 +58,26 @@ const { data: groupBuyingPlan, error } = await useAsyncData('groupBuyingPlan', a
     return info
 })
 
-const addOrderEmit = (val) => {
-    console.log('addOrderEmit', val)
+// 取得產品庫存
+await callOnce(async () => {
+    await productStore.getAllStock()
+})
+
+const { addOrderInCart, addOrderInStorage } = useOrderStore()
+const addOrderEmit = (order) => {
+    addOrderInCart(order)
+    addOrderInStorage(order)
 }
 
-const checkoutEmit = (val) => {
-    console.log('checkoutEmit', val)
+const checkoutEmit = (order) => {
+    addOrderEmit(order)
+    router.push({
+        name: 'cart',
+        query: {
+            id: 'ezbuy'
+        }
+    })
+    // navigateTo('/cart')
 }
 
 onBeforeUnmount(() => {

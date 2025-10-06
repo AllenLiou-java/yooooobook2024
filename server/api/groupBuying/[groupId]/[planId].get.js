@@ -35,9 +35,10 @@ export default defineEventHandler(async (event) => {
     })
         .then((result) => {
             const productList = Object.values(result).map((item) => {
-                const { name, bookIntroduction, imgSrc, productId } = item
+                const { name, content, bookIntroduction, imgSrc, productId } = item
                 return {
                     name,
+                    content,
                     bookIntroduction,
                     imgSrc,
                     productId

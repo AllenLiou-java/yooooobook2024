@@ -12,47 +12,37 @@ export const useOrderStore = defineStore('order', () => {
 
     function addOrderInCart(order) {
         const orderList = ordersInCart.value
-        if (orderList.length === 0) {
+        const orderIndex = orderList.findIndex((item) => item.productId === order.productId)
+
+        if (orderIndex === -1) {
             orderList.push(order)
         } else {
-            const orderIndex = orderList.findIndex(
-                (orderItem) => orderItem.productId === order.productId
-            )
-            if (orderIndex < 0) {
-                orderList.push(order)
-            } else if (orderList[orderIndex].qty + order.qty <= stockList[order.productId]) {
-                orderList[orderIndex].qty += order.qty
-            } else {
-                orderList[orderIndex].qty = stockList[order.productId]
-            }
-            ordersInCart.value = orderList
+            const maxStock = stockList[order.productId]
+            // Math.min 決定訂購數量要加總還是取上限
+            orderList[orderIndex].qty = Math.min(orderList[orderIndex].qty + order.qty, maxStock)
         }
+
+        ordersInCart.value = orderList
     }
 
     function addOrderInStorage(order) {
         const orderList = JSON.parse(localStorage.getItem('orderList')) || []
-        const orderIndex = orderList.findIndex(
-            (orderItem) => orderItem.productId === order.productId
-        )
-        if (orderIndex < 0) {
+        const orderIndex = orderList.findIndex((item) => item.productId === order.productId)
+
+        if (orderIndex === -1) {
             orderList.push(order)
-            localStorage.setItem('orderList', JSON.stringify(orderList))
-        } else if (orderList[orderIndex].qty + order.qty <= stockList[order.productId]) {
-            orderList[orderIndex].qty += order.qty
-            localStorage.setItem('orderList', JSON.stringify(orderList))
         } else {
-            orderList[orderIndex].qty = stockList[order.productId]
-            localStorage.setItem('orderList', JSON.stringify(orderList))
+            const maxStock = stockList[order.productId]
+            // Math.min 決定訂購數量要加總還是取上限
+            orderList[orderIndex].qty = Math.min(orderList[orderIndex].qty + order.qty, maxStock)
         }
+
+        localStorage.setItem('orderList', JSON.stringify(orderList))
     }
 
     function updateOrderQtyInCart(productId, additionalQty) {
-        // if (order.qty === 0) return
-
-        const orderList = ordersInCart.value
-        const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
-        orderList[orderIndex].qty += additionalQty
-        ordersInCart.value = orderList
+        const order = ordersInCart.value.find((item) => item.productId === productId)
+        if (order) order.qty += additionalQty
     }
 
     function setOrderInStorage(productId, additionalQty) {
@@ -83,70 +73,51 @@ export const useOrderStore = defineStore('order', () => {
         localStorage.removeItem('orderList')
     }
 
-    function setTimeDateFmt(s) {
-        return s < 10 ? '0' + s : s
-    }
+    // 共用補 0 工具
+    const pad = (n) => String(n).padStart(2, '0')
 
-    function oderDateCreater() {
+    // 產生日期字串
+    function orderDateCreater() {
         const now = new Date()
-        const _year = now.getFullYear()
-        let _month = now.getMonth() + 1
-        let _day = now.getDate()
-        let _hour = now.getHours()
-        let _minutes = now.getMinutes()
+        const year = now.getFullYear()
+        const month = pad(now.getMonth() + 1)
+        const day = pad(now.getDate())
+        const hour = pad(now.getHours())
+        const minutes = pad(now.getMinutes())
 
-        _month = setTimeDateFmt(_month)
-        _day = setTimeDateFmt(_day)
-        _hour = setTimeDateFmt(_hour)
-        _minutes = setTimeDateFmt(_minutes)
-
-        const orderDate = `${_year.toString()}/${_month.toString()}/${_day} ${_hour}:${_minutes}`
-        return orderDate
+        return `${year}/${month}/${day} ${hour}:${minutes}`
     }
 
+    // 產生訂單 ID
     function orderIdCreater() {
         const now = new Date()
-        const _year = now.getFullYear()
-        let _month = now.getMonth() + 1
-        let _day = now.getDate()
-        let _hour = now.getHours()
-        let _minutes = now.getMinutes()
-        let _seconds = now.getSeconds()
+        const year = String(now.getFullYear()).slice(2)
+        const month = pad(now.getMonth() + 1)
+        const day = pad(now.getDate())
+        const hour = pad(now.getHours())
+        const minutes = pad(now.getMinutes())
+        const seconds = pad(now.getSeconds())
+        const random = Math.floor(Math.random() * 900 + 100) // 100–999
 
-        _month = setTimeDateFmt(_month)
-        _day = setTimeDateFmt(_day)
-        _hour = setTimeDateFmt(_hour)
-        _minutes = setTimeDateFmt(_minutes)
-        _seconds = setTimeDateFmt(_seconds)
-        const orderCode =
-            _year.toString().slice(2, 4) +
-            _month.toString() +
-            _day +
-            _hour +
-            _minutes +
-            _seconds +
-            Math.round(Math.random() * (999 - 100) + 100).toString()
-
-        return orderCode
+        return `${year}${month}${day}${hour}${minutes}${seconds}${random}`
     }
 
-    async function patchOrderInfo(oderInfo) {
-        const { name, address, email, phone, bankAccountNo, buyer, taxId } = oderInfo
+    async function patchOrderInfo(orderInfo) {
+        const { name, address, email, phone, bankAccountNo, buyer, taxId } = orderInfo
 
-        const orderList = ordersInCart.value.map((orderItem) => {
-            const { productName, productId, content, imgSrc, discount, qty } = orderItem
-            return {
+        const orderList = ordersInCart.value.map(
+            ({ productName, productId, content, imgSrc, discount, qty }) => ({
                 productId,
                 productName,
                 qty,
-                totalPrice: discount * qty,
                 unitPrice: discount,
+                totalPrice: discount * qty,
                 content,
                 imgSrc
-            }
-        })
+            })
+        )
 
-        const orderListTotalPrice = orderList.reduce((sum, item) => sum + item.totalPrice, 0)
+        const totalPrice = orderList.reduce((sum, i) => sum + i.totalPrice, 0)
 
         const info = {
             buyer,
@@ -160,8 +131,8 @@ export const useOrderStore = defineStore('order', () => {
             bankAccountNo,
             orderId: orderIdCreater(),
             orderList,
-            totalPrice: orderListTotalPrice,
-            oderDate: oderDateCreater(),
+            totalPrice,
+            oderDate: orderDateCreater(),
             status: '1',
             isClosed: false,
             delivery: {
@@ -176,39 +147,39 @@ export const useOrderStore = defineStore('order', () => {
 
         const { notify } = useToastifyStore()
         const { idToken, userId } = useUserStore()
+        if (!idToken) return
 
-        if (idToken) {
-            try {
-                const { $api } = useNuxtApp()
+        try {
+            const { $api } = useNuxtApp()
 
-                await $api(
-                    apiList.order.patchOrderInfo.serverPath.replace(
-                        ':userId/:orderId',
-                        `${userId}/${info.orderId}`
-                    ),
-                    {
-                        method: apiList.order.patchOrderInfo.method,
-                        body: info
-                    }
-                )
+            // 更新訂單
+            await $api(
+                apiList.order.patchOrderInfo.serverPath.replace(
+                    ':userId/:orderId',
+                    `${userId}/${info.orderId}`
+                ),
+                {
+                    method: apiList.order.patchOrderInfo.method,
+                    body: info
+                }
+            )
 
-                await $api('/api/mail/orderComfirmed', {
-                    method: 'post',
-                    body: {
-                        orderInfo: info
-                    }
-                })
+            // 寄訂單確認信
+            await $api('/api/mail/orderComfirmed', {
+                method: 'post',
+                body: {
+                    orderInfo: info
+                }
+            })
 
-                clearAllOrder()
+            // 導向成功頁面
+            await useRouter().push({
+                path: `/cart/success/${info.orderId}`
+            })
 
-                await useRouter().push({
-                    path: `/cart/success/${info.orderId}`
-                })
-
-                notify('info', '訂單資訊已發送至指定信箱')
-            } catch (e) {
-                notify('error', e.message, e.statusCode)
-            }
+            notify('info', '訂單資訊已發送至指定信箱')
+        } catch (e) {
+            notify('error', e.message, e.statusCode)
         }
     }
 
@@ -230,8 +201,7 @@ export const useOrderStore = defineStore('order', () => {
         setOrderInStorage,
         deleteOrder,
         clearAllOrder,
-        setTimeDateFmt,
-        oderDateCreater,
+        orderDateCreater,
         orderIdCreater,
         patchOrderInfo,
         $reset

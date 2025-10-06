@@ -116,7 +116,7 @@
                                 show-buttons
                                 button-layout="horizontal"
                                 :min="0"
-                                :max="_stock.qty"
+                                :max="stock.qty"
                                 input-class="w-80"
                             >
                                 <template #incrementbuttonicon>
@@ -127,9 +127,9 @@
                                 </template>
                             </InputNumber>
                         </div>
-                        <p class="mb-16">庫存： {{ stock }}</p>
+                        <p class="mb-16">庫存： {{ stock.qty > 100 ? '>100' : stock.qty }}</p>
                         <div class="flex text-white gap-12">
-                            <template v-if="_stock.qty > 0">
+                            <template v-if="stock.qty > 0">
                                 <div
                                     class="max-w-200 w-full bg-blue text-center py-16 rounded-3xl cursor-pointer hover:bg-blue_dark"
                                     @click="addOrder(productDetail)"
@@ -412,32 +412,28 @@ const previewRefs = ref({})
 
 // 取得指定產品資料
 const productStore = useProductStore()
+const { productDetailList } = storeToRefs(productStore)
 const { notify } = useToastifyStore()
 
 const { data: productDetail, error: productDetailError } = await useAsyncData(
-    'product',
+    'productDetail',
     async () => {
-        const productDetailList = storeToRefs(productStore).productDetailList
-        const currentProductId = route.params.productId
+        const productId = route.params.productId
 
-        if (productDetailList.value.some((item) => item.productId === currentProductId)) {
-            const productDetailInfo = productDetailList.value.find(
-                (item) => item.productId === currentProductId
+        // 先在 store 找現有的
+        let productDetailInfo = productDetailList.value.find((item) => item.productId === productId)
+
+        // 如果沒有就從 API 抓並更新 store
+        if (!productDetailInfo) {
+            productDetailInfo = await $api(
+                apiList.product.getDetailItemInfo.serverPath.replace(':productId', productId)
             )
-
-            return productDetailInfo
-        } else {
-            const res = await $api(
-                apiList.product.getDetailItemInfo.serverPath.replace(':productId', currentProductId)
-            )
-
-            // 將productDetail更新到store的productDetailList
             productStore.$patch({
-                productDetailList: [...productDetailList.value, res]
+                productDetailList: [...productDetailList.value, productDetailInfo]
             })
-
-            return res
         }
+
+        return productDetailInfo
     }
 )
 
@@ -453,19 +449,17 @@ if (productDetailError.value) {
 
 // 取得所有產品列表
 const { data: productList } = await useAsyncData('productList', async () => {
-    const productList = productStore.productList
+    // 先從 store 取
+    let list = productStore.productList
 
-    if (Object.keys(productList).length > 0) {
-        return productList
+    // 如果 store 沒有再抓 API
+    if (!list.length) {
+        list = await $api(apiList.product.getSimpleListInfo.serverPath)
+
+        productStore.$patch({ productList: list })
     }
 
-    const res = await $api(apiList.product.getSimpleListInfo.serverPath)
-
-    // 將productList更新到store
-    productStore.$patch({
-        productList: res
-    })
-    return res
+    return list
 })
 
 useHead({
@@ -503,14 +497,13 @@ const isShowDiscountPrice = computed(() => {
 })
 
 // 載入預覽圖
-const previewBookPhotos = computed(() => {
-    const productId = route.params.productId
-    if (typeof bookImgLink[productId] !== 'object') return []
-    return Object.values(bookImgLink[productId])
-})
+// bookImgLink[route.params.productId] ?? {}
+// → 如果是 null 或 undefined 就回傳 {}
+const previewBookPhotos = computed(() => Object.values(bookImgLink[route.params.productId] ?? {}))
 
 const { addOrderInCart, addOrderInStorage } = useOrderStore()
 const { ordersInCart } = storeToRefs(useOrderStore())
+
 const addOrder = (product) => {
     if (orderQty.value === 0) return
 
@@ -524,16 +517,14 @@ const addOrder = (product) => {
         qty: orderQty.value
     }
 
-    console.log(order)
-
     addOrderInCart(order)
     addOrderInStorage(order)
     orderQty.value = 0
 }
 
 // 取得產品庫存
-const { data: _stock, error: stockError } = await useAPI(
-    apiList.stock.getStock.serverPath.replace(':productId', route.params.productId)
+const { data: stock, error: stockError } = await useAPI(
+    apiList.stock.getStockById.serverPath.replace(':productId', route.params.productId)
 )
 
 if (stockError.value) {
@@ -544,14 +535,6 @@ if (stockError.value) {
         fatal: true
     })
 }
-
-const stock = computed(() => {
-    if (_stock.value.qty >= 100) {
-        return '>100'
-    } else {
-        return _stock.value.qty
-    }
-})
 
 const { idToken, emailVerified } = storeToRefs(useUserStore())
 
@@ -564,7 +547,6 @@ const checkout = (product) => {
         notify('error', '請選擇訂購數量')
     } else {
         addOrder(product)
-        // router.push('/cart')
         navigateTo('/cart')
     }
 }
@@ -582,7 +564,7 @@ const openBookPreview = () => {
 }
 
 const isDialogVisible = ref(false)
-const utilityStore = useUtilityStore()
+const { setVerifyEmailDialogVisible } = useUtilityStore()
 
 const sendEmailVerify = async () => {
     isDialogVisible.value = false
@@ -596,15 +578,15 @@ const sendEmailVerify = async () => {
             }
         })
 
-        utilityStore.setVerifyEmailDialogVisible(true)
+        setVerifyEmailDialogVisible(true)
     } catch (e) {
         notify('error', e.message, e.statusCode)
     }
 }
 
 onMounted(() => {
-    if (_stock.value?.qty) {
-        productStore.setStockList(route.params.productId, _stock.value.qty)
+    if (stock.value?.qty) {
+        productStore.setStockList(route.params.productId, stock.value.qty)
     }
 
     openBookPreview()

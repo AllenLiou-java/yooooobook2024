@@ -63,12 +63,22 @@ const member = {
 }
 
 const stock = {
-    getStock: {
+    getAllStock: {
+        url: '/stock.json',
+        serverPath: '/api/stock',
+        method: 'get'
+    },
+    patchAllStock: {
+        url: '/stock.json',
+        serverPath: '/api/stock',
+        method: 'patch'
+    },
+    getStockById: {
         url: '/stock/:id.json',
         serverPath: '/api/stock/:productId',
         method: 'get'
     },
-    patchStock: {
+    patchStockById: {
         url: '/stock/:id.json',
         serverPath: '/api/stock/:productId',
         method: 'patch'

@@ -53,7 +53,7 @@
                     class="w-full"
                     type="button"
                     label="了解"
-                    @click="utilityStore.setVerifyEmailDialogVisible(false)"
+                    @click="setVerifyEmailDialogVisible(false)"
                 ></Button>
             </div>
         </Dialog>
@@ -82,7 +82,7 @@
                     class="w-full"
                     type="button"
                     label="了解"
-                    @click="utilityStore.setResetPasswordDialogVisible(false)"
+                    @click="setResetPasswordDialogVisible(false)"
                 ></Button>
             </div>
         </Dialog>
@@ -183,6 +183,7 @@ import ConfirmDialog from 'primevue/confirmdialog'
 
 const utilityStore = useUtilityStore()
 const { isVerifyEmailDialogVisible, isResetPasswordDialogVisible } = storeToRefs(utilityStore)
+const { setVerifyEmailDialogVisible, setResetPasswordDialogVisible } = utilityStore
 
 const userStore = useUserStore()
 const { email } = storeToRefs(userStore)
@@ -217,7 +218,7 @@ useSeoMeta({
         '《有良冊》致力於出版公司登記專書，並透過本網站與Facebook粉絲專頁分享公司法及公司登記實務知識，另提供免費公司登記諮詢服務。【加入官方 LINE 好友👉 https://lin.ee/f8oZLym】',
     ogImage: '/yooooobook.jpg'
 })
-const { initProfile } = useUserStore()
+const { initProfile } = userStore
 
 const idToken = useCookie('idToken')
 
@@ -231,16 +232,19 @@ const setVisible = () => {
 
 const orderStore = useOrderStore()
 const { ordersInCart } = storeToRefs(orderStore)
-const { updateOrderQtyInCart, setOrderInStorage, deleteOrder } = useOrderStore()
-const { getStock } = useProductStore()
-const { stockList } = storeToRefs(useProductStore())
-
+const { updateOrderQtyInCart, setOrderInStorage, deleteOrder } = orderStore
+const productStore = useProductStore()
+const { getStockById } = productStore
+const { stockList } = storeToRefs(productStore)
 const confirm = useConfirm()
+
 const updateOrderQty = async (calculateType, productId) => {
-    const orderList = ordersInCart.value
-    const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
+    const order = ordersInCart.value.find((item) => item.productId === productId)
+    if (!order) return
+
+    // ➖ 減少數量
     if (calculateType === 'minus') {
-        if (orderList[orderIndex].qty - 1 > 0) {
+        if (order.qty > 1) {
             updateOrderQtyInCart(productId, -1)
             setOrderInStorage(productId, -1)
         } else {
@@ -250,21 +254,18 @@ const updateOrderQty = async (calculateType, productId) => {
                 message: '您確定要刪除嗎?',
                 rejectLabel: '取消',
                 acceptLabel: '確定',
-                accept: () => {
-                    deleteOrder(productId)
-                },
-                reject: () => {
-                    console.log('cancel')
-                }
+                accept: () => deleteOrder(productId)
             })
         }
-    } else {
-        await getStock(productId)
-        const stock = stockList.value[productId]
-        if (orderList[orderIndex].qty + 1 <= stock) {
-            updateOrderQtyInCart(productId, 1)
-            setOrderInStorage(productId, 1)
-        }
+        return
+    }
+
+    // ➕ 增加數量
+    await getStockById(productId)
+    const stock = stockList.value[productId]
+    if (order.qty < stock) {
+        updateOrderQtyInCart(productId, 1)
+        setOrderInStorage(productId, 1)
     }
 }
 

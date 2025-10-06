@@ -16,7 +16,6 @@ export const useUserStore = defineStore('user', () => {
     const isUserLoading = ref(false)
 
     const setUserLoggedin = async (id_token, refresh_token, name) => {
-        const router = useRouter()
         const idTokenDecode = jwtDecode(id_token)
 
         isUserLoggedIn.value = true
@@ -55,8 +54,6 @@ export const useUserStore = defineStore('user', () => {
                 body: { memberInfo, idToken: id_token }
             })
         }
-
-        // router.back()
     }
 
     const setUserLogout = () => {
@@ -82,24 +79,20 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const initProfile = () => {
-        const cookieIdToken = useCookie('idToken').value
-        const cookieRefreshToken = useCookie('refreshToken').value
-        const cookieUserName = useCookie('userName').value
-        const cookieEmailVerified = useCookie('emailVerified')
+        const idTokenCookie = useCookie('idToken').value
+        if (!idTokenCookie) return false
 
-        if (cookieIdToken) {
-            const idTokenDecode = jwtDecode(cookieIdToken)
+        const { name, email: userEmail, picture, user_id, firebase } = jwtDecode(idTokenCookie)
 
-            isUserLoggedIn.value = true
-            userName.value = idTokenDecode.name || cookieUserName
-            email.value = idTokenDecode.email
-            emailVerified.value = cookieEmailVerified
-            photoUrl.value = idTokenDecode.picture
-            userId.value = idTokenDecode.user_id
-            idToken.value = cookieIdToken
-            refreshToken.value = cookieRefreshToken
-            signInProvider.value = idTokenDecode.firebase.sign_in_provider
-        }
+        isUserLoggedIn.value = true
+        userName.value = name || useCookie('userName').value
+        email.value = userEmail
+        emailVerified.value = useCookie('emailVerified').value
+        photoUrl.value = picture
+        userId.value = user_id
+        idToken.value = idTokenCookie
+        refreshToken.value = useCookie('refreshToken').value
+        signInProvider.value = firebase?.sign_in_provider
 
         return true
     }
