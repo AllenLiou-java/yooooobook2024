@@ -204,7 +204,7 @@ const addOrder = () => {
 }
 
 const checkout = () => {
-    if (ordersInCart.value.length === 0 && orderQty.value === 0) return
+    // if (ordersInCart.value.length === 0 || orderQty.value === 0) return
     const { name, productId, imgSrc, price, content } = props
     const order = {
         productName: name,

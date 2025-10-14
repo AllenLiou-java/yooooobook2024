@@ -63,21 +63,25 @@ await callOnce(async () => {
     await productStore.getAllStock()
 })
 
-const { addOrderInCart, addOrderInStorage } = useOrderStore()
+const orderStore = useOrderStore()
+const { addOrderInCart, addOrderInStorage } = orderStore
+const { ordersInCart } = storeToRefs(orderStore)
+
 const addOrderEmit = (order) => {
     addOrderInCart(order)
     addOrderInStorage(order)
 }
 
 const checkoutEmit = (order) => {
-    addOrderEmit(order)
-    router.push({
-        name: 'cart',
-        query: {
-            id: 'ezbuy'
-        }
-    })
-    // navigateTo('/cart')
+    const { qty } = order
+    const hasOrders = ordersInCart.value.length > 0
+
+    // 沒有任何商品可結帳就不動作
+    if (!hasOrders && qty === 0) return
+
+    if (qty > 0) addOrderEmit(order)
+
+    router.push({ name: 'cart-ezbuy', query: { id: 'ezbuy', groupId, planId } })
 }
 
 onBeforeUnmount(() => {
