@@ -37,7 +37,7 @@
 
 <script setup>
 const route = useRoute()
-const { groupId, planId } = route.params
+const { planId } = route.params
 const router = useRouter()
 
 const { $api } = useNuxtApp()
@@ -46,10 +46,7 @@ const productStore = useProductStore()
 
 const { data: groupBuyingPlan, error } = await useAsyncData('groupBuyingPlan', async () => {
     const info = await $api(
-        apiList.groupBuying.getGroupBuyingPlan.serverPath.replace(
-            ':groupId/:planId',
-            `${groupId}/${planId}`
-        )
+        apiList.groupBuying.getGroupBuyingPlan.serverPath.replace(':planId', `${planId}`)
     )
 
     productStore.$patch((state) => {
@@ -81,7 +78,7 @@ const checkoutEmit = (order) => {
 
     if (qty > 0) addOrderEmit(order)
 
-    router.push({ name: 'cart-ezbuy', query: { id: 'ezbuy', groupId, planId } })
+    router.push({ name: 'ezbuy-cart', query: { id: 'ezbuy', planId } })
 }
 
 onBeforeUnmount(() => {

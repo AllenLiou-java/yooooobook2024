@@ -160,7 +160,7 @@
                     <div
                         v-for="(noticeSegment, idx) in productDetail.notice"
                         :key="idx"
-                        class="mb-16 leading-[1.5]"
+                        class="leading-[1.5]"
                         v-html="noticeSegment"
                     />
                 </div>

@@ -105,7 +105,22 @@ const product = {
 
 const groupBuying = {
     getGroupBuyingPlan: {
-        serverPath: '/api/groupBuying/:groupId/:planId',
+        serverPath: '/api/groupBuying/:planId',
+        method: 'get'
+    }
+}
+
+const groupOrder = {
+    // 新增會員的訂單資訊
+    patchOrderInfo: {
+        url: '/groupOrder/:planId/:orderId.json',
+        serverPath: '/api/groupOrder/:planId/:orderId',
+        method: 'patch'
+    },
+    // 取得會員的特定訂單內容
+    getOrderInfo: {
+        url: '/groupOrder/:planId/:orderId.json',
+        serverPath: '/api/groupOrder/:planId/:orderId',
         method: 'get'
     }
 }
@@ -140,5 +155,6 @@ export const apiList = {
     stock,
     product,
     groupBuying,
+    groupOrder,
     order
 }

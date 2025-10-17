@@ -139,7 +139,7 @@
             </template>
             <template v-else>
                 <div class="h-[20vh] flex-center">
-                    <p class="text-20">查無訂單資料 ></p>
+                    <p class="text-20">查無訂單資料</p>
                 </div>
             </template>
         </div>

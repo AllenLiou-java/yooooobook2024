@@ -1,19 +1,22 @@
 import { serverApi } from '@/server/utils/database'
 
 export default defineEventHandler(async (event) => {
-    const groupId = getRouterParam(event, 'groupId')
     const planId = getRouterParam(event, 'planId')
     const idToken = getRequestHeader(event, 'idToken')
 
-    const planContent = await serverApi(`/group_buying/${groupId}/${planId}.json`, {
+    const planContent = await serverApi(`/group_buying/${planId}.json`, {
         query: {
             auth: idToken
         }
     })
         .then((result) => {
+            const { buildTime, group, plan } = result
+
             return {
-                ...result,
-                products: result.products.filter((item) => item.launch)
+                buildTime,
+                group,
+                ...plan,
+                products: plan.products.filter((item) => item.launch)
             }
         })
         .catch((error) => {
@@ -35,11 +38,12 @@ export default defineEventHandler(async (event) => {
     })
         .then((result) => {
             const productList = Object.values(result).map((item) => {
-                const { name, content, bookIntroduction, imgSrc, productId } = item
+                const { name, content, bookIntroduction, notice, imgSrc, productId } = item
                 return {
                     name,
                     content,
                     bookIntroduction,
+                    notice,
                     imgSrc,
                     productId
                 }

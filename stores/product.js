@@ -9,7 +9,8 @@ export const useProductStore = defineStore('product', () => {
     const stockList = ref({})
 
     async function updateStock() {
-        const stockApi = apiList.stock
+        const { serverPath, method } = apiList.stock.patchAllStock
+
         // 取得所有產品庫存清單
         await getAllStock()
 
@@ -26,10 +27,9 @@ export const useProductStore = defineStore('product', () => {
             updatedOrders.map(({ productId, qty }) => [productId, { qty }])
         )
 
-        // 使用patchAllStock的api更新庫存清單
-        const { serverPath: url, method } = stockApi.patchAllStock
+        // 更新庫存清單
 
-        await $api(url, {
+        await $api(serverPath, {
             method,
             body: patchStockInfo
         })
@@ -40,13 +40,10 @@ export const useProductStore = defineStore('product', () => {
     }
 
     const getAllStock = async () => {
-        const data = await $api(apiList.stock.getAllStock.serverPath)
+        const { serverPath } = apiList.stock.getAllStock
+        const data = await $api(serverPath)
 
-        const allStock = Object.fromEntries(
-            Object.entries(data).map(([key, value]) => [key, value.qty])
-        )
-
-        stockList.value = allStock
+        stockList.value = Object.fromEntries(Object.entries(data).map(([id, { qty }]) => [id, qty]))
     }
 
     const getStockById = async (productId) => {

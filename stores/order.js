@@ -103,7 +103,13 @@ export const useOrderStore = defineStore('order', () => {
     }
 
     async function patchOrderInfo(orderInfo) {
-        const { name, address, email, phone, bankAccountNo, buyer, taxId } = orderInfo
+        const { name, address, email, phone, bankAccountNo, buyer, taxId, isFromGroup } = orderInfo
+        const { idToken, userId } = useUserStore()
+        const { notify } = useToastifyStore()
+        const { $api } = useNuxtApp()
+        const router = useRouter()
+
+        if (!idToken) return
 
         const orderList = ordersInCart.value.map(
             ({ productName, productId, content, imgSrc, discount, qty }) => ({
@@ -141,17 +147,11 @@ export const useOrderStore = defineStore('order', () => {
                 trackingUrl: ''
             },
             remark: '',
-            isFromGroup: false,
+            isFromGroup,
             files: []
         }
 
-        const { notify } = useToastifyStore()
-        const { idToken, userId } = useUserStore()
-        if (!idToken) return
-
         try {
-            const { $api } = useNuxtApp()
-
             // 更新訂單
             await $api(
                 apiList.order.patchOrderInfo.serverPath.replace(
@@ -173,9 +173,85 @@ export const useOrderStore = defineStore('order', () => {
             })
 
             // 導向成功頁面
-            await useRouter().push({
+            await router.push({
                 path: `/cart/success/${info.orderId}`
             })
+
+            notify('info', '訂單資訊已發送至指定信箱')
+        } catch (e) {
+            notify('error', e.message, e.statusCode)
+        }
+    }
+
+    async function patchGroupOrderInfo(orderInfo) {
+        const { name, address, email, phone, bankAccountNo, buyer, taxId, isFromGroup, planId } =
+            orderInfo
+        const { notify } = useToastifyStore()
+        const { $api } = useNuxtApp()
+        const router = useRouter()
+
+        const orderList = ordersInCart.value.map(
+            ({ productName, productId, content, imgSrc, discount, qty }) => ({
+                productId,
+                productName,
+                qty,
+                unitPrice: discount,
+                totalPrice: discount * qty,
+                content,
+                imgSrc
+            })
+        )
+
+        const totalPrice = orderList.reduce((sum, i) => sum + i.totalPrice, 0)
+
+        const info = {
+            buyer,
+            receiver: {
+                name,
+                address
+            },
+            email,
+            phone,
+            taxId,
+            bankAccountNo,
+            orderId: orderIdCreater(),
+            orderList,
+            totalPrice,
+            oderDate: orderDateCreater(),
+            status: '1',
+            isClosed: false,
+            delivery: {
+                company: '',
+                trackingNo: '',
+                trackingUrl: ''
+            },
+            remark: '',
+            isFromGroup,
+            files: []
+        }
+
+        try {
+            // 更新訂單
+            const { serverPath, method } = apiList.groupOrder.patchOrderInfo
+            await $api(serverPath.replace(':planId/:orderId', `${planId}/${info.orderId}`), {
+                method,
+                body: info
+            })
+
+            // 寄訂單確認信
+            await $api('/api/mail/orderComfirmed', {
+                method: 'post',
+                body: {
+                    orderInfo: info
+                }
+            })
+
+            // 導向成功頁面
+            await router.push({
+                path: `/cart/success/${info.orderId}`
+            })
+
+            await router.push({ name: 'ezbuy-success', query: { planId, orderId: info.orderId } })
 
             notify('info', '訂單資訊已發送至指定信箱')
         } catch (e) {
@@ -204,6 +280,7 @@ export const useOrderStore = defineStore('order', () => {
         orderDateCreater,
         orderIdCreater,
         patchOrderInfo,
+        patchGroupOrderInfo,
         $reset
     }
 })

@@ -60,10 +60,10 @@
 
                     <p class="mb-12">
                         <span class="text-secondary px-6 mx-6 font-bold"
-                            >優惠價 {{ price.discount }}元</span
+                            >優惠價： {{ thousandthsFormat(price.discount) }}元</span
                         >
                         <span class="text-14 text-gray ml-6"
-                            >( 定價 {{ price.originalPrice }}元 )</span
+                            >( 定價： {{ thousandthsFormat(price.originalPrice) }}元 )</span
                         >
                     </p>
 
@@ -78,9 +78,6 @@
                                 },
                                 toggleableContent: {
                                     class: 'pt-18'
-                                },
-                                content: {
-                                    class: 'p-0'
                                 }
                             }"
                             header="書籍簡介"
@@ -114,6 +111,14 @@
                                 </button>
                             </template>
                         </BookPreview>
+                    </div>
+                    <div
+                        v-if="notice.length > 0"
+                        class="rounded-6 bg-[#8d111d] p-12 text-14 text-white leading-normal font-bold"
+                    >
+                        <p v-for="noticeItem in notice">
+                            {{ noticeItem }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -149,6 +154,10 @@ const props = defineProps({
     },
     content: {
         type: Array,
+        required: true
+    },
+    notice: {
+        type: [Array, String],
         required: true
     }
 })
@@ -204,7 +213,6 @@ const addOrder = () => {
 }
 
 const checkout = () => {
-    // if (ordersInCart.value.length === 0 || orderQty.value === 0) return
     const { name, productId, imgSrc, price, content } = props
     const order = {
         productName: name,

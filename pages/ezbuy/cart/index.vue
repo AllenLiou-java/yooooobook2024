@@ -436,28 +436,25 @@ import IconTransport from '@/components/icon/Transport.vue'
 import IconInvoice from '@/components/icon/Invoice.vue'
 import IconConfirm from '@/components/icon/Confirm.vue'
 
-// definePageMeta({
-//     middleware: [
-//         function (to, from) {
-//             const idToken = useCookie('idToken').value
-
-//             if (!idToken) {
-//                 return navigateTo({
-//                     path: '/user/logIn'
-//                 })
-//             }
-//         }
-//     ]
-// })
+definePageMeta({
+    middleware: [
+        function (to, from) {
+            if (!to.query.planId) {
+                return false
+            }
+        }
+    ]
+})
 
 const active = ref(0)
+const { planId } = useRoute().query
 
 const orderStore = useOrderStore()
 const { ordersInCart, isOrderLoading } = storeToRefs(orderStore)
-const { patchOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder, clearAllOrder } =
+const { patchGroupOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder, clearAllOrder } =
     orderStore
 
-const { updateStock, getStockById, getAllStock } = useProductStore()
+const { updateStock, getStockById } = useProductStore()
 const { stockList } = storeToRefs(useProductStore())
 
 const totalPrice = computed(() => {
@@ -525,14 +522,16 @@ const onSubmit = async () => {
         state.isOrderLoading = true
     })
 
-    await patchOrderInfo({
+    await patchGroupOrderInfo({
         name: name.value,
         address: address.value,
         email: email.value,
         phone: phone.value,
         bankAccountNo: bankAccountNo.value,
         buyer: buyer.value || '',
-        taxId: taxId.value || ''
+        taxId: taxId.value || '',
+        isFromGroup: true,
+        planId
     })
 
     await updateStock()

@@ -422,7 +422,6 @@
                 </StepperPanel>
             </Stepper>
         </div>
-        <button @click="getAllStock">test</button>
     </div>
 </template>
 
@@ -534,7 +533,8 @@ const onSubmit = async () => {
         phone: phone.value,
         bankAccountNo: bankAccountNo.value,
         buyer: buyer.value || '',
-        taxId: taxId.value || ''
+        taxId: taxId.value || '',
+        isFromGroup: false
     })
 
     await updateStock()
