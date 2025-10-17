@@ -122,6 +122,12 @@ const groupOrder = {
         url: '/groupOrder/:planId/:orderId.json',
         serverPath: '/api/groupOrder/:planId/:orderId',
         method: 'get'
+    },
+    // 取得特定團購群的所有訂單內容
+    getOrderInfoByPlanId: {
+        url: '/groupOrder/:planId.json',
+        serverPath: '/api/groupOrder/:planId',
+        method: 'get'
     }
 }
 

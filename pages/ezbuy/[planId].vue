@@ -1,8 +1,11 @@
 <template>
-    <div class="py-80 lt-md:py-60 min-h-[calc(100vh-96px-346px)] px-72 lt-md:px-36">
-        <h1 class="mb-24 text-blue_dark">{{ groupBuyingPlan.title }}</h1>
+    <div
+        v-if="groupBuyingPlan.launch"
+        class="py-80 lt-md:py-60 min-h-[calc(100vh-96px-346px)] px-72 lt-md:px-36"
+    >
+        <h1 class="mb-24 text-blue_dark">【{{ groupBuyingPlan.title }}】</h1>
         <p class="mb-16 bg-[#fbe45d] inline-block px-8 py-4 rounded-6">
-            優惠期間：{{ groupBuyingPlan.promotionPeriod }}
+            優惠期間：即日起 - {{ groupBuyingPlan.closingDate }}
         </p>
         <div class="mb-32 lt-md:mb-24">
             <p class="leading-24 mb-8" v-for="partContent in groupBuyingPlan.content">
@@ -31,6 +34,28 @@
                 @addOrder="addOrderEmit"
                 @checkout="checkoutEmit"
             />
+        </div>
+    </div>
+    <div v-else class="container flex-center gap-x-40 gap-y-30 flex-col py-40">
+        <h1>活動截止</h1>
+        <div class="text-20">
+            <p class="mb-12 lt-sm:text-16">
+                感謝各位熱烈支持，【{{ groupBuyingPlan.title }}】已截止。
+            </p>
+            <p class="mb-12 lt-sm:text-16">
+                若您想透過優惠活動購入書籍，請持續關注我們的最新消息。
+            </p>
+            <p class="mb-32 lt-sm:text-16">留下您的聯絡資料，若有優惠活動將主動通知您。</p>
+            <iframe
+                class="pr-12"
+                src="https://forms.gle/aWdUeppATzAhPvbYA"
+                width="100%"
+                height="600"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0"
+                >載入中…</iframe
+            >
         </div>
     </div>
 </template>

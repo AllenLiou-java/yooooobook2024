@@ -10,11 +10,12 @@ export default defineEventHandler(async (event) => {
         }
     })
         .then((result) => {
-            const { buildTime, group, plan } = result
+            const { buildTime, group, launch, plan } = result
 
             return {
                 buildTime,
                 group,
+                launch,
                 ...plan,
                 products: plan.products.filter((item) => item.launch)
             }

@@ -1,12 +1,7 @@
 export default defineEventHandler(async (event) => {
     const planId = getRouterParam(event, 'planId')
-    const idToken = getRequestHeader(event, 'idToken')
 
-    const data = await serverApi(`/group_order/${planId}.json`, {
-        query: {
-            auth: idToken
-        }
-    })
+    const data = await serverApi(`/group_order/${planId}.json`)
         .then((result) => result)
         .catch((error) => {
             const statusCode = error.statusCode
