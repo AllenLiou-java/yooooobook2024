@@ -108,7 +108,7 @@
                                         basicErrors.address
                                     }}</small>
                                 </div>
-                                <!-- <div class="flex flex-col gap-2 mb-16">
+                                <div class="flex flex-col gap-2 mb-16">
                                     <label class="mb-8" for="email">Email</label>
                                     <input
                                         id="email"
@@ -122,7 +122,7 @@
                                     <small class="text-secondary text-14">{{
                                         basicErrors.email
                                     }}</small>
-                                </div> -->
+                                </div>
                                 <div class="flex flex-col gap-2 mb-16">
                                     <label class="mb-8" for="phone">聯絡電話</label>
                                     <input
@@ -330,7 +330,7 @@
                                                 {{ address }}
                                             </td>
                                         </tr>
-                                        <!-- <tr>
+                                        <tr>
                                             <td
                                                 class="border border-solid px-12 py-8 font-semibold"
                                             >
@@ -339,7 +339,7 @@
                                             <td class="border border-solid px-12 py-8">
                                                 {{ email }}
                                             </td>
-                                        </tr> -->
+                                        </tr>
                                         <tr>
                                             <td
                                                 class="border border-solid px-12 py-8 font-semibold"
@@ -439,25 +439,22 @@ import IconConfirm from '@/components/icon/Confirm.vue'
 definePageMeta({
     middleware: [
         function (to, from) {
-            const idToken = useCookie('idToken').value
-
-            if (!idToken) {
-                return navigateTo({
-                    path: '/user/logIn'
-                })
+            if (!to.query.planId) {
+                return false
             }
         }
     ]
 })
 
 const active = ref(0)
+const { planId } = useRoute().query
 
 const orderStore = useOrderStore()
 const { ordersInCart, isOrderLoading } = storeToRefs(orderStore)
-const { patchOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder, clearAllOrder } =
+const { patchGroupOrderInfo, updateOrderQtyInCart, setOrderInStorage, deleteOrder, clearAllOrder } =
     orderStore
 
-const { updateStock, getStockById, getAllStock } = useProductStore()
+const { updateStock, getStockById } = useProductStore()
 const { stockList } = storeToRefs(useProductStore())
 
 const totalPrice = computed(() => {
@@ -478,7 +475,7 @@ const {
     validationSchema: yup.object({
         name: yup.string().required('請輸入收件人姓名'),
         address: yup.string().min(6, '請填寫正確地址').required('請輸入收件地址'),
-        // email: yup.string().email('請確認Email是否正確').required('請填入Email'),
+        email: yup.string().email('請確認Email是否正確').required('請填入Email'),
         phone: yup.string().min(7, '請確認填寫的電話號碼').required('請輸入電話號碼'),
         bankAccountNo: yup.string().length(5, '請確認匯款帳戶後5碼').required('請輸入匯款帳戶後5碼')
     })
@@ -486,24 +483,25 @@ const {
 
 const [name, nameAttrs] = defineField('name')
 const [address, addressAttrs] = defineField('address')
-// const [email, emailAttrs] = defineField('email')
+const [email, emailAttrs] = defineField('email')
 const [phone, phoneAttrs] = defineField('phone')
 const [bankAccountNo, bankAccountNoAttrs] = defineField('bankAccountNo')
 
 const basicInfoConfirm = (submit, nextCallback) => {
-    if (ordersInCart.value.length === 0) return
+    if (!ordersInCart.value.length) return
 
     submit()
 
-    const errorLength = Object.keys(basicErrors.value).length
-    const valueLength = Object.keys(basicValues).length
+    const hasError = Object.keys(basicErrors.value).length > 0
+    const isFormComplete = Object.keys(basicValues).length === 5
+    if (hasError || !isFormComplete) return
 
-    if (errorLength === 0 && valueLength === 4) {
-        nextCallback()
-        const formHeaderLine = document.getElementById('formHeaderLine')
+    nextCallback()
 
+    const header = document.getElementById('formHeaderLine')
+    if (header) {
         window.scrollTo({
-            top: getPosition(formHeaderLine).y - 120,
+            top: getPosition(header).y - 120,
             behavior: 'smooth'
         })
     }
@@ -519,22 +517,21 @@ const { defineField: defineInvoiceField } = useForm({
 const [buyer, buyerAttrs] = defineInvoiceField('buyer')
 const [taxId, taxIdAttrs] = defineInvoiceField('taxId')
 
-const userStore = storeToRefs(useUserStore())
-
 const onSubmit = async () => {
     orderStore.$patch((state) => {
         state.isOrderLoading = true
     })
 
-    await patchOrderInfo({
+    await patchGroupOrderInfo({
         name: name.value,
         address: address.value,
-        email: userStore.email.value,
+        email: email.value,
         phone: phone.value,
         bankAccountNo: bankAccountNo.value,
         buyer: buyer.value || '',
         taxId: taxId.value || '',
-        isFromGroup: false
+        isFromGroup: true,
+        planId
     })
 
     await updateStock()
@@ -547,35 +544,34 @@ const onSubmit = async () => {
 
 const confirm = useConfirm()
 const updateOrderQty = async (calculateType, productId) => {
-    const orderList = ordersInCart.value
-    const orderIndex = orderList.findIndex((orderItem) => orderItem.productId === productId)
-    if (calculateType === 'minus') {
-        if (orderList[orderIndex].qty - 1 > 0) {
-            updateOrderQtyInCart(productId, -1)
-            setOrderInStorage(productId, -1)
-        } else {
-            confirm.require({
-                group: 'headless',
-                header: '刪除',
-                message: '您確定要刪除嗎?',
-                rejectLabel: '取消',
-                acceptLabel: '確定',
-                accept: () => {
-                    deleteOrder(productId)
-                },
-                reject: () => {
-                    console.log('cancel')
-                }
-            })
-        }
-    } else {
+    const list = ordersInCart.value
+    const index = list.findIndex((o) => o.productId === productId)
+    if (index === -1) return
+
+    const order = list[index]
+    const delta = calculateType === 'minus' ? -1 : 1
+
+    // 遞減處理
+    if (calculateType === 'minus' && order.qty === 1) {
+        return confirm.require({
+            group: 'headless',
+            header: '刪除',
+            message: '您確定要刪除嗎?',
+            rejectLabel: '取消',
+            acceptLabel: '確定',
+            accept: () => deleteOrder(productId)
+        })
+    }
+
+    // 遞增需檢查庫存
+    if (calculateType === 'add') {
         await getStockById(productId)
         const stock = stockList.value[productId]
-        if (orderList[orderIndex].qty + 1 <= stock) {
-            updateOrderQtyInCart(productId, 1)
-            setOrderInStorage(productId, 1)
-        }
+        if (order.qty + 1 > stock) return
     }
+
+    updateOrderQtyInCart(productId, delta)
+    setOrderInStorage(productId, delta)
 }
 </script>
 

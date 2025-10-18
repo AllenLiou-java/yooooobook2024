@@ -137,7 +137,7 @@ const { data: productList, error } = await useAsyncData('products', () => {
     if (Object.keys(productList).length > 0) {
         return productList
     } else {
-        return $api(apiList.product.getListInfo.serverPath)
+        return $api(apiList.product.getSimpleListInfo.serverPath)
     }
 })
 

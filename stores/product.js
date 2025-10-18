@@ -2,57 +2,67 @@ import { defineStore } from 'pinia'
 
 export const useProductStore = defineStore('product', () => {
     const orderStore = useOrderStore()
+    const { $api } = useNuxtApp()
+
     const productList = ref([])
     const productDetailList = ref([])
     const stockList = ref({})
 
     async function updateStock() {
-        const orders = orderStore.ordersInCart
-        const stockApi = apiList.stock
-        const { $api } = useNuxtApp()
+        const { serverPath, method } = apiList.stock.patchAllStock
 
-        if (orders.length > 0) {
-            for (let i = 0; i < orders.length; i++) {
-                const { qty: currentStock } = await $api(
-                    stockApi.getStock.serverPath.replace(':productId', orders[i].productId),
-                    {
-                        method: stockApi.getStock.method
-                    }
-                )
-                const orderQty = orders[i].qty
-                const updatedQty = currentStock - orderQty
+        // 取得所有產品庫存清單
+        await getAllStock()
 
-                if (updatedQty >= 0) {
-                    await $api(
-                        stockApi.patchStock.serverPath.replace(':productId', orders[i].productId),
-                        {
-                            method: stockApi.patchStock.method,
-                            body: {
-                                qty: updatedQty
-                            }
-                        }
-                    )
-                } else {
-                    ordersInCart[i].qty = 0
-                }
+        // 根據orderInCart中產品，計算出更新庫存後的清單
+
+        const updatedOrders = orderStore.ordersInCart.map(({ productId, qty }) => {
+            return {
+                productId,
+                qty: Math.max(stockList.value[productId] - qty, 0)
             }
-        }
+        })
+
+        const patchStockInfo = Object.fromEntries(
+            updatedOrders.map(({ productId, qty }) => [productId, { qty }])
+        )
+
+        // 更新庫存清單
+
+        await $api(serverPath, {
+            method,
+            body: patchStockInfo
+        })
     }
 
     const setStockList = (productId, stockQty) => {
         stockList.value[productId] = stockQty
     }
 
-    const getStock = async (productId) => {
-        const productIdList = Object.keys(stockList.value)
-        if (productIdList.length === 0 || !productIdList.includes(productId)) {
+    const getAllStock = async () => {
+        const { serverPath } = apiList.stock.getAllStock
+        const data = await $api(serverPath)
+
+        stockList.value = Object.fromEntries(Object.entries(data).map(([id, { qty }]) => [id, qty]))
+    }
+
+    const getStockById = async (productId) => {
+        if (!Object.keys(stockList.value).includes(productId)) {
             const { qty } = await $api(
-                apiList.stock.getStock.serverPath.replace(':productId', productId)
+                apiList.stock.getStockById.serverPath.replace(':productId', productId)
             )
 
             setStockList(productId, qty)
         }
     }
 
-    return { productList, productDetailList, stockList, setStockList, updateStock, getStock }
+    return {
+        productList,
+        productDetailList,
+        stockList,
+        setStockList,
+        updateStock,
+        getStockById,
+        getAllStock
+    }
 })

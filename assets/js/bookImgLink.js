@@ -1,6 +1,6 @@
 const pages = {
     AA00001: {
-        book_preview: {
+        book1: {
             name: '有限公司篇',
             links: [
                 // null,

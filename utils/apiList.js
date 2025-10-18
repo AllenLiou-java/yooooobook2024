@@ -63,12 +63,22 @@ const member = {
 }
 
 const stock = {
-    getStock: {
+    getAllStock: {
+        url: '/stock.json',
+        serverPath: '/api/stock',
+        method: 'get'
+    },
+    patchAllStock: {
+        url: '/stock.json',
+        serverPath: '/api/stock',
+        method: 'patch'
+    },
+    getStockById: {
         url: '/stock/:id.json',
         serverPath: '/api/stock/:productId',
         method: 'get'
     },
-    patchStock: {
+    patchStockById: {
         url: '/stock/:id.json',
         serverPath: '/api/stock/:productId',
         method: 'patch'
@@ -76,14 +86,47 @@ const stock = {
 }
 
 const product = {
-    getListInfo: {
+    getSimpleListInfo: {
         url: '/products.json',
-        serverPath: '/api/products',
+        serverPath: '/api/products/simple',
         method: 'get'
     },
-    getItemInfo: {
+    getDetailListInfo: {
+        url: '/products_simple.json',
+        serverPath: '/api/products/detail',
+        method: 'get'
+    },
+    getDetailItemInfo: {
         url: '/products/:id.json',
-        serverPath: '/api/products/:productId',
+        serverPath: '/api/products/detail/:productId',
+        method: 'get'
+    }
+}
+
+const groupBuying = {
+    getGroupBuyingPlan: {
+        serverPath: '/api/groupBuying/:planId',
+        method: 'get'
+    }
+}
+
+const groupOrder = {
+    // 新增會員的訂單資訊
+    patchOrderInfo: {
+        url: '/groupOrder/:planId/:orderId.json',
+        serverPath: '/api/groupOrder/:planId/:orderId',
+        method: 'patch'
+    },
+    // 取得會員的特定訂單內容
+    getOrderInfo: {
+        url: '/groupOrder/:planId/:orderId.json',
+        serverPath: '/api/groupOrder/:planId/:orderId',
+        method: 'get'
+    },
+    // 取得特定團購群的所有訂單內容
+    getOrderInfoByPlanId: {
+        url: '/groupOrder/:planId.json',
+        serverPath: '/api/groupOrder/:planId',
         method: 'get'
     }
 }
@@ -117,5 +160,7 @@ export const apiList = {
     member,
     stock,
     product,
+    groupBuying,
+    groupOrder,
     order
 }

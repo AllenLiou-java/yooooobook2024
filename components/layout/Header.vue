@@ -6,13 +6,8 @@
             <div
                 class="flex justify-between items-center flex-grow-1 lt-md:(flex-col items-start justify-center)"
             >
-                <h1>
-                    <NuxtLink
-                        class="w-230 h-25 block bg-logo indent-[101%] whitespace-nowrap overflow-hidden"
-                        to="/"
-                        >有良冊股份有限公司</NuxtLink
-                    >
-                </h1>
+                <AppLogo />
+
                 <ul class="flex justify-between max-w-530 w-full mx-16 lt-lg:hidden">
                     <li
                         v-for="routeItem in routeList"
@@ -52,142 +47,17 @@
                         </div>
                     </li>
                 </ul>
+
                 <div
                     class="min-w-184 h-60 shrink-0 flex flex-col justify-between lt-lg:(flex-row) lt-md:(flex-col mt-16)"
                 >
                     <div class="flex-center lt-lg:mr-0 gap-12 mb-8 lt-lg:mb-0 lt-md:mb-8">
-                        <div class="text-white cursor-pointer" @click="emit('setVisible')">
-                            <span
-                                class="material-icons align-text-top text-22 mr-2"
-                                :class="qtyInCart > 0 ? 'text-brown_light' : ''"
-                            >
-                                shopping_cart
-                            </span>
-                            <span
-                                class="text-14 align-middle"
-                                :class="qtyInCart > 0 ? 'text-brown_light' : ''"
-                                >購物車({{ qtyInCart }})</span
-                            >
-                        </div>
-
-                        <Button
-                            class="bg-brown_dark px-8 py-4 text-center cursor-pointer text-14 font-bold p-0 m-0 border-0 rounded-4"
-                            aria-haspopup="true"
-                            aria-controls="overlay_panel"
-                            @click="toggleProductPanel"
-                        >
-                            <template #default>
-                                <span class="material-icons mr-2"> search </span>
-                                書籍搜尋
-                            </template>
-                        </Button>
-
-                        <OverlayPanel ref="productPanel" append-to="body" @hide="blocked = false">
-                            <DataTable
-                                :value="Object.values(productList)"
-                                selection-mode="single"
-                                :paginator="true"
-                                :rows="5"
-                                @row-select="onProductSelect"
-                            >
-                                <Column
-                                    field="name"
-                                    header="產品名稱"
-                                    sortable
-                                    style="min-width: 12rem"
-                                ></Column>
-                                <Column header="產品圖片">
-                                    <template #body="slotProps">
-                                        <img
-                                            :src="slotProps.data.imgSrc"
-                                            :alt="slotProps.data.productId"
-                                            class="w-64"
-                                        />
-                                    </template>
-                                </Column>
-                                <!-- <Column
-                                    field="price"
-                                    header="價格"
-                                    sortable
-                                    style="min-width: 8rem"
-                                >
-                                    <template #body="slotProps">
-                                        $ {{ slotProps.data.price.discount }}
-                                    </template>
-                                </Column> -->
-                            </DataTable>
-                        </OverlayPanel>
+                        <CartButton :qty="qtyInCart" @click="$emit('setVisible')" />
+                        <SearchButton :product-list="productList" @select="onProductSelect" />
                     </div>
 
                     <div class="flex justify-end items-center ml-12 lt-md:(justify-start ml-0)">
-                        <template v-if="!isUserLoggedIn">
-                            <NuxtLink
-                                no-prefetch
-                                to="/user/logIn"
-                                class="text-brown_light cursor-pointer"
-                            >
-                                <span class="material-icons align-text-top text-22 mr-6">
-                                    person
-                                </span>
-                                <span class="text-16 align-middle">會員登入</span>
-                            </NuxtLink>
-                        </template>
-                        <template v-else>
-                            <div
-                                class="card flex justify-content-center relative cursor-pointer group"
-                            >
-                                <div
-                                    aria-haspopup="true"
-                                    aria-controls="overlay_tmenu"
-                                    class="font-black rounded-full border border-solid text-blue border-blue bg-white text-14 px-12 py-4 group-hover:( bg-brown_light)"
-                                    :style="onPopup ? popupActiveStyle : ''"
-                                    @click="toggle"
-                                >
-                                    <p
-                                        class="w-120 whitespace-nowrap text-ellipsis overflow-hidden text-center"
-                                    >
-                                        {{ userName }}
-                                    </p>
-                                </div>
-
-                                <TieredMenu
-                                    id="overlay_tmenu"
-                                    ref="menu"
-                                    :model="loginMenu"
-                                    popup
-                                    @show="onPopup = true"
-                                    @hide="onPopup = false"
-                                >
-                                    <template #item="{ item, props }">
-                                        <template v-if="item.route">
-                                            <NuxtLink
-                                                class="gap-8"
-                                                :to="item.route"
-                                                :class="props.action.class"
-                                            >
-                                                <span class="material-icons">
-                                                    {{ item.icon }}
-                                                </span>
-                                                <span>{{ item.label }}</span>
-                                            </NuxtLink>
-                                        </template>
-                                        <template v-else>
-                                            <p class="px-12 py-8 gap-8" :class="props.action.class">
-                                                <span class="material-icons">
-                                                    {{ item.icon }}
-                                                </span>
-                                                <span>{{ item.label }}</span>
-                                            </p>
-                                        </template>
-                                    </template>
-                                </TieredMenu>
-                                <span
-                                    class="material-icons text-20 text-gray bg-white rounded-full absolute end-[-10px] bottom-[-4px] absolute"
-                                >
-                                    expand_circle_down
-                                </span>
-                            </div>
-                        </template>
+                        <UserMenu />
                     </div>
                 </div>
             </div>
@@ -278,21 +148,20 @@
 </template>
 
 <script setup>
-import TieredMenu from 'primevue/tieredmenu'
-import { useConfirm } from 'primevue/useconfirm'
 import { storeToRefs } from 'pinia'
 const { $api } = useNuxtApp()
-
 const router = useRouter()
-
 const { notify } = useToastifyStore()
+
 const visible = ref(false)
 const blocked = ref(false)
 
-const utilityStore = useUtilityStore()
+// === Stores ===
 
 const orderStore = useOrderStore()
 const { qtyInCart } = storeToRefs(orderStore)
+
+const productStore = useProductStore()
 
 const routeList = ref([
     {
@@ -336,13 +205,12 @@ const routeList = ref([
     }
 ])
 
-const productStore = useProductStore()
 const { data: productList, error } = await useAsyncData('products', () => {
     const productList = productStore.productList
     if (Object.keys(productList).length > 0) {
         return productList
     } else {
-        return $api(apiList.product.getListInfo.serverPath)
+        return $api(apiList.product.getSimpleListInfo.serverPath)
     }
 })
 
@@ -355,187 +223,15 @@ if (error.value) {
     }
 }
 
-const productPanel = ref()
-
-const toggleProductPanel = (event) => {
-    productPanel.value.toggle(event)
-    blocked.value = true
-}
-
-const onProductSelect = (event) => {
-    router.push(`/bookstore/${event.data.productId}`)
-
-    productPanel.value.hide()
-}
-
-const userStore = useUserStore()
-const { setUserLogout } = userStore
-const { isUserLoggedIn, userName, idToken, signInProvider, email } = storeToRefs(userStore)
-
-const menu = ref()
-
-const toggle = (event) => {
-    menu.value.toggle(event)
-}
-
-const onPopup = ref(false)
-
-const popupActiveStyle = computed(() => {
-    return { backgroundColor: '#facc15' }
-})
-
-const confirm = useConfirm()
-const confirmLogout = () => {
-    confirm.require({
-        group: 'headless',
-        header: '登出',
-        message: '確定要登出?',
-        rejectLabel: '取消',
-        acceptLabel: '登出',
-        accept: () => {
-            setUserLogout()
-            notify('info', '登出成功')
-        },
-        reject: () => {
-            console.log('logout cancel')
-        }
-    })
-}
-
-const confirmResetPassword = () => {
-    confirm.require({
-        group: 'headless',
-        header: '重設密碼',
-        message: '確定要重設密碼?',
-        rejectLabel: '取消',
-        acceptLabel: '確定',
-        accept: async () => {
-            resetPassword()
-        },
-        reject: () => {
-            console.log('logout cancel')
-        }
-    })
-}
-
-const confirmEmailVerify = async () => {
-    const emailVerified = useCookie('emailVerified').value
-    if (emailVerified) return
-
-    const idToken = useCookie('idToken').value
-    const emailVerify = apiList.member.sendEmailVerify
-
-    try {
-        await $api(emailVerify.serverPath, {
-            method: emailVerify.method,
-            body: {
-                idToken
-            }
-        })
-        utilityStore.setVerifyEmailDialogVisible(true)
-    } catch (e) {
-        notify('error', e.message, e.statusCode)
-    }
-}
-
-const resetPassword = async () => {
-    if (!idToken.value) return
-
-    const sendPasswordResetEmail = apiList.member.sendPasswordResetEmail
-    try {
-        await $api(sendPasswordResetEmail.serverPath, {
-            method: sendPasswordResetEmail.method,
-            body: {
-                email: email.value
-            }
-        })
-        utilityStore.setResetPasswordDialogVisible(true)
-    } catch (e) {
-        notify('error', e.message, e.statusCode)
-    }
-}
-
-const loginMenu = ref([])
-const updateLoginMenuItem = () => {
-    loginMenu.value = []
-
-    if (!idToken.value) return
-    loginMenu.value.push({
-        label: '登出',
-        icon: 'logout',
-        command: () => {
-            confirmLogout()
-        }
-    })
-    if (signInProvider.value === 'password') {
-        loginMenu.value.push({
-            label: '重設密碼',
-            icon: 'password',
-            command: () => {
-                confirmResetPassword()
-            }
-        })
-    }
-    const emailVerifiedCookie = useCookie('emailVerified').value
-
-    if (!emailVerifiedCookie) {
-        loginMenu.value.push({
-            label: '信箱驗證',
-            icon: 'verified',
-            command: () => {
-                confirmEmailVerify()
-            }
-        })
-    }
-}
-
-watch(idToken, async (newVal, oldVal) => {
-    if (import.meta.server) return
-    if (!newVal) return
-    await updateEmailVerify()
-    updateLoginMenuItem()
-})
-
-// 更新emailVerified狀態
-const updateEmailVerify = async () => {
-    const cookieidToken = useCookie('idToken').value
-    const cookieEmailVerified = useCookie('emailVerified').value
-    if (!cookieidToken) return
-    if (cookieEmailVerified) return
-
-    const userDataResponse = await $api(apiList.member.getUserData.serverPath, {
-        method: apiList.member.getUserData.method,
-        body: {
-            idToken: cookieidToken
-        }
-    }).catch((e) => {
-        notify('error', e.message, e.statusCode)
-    })
-
-    if (!userDataResponse) return
-    const user = userDataResponse.users[0]
-
-    userStore.$patch({
-        emailVerified: user.emailVerified
-    })
-
-    useCookie('emailVerified').value = user.emailVerified
+const onProductSelect = (product) => {
+    router.push(`/bookstore/${product.productId}`)
 }
 
 onMounted(async () => {
-    await updateEmailVerify()
-    updateLoginMenuItem()
-
     productStore.$patch({
         productList: productList.value
     })
 })
-
-const emit = defineEmits(['setVisible'])
 </script>
 
-<style lang="scss" scoped>
-.bg-logo {
-    @include bg-cover('@/assets/images/home/Logo.png');
-}
-</style>
+<style lang="scss" scoped></style>
