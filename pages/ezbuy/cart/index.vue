@@ -437,6 +437,7 @@ import IconInvoice from '@/components/icon/Invoice.vue'
 import IconConfirm from '@/components/icon/Confirm.vue'
 
 definePageMeta({
+    layout: 'group-buying-layout',
     middleware: [
         function (to, from) {
             if (!to.query.planId) {

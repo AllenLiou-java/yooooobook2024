@@ -71,6 +71,11 @@ const statusList = [
     },
     {
         code: 404,
+        error: 'No record found',
+        errorCH: '查無資料'
+    },
+    {
+        code: 404,
         error: 'Stock Not Found',
         errorCH: '查無庫存資料'
     },

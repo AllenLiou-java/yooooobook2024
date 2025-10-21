@@ -1,7 +1,7 @@
 <template>
     <div
         style="box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-        class="rounded-[6px] overflow-hidden"
+        class="rounded-[6px] overflow-hidden bg-white"
     >
         <p
             :style="{ backgroundColor: bookIntroduction.primaryColor }"
@@ -82,7 +82,11 @@
                             }"
                             header="書籍簡介"
                         >
-                            <p class="m-0" v-for="(item, idx) in bookIntroduction.overview">
+                            <p
+                                class="m-0"
+                                v-for="(item, idx) in bookIntroduction.overview"
+                                :key="idx"
+                            >
                                 {{ item }}
                             </p>
                         </AccordionTab>
@@ -159,15 +163,12 @@ const props = defineProps({
     notice: {
         type: [Array, String],
         required: true
+    },
+    stock: {
+        type: Number,
+        required: true
     }
 })
-
-const productStore = useProductStore()
-const { stockList } = storeToRefs(productStore)
-const orderStore = useOrderStore()
-const { ordersInCart } = storeToRefs(orderStore)
-
-const stock = computed(() => stockList.value[props.productId])
 
 const emit = defineEmits(['addOrder', 'checkout'])
 
