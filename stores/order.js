@@ -247,10 +247,6 @@ export const useOrderStore = defineStore('order', () => {
             })
 
             // 導向成功頁面
-            await router.push({
-                path: `/cart/success/${info.orderId}`
-            })
-
             await router.push({ name: 'ezbuy-success', query: { planId, orderId: info.orderId } })
 
             notify('info', '訂單資訊已發送至指定信箱')

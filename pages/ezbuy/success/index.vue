@@ -95,14 +95,15 @@
 
         <NuxtLink
             class="bg-blue text-white hover:bg-blue_dark rounded-3xl cursor-pointer px-16 py-8"
-            to="/"
-            >返回首頁</NuxtLink
+            :to="`/ezbuy/${planId}`"
+            >返回訂購頁</NuxtLink
         >
     </div>
 </template>
 
 <script setup>
 definePageMeta({
+    layout: 'group-buying-layout',
     middleware: [
         function (to, from) {
             const { planId, orderId } = to.query

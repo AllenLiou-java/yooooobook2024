@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
                 <li>訂單日期：${orderInfo.oderDate}</li>
                 <li>訂單編號：${orderInfo.orderId}</li>   
                 <li>訂單總金額：${thousandthsFormat(orderInfo.totalPrice)}</li>
+                <li>訂單類型：${orderInfo.isFromGroup ? '團購' : '個人'}</li>
             </ul>
             <table class="gmail-table">
                 <thead>
