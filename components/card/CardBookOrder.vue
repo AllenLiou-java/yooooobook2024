@@ -116,11 +116,12 @@
                             </template>
                         </BookPreview>
                     </div>
+
                     <div
-                        v-if="notice.length > 0"
+                        v-if="Array.isArray(notice) && notice.length > 0"
                         class="rounded-6 bg-[#8d111d] p-12 text-14 text-white leading-normal font-bold"
                     >
-                        <p v-for="noticeItem in notice">
+                        <p v-for="(noticeItem, i) in notice" :key="i">
                             {{ noticeItem }}
                         </p>
                     </div>
@@ -162,7 +163,7 @@ const props = defineProps({
     },
     notice: {
         type: [Array, String],
-        required: true
+        default: () => []
     },
     stock: {
         type: Number,
