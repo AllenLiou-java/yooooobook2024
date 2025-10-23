@@ -119,7 +119,8 @@ const addOrderEmit = (order) => {
 
 const checkoutEmit = (order) => {
     const { qty } = order
-    const hasOrders = ordersInCart.value.length > 0
+
+    const hasOrders = Array.isArray(ordersInCart.value) && ordersInCart.value.length > 0
 
     // 沒有任何商品可結帳就不動作
     if (!hasOrders && qty === 0) return
