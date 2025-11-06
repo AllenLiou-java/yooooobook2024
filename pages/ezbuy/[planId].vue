@@ -91,24 +91,28 @@ const {
         apiList.groupBuying.getGroupBuyingPlan.serverPath.replace(':planId', `${planId}`)
     )
 
-    productStore.$patch((state) => {
-        state.productDetailList = info.data.products
-    })
+    if (info.data) {
+        productStore.$patch((state) => {
+            state.productDetailList = info.data.products
+        })
 
-    await getAllStock()
+        await getAllStock()
 
-    info.data.products = info.data.products.map((p) => ({
-        ...p,
-        stock: productStore.stockList[p.productId]
-    }))
+        info.data.products = info.data.products.map((p) => ({
+            ...p,
+            stock: productStore.stockList[p.productId]
+        }))
 
-    return info
+        return info
+    } else {
+        return info
+    }
 })
 
 if (!groupBuyingPlan) {
     throw createError({
         statusCode: 404,
-        statusMessage: 'No record found'
+        statusMessage: 'Page Not found'
     })
 }
 
