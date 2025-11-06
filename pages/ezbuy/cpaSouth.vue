@@ -198,7 +198,7 @@ useSeoMeta({
     ogUrl: 'https://www.yooooobook.com/ezbuy'
 })
 
-const isShow = ref(true)
+const isShow = ref(false)
 
 const newBookList = ref([
     {
