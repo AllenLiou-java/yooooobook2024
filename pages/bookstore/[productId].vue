@@ -127,7 +127,7 @@
                                 </template>
                             </InputNumber>
                         </div>
-                        <p class="mb-16">庫存： {{ stock.qty > 100 ? '>100' : stock.qty }}</p>
+                        <!-- <p class="mb-16">庫存： {{ stock.qty > 100 ? '>100' : stock.qty }}</p> -->
                         <div class="flex text-white gap-12">
                             <template v-if="stock.qty > 0">
                                 <div
